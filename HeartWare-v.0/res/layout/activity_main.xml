@@ -1,15 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <ListView
-        android:id="@+id/listView1"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+    
+    <TableRow
+	    android:id="@+id/tableRow1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+	    android:layout_height="wrap_content"
+	    android:background="#000000" >
 
-    </ListView>
+        <TextView
+            android:id="@+id/contactsTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/profiles_title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#FFFFFF" 
+            android:layout_weight="1"/>
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/button1"
+            android:background="#444444"
+            android:onClick="showAddProfile"
+            android:text="@string/add_button"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+     </TableRow>
+     <TableRow
+	    android:id="@+id/tableRow2"
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+        
+    <!-- @android:id/list corresponds to ListActivity in java source code -->
+    <ListView
+         android:id="@android:id/list"  
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_weight="1">
+     </ListView>
+     </TableRow>
+
+</TableLayout>

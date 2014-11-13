@@ -6,5 +6,21 @@
     <string name="action_settings">Settings</string>
     <string name="Day">Day N</string>
     <string name="Data">Data</string>
-
+    <string name="add_profile">Add Profile</string>
+    <string name="profiles_title">Profiles</string>
+    <string name="add_button">ADD</string>
+    <string name="save_data">Save</string>
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_button">Edit</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="title_activity_main">MainActivity</string>
+    
+    <!-- user data -->
+	<string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email_address">Email Address</string>
+    <string name="home_address">Address</string>
+	
 </resources>
