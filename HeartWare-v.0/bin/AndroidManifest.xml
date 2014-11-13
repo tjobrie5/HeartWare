@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="21" />  <!-- Version 5.0 -->
 
     <application
         android:allowBackup="true"
@@ -21,6 +21,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.heartware.NewProfile"
+            android:label="" >
+        </activity>
+        <activity
+            android:name="com.example.heartware.EditProfile"
+            android:label="" >
+        </activity>
+        <activity
+            android:name="com.example.heartware.DataView"
+            android:label="" >
         </activity>
     </application>
 

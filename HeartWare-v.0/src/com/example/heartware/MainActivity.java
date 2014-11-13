@@ -1,3 +1,9 @@
+/**
+ * The MainActivity is a list view.
+ * The lists contain the user's profiles.
+ * A single user can have multiple profiles.
+ */
+
 package com.example.heartware;
 
 import android.support.v7.app.ActionBarActivity;
