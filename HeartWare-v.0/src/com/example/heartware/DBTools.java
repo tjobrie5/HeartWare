@@ -21,13 +21,13 @@ public class DBTools extends SQLiteOpenHelper {
 	// Context provides access to application-specific resources and classes
 	public DBTools(Context applicationcontext) {
 		// super(context, name of data base, version control, version number >= 1) 
-	    super(applicationcontext, "contactbook.db", null, 1); 
+	    super(applicationcontext, "profiles.db", null, 1); 
 	}
 	
 	// onCreate is called the first time the database is created
 	public void onCreate(SQLiteDatabase database) {
 		// Make sure you don't put a ; at the end of the query
-		String query = "CREATE TABLE contacts ( contactId INTEGER PRIMARY KEY, firstName TEXT, " +
+		String query = "CREATE TABLE profiles ( profileId INTEGER PRIMARY KEY, firstName TEXT, " +
 				"lastName TEXT, phoneNumber TEXT, emailAddress TEXT, homeAddress TEXT)";
 		
 		// Executes the query provided as long as the query isn't a select or if the query doesn't return any data
@@ -39,7 +39,7 @@ public class DBTools extends SQLiteOpenHelper {
 	// This is dropping the table to delete the data and then calling
 	// onCreate to make an empty table
 	public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
-		String query = "DROP TABLE IF EXISTS contacts";
+		String query = "DROP TABLE IF EXISTS profiles";
 		// Executes the query provided as long as the query isn't a select or if the query doesn't return any data
 		database.execSQL(query);
     	onCreate(database);
@@ -62,7 +62,7 @@ public class DBTools extends SQLiteOpenHelper {
 		values.put("homeAddress", queryValues.get("homeAddress"));
 		
 		// Inserts the data in the form of ContentValues into the table name provided
-		database.insert("contacts", null, values);
+		database.insert("profiles", null, values);
 		
 		// Release the reference to the SQLiteDatabase object	
 		database.close();
@@ -83,8 +83,8 @@ public class DBTools extends SQLiteOpenHelper {
 		values.put("homeAddress", queryValues.get("homeAddress"));
 	    
 		// update(TableName, ContentValueForTable, WhereClause, ArgumentForWhereClause)
-	    return database.update("contacts", values, 
-	    		"contactId" + " = ?", new String[] { queryValues.get("contactId") });
+	    return database.update("profiles", values, 
+	    		"profileId" + " = ?", new String[] { queryValues.get("profileId") });
 	}
 	
 	// Used to delete a contact with the matching contactId
@@ -93,7 +93,7 @@ public class DBTools extends SQLiteOpenHelper {
 		// Open a database for reading and writing
 		SQLiteDatabase database = this.getWritableDatabase();
 		
-		String deleteQuery = "DELETE FROM contacts where contactId='"+ id +"'";
+		String deleteQuery = "DELETE FROM profiles where profileId='"+ id +"'";
 		
 		// Executes the query provided as long as the query isn't a select or if the query doesn't return any data
 		database.execSQL(deleteQuery);
@@ -103,9 +103,9 @@ public class DBTools extends SQLiteOpenHelper {
 	public ArrayList<HashMap<String, String>> getAllProfiles() {
 		
 		// ArrayList that contains every row in the database and each row key / value stored in a HashMap
-		ArrayList<HashMap<String, String>> contactArrayList;
-		contactArrayList = new ArrayList<HashMap<String, String>>();
-		String selectQuery = "SELECT  * FROM contacts ORDER BY lastName";	
+		ArrayList<HashMap<String, String>> profileArrayList;
+		profileArrayList = new ArrayList<HashMap<String, String>>();
+		String selectQuery = "SELECT  * FROM profiles ORDER BY lastName ASC";	
 		
 		// Open a database for reading and writing
 	    SQLiteDatabase database = this.getWritableDatabase();
@@ -118,50 +118,50 @@ public class DBTools extends SQLiteOpenHelper {
 	    // Move to the first row
 	    if (cursor.moveToFirst()) {
 	        do {
-	        	HashMap<String, String> contactMap = new HashMap<String, String>();
+	        	HashMap<String, String> profileMap = new HashMap<String, String>();
 	        	
 	        	// Store the key / value pairs in a HashMap
 	        	// Access the Cursor data by index that is in the same order
 	        	// as used when creating the table
-	        	contactMap.put("contactId", cursor.getString(0));
-	        	contactMap.put("firstName", cursor.getString(1));
-	        	contactMap.put("lastName", cursor.getString(2));
-	        	contactMap.put("phoneNumber", cursor.getString(3));
-	        	contactMap.put("emailAddress", cursor.getString(4));
-	        	contactMap.put("homeAddress", cursor.getString(5));
+	        	profileMap.put("profileId", cursor.getString(0));
+	        	profileMap.put("firstName", cursor.getString(1));
+	        	profileMap.put("lastName", cursor.getString(2));
+	        	profileMap.put("phoneNumber", cursor.getString(3));
+	        	profileMap.put("emailAddress", cursor.getString(4));
+	        	profileMap.put("homeAddress", cursor.getString(5));
 	        	
-	        	contactArrayList.add(contactMap);
+	        	profileArrayList.add(profileMap);
 	        } while (cursor.moveToNext()); // Move Cursor to the next row
 	    }
 	 
 	    // return contact list
-	    return contactArrayList;
+	    return profileArrayList;
 	}
 	
 	// get a specific contact from the database
 	public HashMap<String, String> getProfileInfo(String id) {
-		HashMap<String, String> contactMap = new HashMap<String, String>();
+		HashMap<String, String> profileMap = new HashMap<String, String>();
 		
 		// Open a database for reading only
 		SQLiteDatabase database = this.getReadableDatabase();
 		
-		String selectQuery = "SELECT * FROM contacts where contactId='" + id + "'";
+		String selectQuery = "SELECT * FROM profiles where profileId='" + id + "'";
 		
 		// rawQuery executes the query and returns the result as a Cursor
 		Cursor cursor = database.rawQuery(selectQuery, null);
 		if (cursor.moveToFirst()) {
 	        do {
-	        	contactMap.put("contactId", cursor.getString(0));	
-	        	contactMap.put("firstName", cursor.getString(1));
-	        	contactMap.put("lastName", cursor.getString(2));
-	        	contactMap.put("phoneNumber", cursor.getString(3));
-	        	contactMap.put("emailAddress", cursor.getString(4));
-	        	contactMap.put("homeAddress", cursor.getString(5));
+	        	profileMap.put("profileId", cursor.getString(0));	
+	        	profileMap.put("firstName", cursor.getString(1));
+	        	profileMap.put("lastName", cursor.getString(2));
+	        	profileMap.put("phoneNumber", cursor.getString(3));
+	        	profileMap.put("emailAddress", cursor.getString(4));
+	        	profileMap.put("homeAddress", cursor.getString(5));
 				   
 	        } while (cursor.moveToNext());
 	    }				    
 		
-		return contactMap;
+		return profileMap;
 	}	
 
 } // class

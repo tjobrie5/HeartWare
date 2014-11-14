@@ -28,7 +28,7 @@ public class MainActivity extends ListActivity {
 
 	// The Intent is used to issue that an operation should be performed
 	Intent intent;
-	TextView contactId;
+	TextView profileId;
 
 	// The object that allows database access
 	DBTools dbTools = new DBTools(this);
@@ -42,27 +42,27 @@ public class MainActivity extends ListActivity {
 		setContentView(R.layout.activity_main);
 
 		// Gets all the data from the database and stores it in an ArrayList
-		ArrayList<HashMap<String, String>> contactList =  dbTools.getAllProfiles();
+		ArrayList<HashMap<String, String>> profileList =  dbTools.getAllProfiles();
 
 		// Check to make sure there are contacts to display
-		if(contactList.size()!=0) {
+		if(profileList.size()!=0) {
 			
 			// Get the ListView and assign an event handler to it
 			ListView listView = (ListView) findViewById(android.R.id.list);
 			listView.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					
 					// When an item is clicked get the TextView with the matching ID
-					contactId = (TextView) view.findViewById(R.id.contactId);
+					profileId = (TextView) view.findViewById(R.id.profileId);
 					
-					// Convert that contactId into a String
-					String contactIdValue = contactId.getText().toString();	
+					// Convert that profileId into a String
+					String profileIdValue = profileId.getText().toString();	
 					
 					// getApplication() returns the application that owns this activity
 					Intent  theIntent = new Intent(getApplication(), EditProfile.class);
 					
 					// Put additional data in for EditProfile to use
-					theIntent.putExtra("contactId", contactIdValue); 
+					theIntent.putExtra("profileId", profileIdValue); 
 					
 					// Calls for EditProfile activity to start
 					startActivity(theIntent); 
@@ -75,9 +75,9 @@ public class MainActivity extends ListActivity {
 			// The ArrayList of data is next followed by the xml resource,
 			// then we have the names of the data in String format and
 			// their specific resource ids
-			ListAdapter adapter = new SimpleAdapter( MainActivity.this, contactList, R.layout.profile_entry, 
-					new String[] { "contactId","lastName", "firstName"}, 
-						new int[] {R.id.contactId, R.id.lastName, R.id.firstName});
+			ListAdapter adapter = new SimpleAdapter( MainActivity.this, profileList, R.layout.profile_entry, 
+					new String[] { "profileId","lastName", "firstName"}, 
+						new int[] {R.id.profileId, R.id.lastName, R.id.firstName});
 			
 			// setListAdapter provides the Cursor for the ListView
 			// The Cursor provides access to the database data

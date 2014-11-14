@@ -42,7 +42,7 @@ public class NewProfile extends Activity {
 
 	}
 	
-	public void addNewContact(View view) {
+	public void addNewProfile(View view) {
 		
 		// Will hold the HashMap of values 
 		HashMap<String, String> queryValuesMap =  new  HashMap<String, String>();

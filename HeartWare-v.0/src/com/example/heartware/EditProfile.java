@@ -44,22 +44,22 @@ public class EditProfile extends Activity {
 		Intent theIntent = getIntent(); // getIntent gets the intent that started this activity
 
 		// Get the extended data provided to this activity
-		// putExtra("contactId", contactIdValue); in MainActivity
-		// will pass contactId here
-		String contactId = theIntent.getStringExtra("contactId");
+		// putExtra("profileId", profileIdValue); in MainActivity
+		// will pass profileId here
+		String profileId = theIntent.getStringExtra("profileId");
 
-		// Get the HashMap of data associated with the contactId
+		// Get the HashMap of data associated with the profileId
 
-		HashMap<String, String> contactList = dbTools.getProfileInfo(contactId);
+		HashMap<String, String> profileList = dbTools.getProfileInfo(profileId);
 
-		if(contactList.size() != 0) {
+		if(profileList.size() != 0) {
 
 			// Put the values in the EditText boxes
-			firstName.setText(contactList.get("firstName"));
-			lastName.setText(contactList.get("lastName"));
-			phoneNumber.setText(contactList.get("phoneNumber"));
-			emailAddress.setText(contactList.get("emailAddress"));
-			homeAddress.setText(contactList.get("homeAddress"));
+			firstName.setText(profileList.get("firstName"));
+			lastName.setText(profileList.get("lastName"));
+			phoneNumber.setText(profileList.get("phoneNumber"));
+			emailAddress.setText(profileList.get("emailAddress"));
+			homeAddress.setText(profileList.get("homeAddress"));
 		}
 	}
 	
@@ -77,12 +77,12 @@ public class EditProfile extends Activity {
 		Intent theIntent = getIntent();
 
 		// Get the extended data provided to this activity
-		// putExtra("contactId", contactIdValue); in MainActivity
-		// will pass contactId here
-		String contactId = theIntent.getStringExtra("contactId");
+		// putExtra("profileId", profileIdValue); in MainActivity
+		// will pass profileId here
+		String profileId = theIntent.getStringExtra("profileId");
 
 		// Put the values in the EditTexts in the HashMap
-		queryValuesMap.put("contactId", contactId);
+		queryValuesMap.put("profileId", profileId);
 		queryValuesMap.put("firstName", firstName.getText().toString());
 		queryValuesMap.put("lastName", lastName.getText().toString());
 		queryValuesMap.put("phoneNumber", phoneNumber.getText().toString());
@@ -98,10 +98,10 @@ public class EditProfile extends Activity {
 	
 	public void removeProfile(View view) {
 		Intent theIntent = getIntent();
-		String contactId = theIntent.getStringExtra("contactId");
+		String profileId = theIntent.getStringExtra("profileId");
 		
-		// Call for the contact with the contactId provided to be deleted
-		dbTools.deleteProfile(contactId);
+		// Call for the contact with the profileId provided to be deleted
+		dbTools.deleteProfile(profileId);
 		
 		// Call for MainActivity
 		this.callMainActivity(view);

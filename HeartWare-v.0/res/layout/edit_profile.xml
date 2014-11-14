@@ -10,7 +10,7 @@
         android:background="#000000" >
 
         <TextView
-            android:id="@+id/editContactTitleTextView"
+            android:id="@+id/editProfileTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#000000"
