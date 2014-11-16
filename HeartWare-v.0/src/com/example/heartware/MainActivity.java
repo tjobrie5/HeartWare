@@ -43,9 +43,9 @@ public class MainActivity extends ListActivity {
 
 		// Gets all the data from the database and stores it in an ArrayList
 		ArrayList<HashMap<String, String>> profileList =  dbTools.getAllProfiles();
-
+		
 		// Check to make sure there are contacts to display
-		if(profileList.size()!=0) {
+		if(profileList.size() != 0) {
 			
 			// Get the ListView and assign an event handler to it
 			ListView listView = (ListView) findViewById(android.R.id.list);
@@ -76,8 +76,8 @@ public class MainActivity extends ListActivity {
 			// then we have the names of the data in String format and
 			// their specific resource ids
 			ListAdapter adapter = new SimpleAdapter( MainActivity.this, profileList, R.layout.profile_entry, 
-					new String[] { "profileId","lastName", "firstName"}, 
-						new int[] {R.id.profileId, R.id.lastName, R.id.firstName});
+					new String[] { "profileId","firstName", "lastName"}, 
+						new int[] {R.id.profileId, R.id.firstName, R.id.lastName});
 			
 			// setListAdapter provides the Cursor for the ListView
 			// The Cursor provides access to the database data

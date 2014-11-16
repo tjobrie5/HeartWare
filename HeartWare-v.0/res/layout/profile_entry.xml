@@ -8,9 +8,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
-
+    
     <TextView
-        android:id="@+id/lastName"
+        android:id="@+id/firstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_5dp" 
@@ -19,7 +19,7 @@
         android:textStyle="bold"/>
     
     <TextView
-        android:id="@+id/firstName"
+        android:id="@+id/lastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_5dp" 

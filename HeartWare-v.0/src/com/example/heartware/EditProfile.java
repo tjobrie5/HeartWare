@@ -108,8 +108,24 @@ public class EditProfile extends Activity {
 
 	}
 	
-	public void cancelEdit(View view) {
-		this.callMainActivity(view);
+	// goto graph view
+	public void graph(View view) {
+		Intent dataIntent = new Intent(getApplication(), DataView.class);
+		startActivity(dataIntent);
+	}
+	
+	// make a mongoDB_query
+	public void mongoDB_Query(View view) {
+		
+		// this needs a lot of editing, and will inevitable be moved
+		// somewhere else. however, for right now, this onClick method
+		// serves to act as an interface between getting data from MongoDB
+		// and presenting it in Android. 
+		// TODO: create a better query interface
+		
+		Intent qIntent = new Intent(getApplication(), SmartQuery.class);
+		qIntent.putExtra("query", "This is a placeholder - everything looks good");
+		startActivity(qIntent);
 	}
 	
 	// switches the view to the MainActivity

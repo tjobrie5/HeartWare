@@ -34,6 +34,10 @@
             android:name="com.example.heartware.DataView"
             android:label="" >
         </activity>
+        <activity
+            android:name="com.example.heartware.SmartQuery"
+            android:label="" >
+        </activity>
     </application>
 
 </manifest>

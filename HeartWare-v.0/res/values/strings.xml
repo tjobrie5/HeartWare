@@ -8,12 +8,16 @@
     <string name="Data">Data</string>
     <string name="add_profile">Add Profile</string>
     <string name="profiles_title">Profiles</string>
+    <string name="goals_title">Goals</string>
+    <string name="plans_title">Plans</string>
     <string name="add_button">ADD</string>
     <string name="save_data">Save</string>
     <string name="edit_profile_title">Edit Profile</string>
     <string name="edit_button">Edit</string>
     <string name="delete_button">Delete</string>
     <string name="cancel_button">Cancel</string>
+    <string name="smart_query">Query DLVHEX</string> <!--  for analyzing data from Jawbone UP -->
+    <string name="data_view">Graphs</string> <!--  For viewing the graph of data using AFreeChart -->
     <string name="title_activity_main">MainActivity</string>
     
     <!-- user data -->

@@ -165,10 +165,17 @@
     </TableRow>
 
     <Button
-        android:id="@+id/cancelButton"
+        android:id="@+id/graphButton"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:onClick="cancelEdit"
-        android:text="@string/cancel_button" />
+        android:onClick="graph"
+        android:text="@string/data_view" />
 
+    <Button
+        android:id="@+id/mongoDB_Button"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:onClick="mongoDB_Query"
+        android:text="@string/smart_query" />
+    
 </TableLayout>
