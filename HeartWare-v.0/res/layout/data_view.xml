@@ -19,35 +19,21 @@
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/button1"
+            android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/textView1"
-            android:src="@drawable/arb_graph" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:text="Left" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="Right" />
+            android:layout_above="@+id/textView2"
+            android:contentDescription="@string/graph_description"
+            android:src="@drawable/graph_view_xxxhdpi" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_alignParentBottom="true"
-            android:layout_alignTop="@+id/button1"
             android:layout_centerHorizontal="true"
             android:text="@string/Data" />
    

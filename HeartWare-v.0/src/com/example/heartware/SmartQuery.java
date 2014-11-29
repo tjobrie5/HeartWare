@@ -30,7 +30,7 @@ public class SmartQuery extends Activity {
 		
 		queryText = (TextView) findViewById(R.id.queryText1);
 		
-		queryText.setText(qText);
+		//queryText.setText(qText);
 	}
 
 	

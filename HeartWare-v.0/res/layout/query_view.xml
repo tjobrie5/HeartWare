@@ -6,17 +6,11 @@
 
     <TextView
         android:id="@+id/queryText1"
-        android:layout_width="214dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="0.19"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/queryText2"
-        android:layout_width="224dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.23"
-        android:text="TextView" />
+        android:text="@string/query_string"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
 
 </LinearLayout>
