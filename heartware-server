@@ -1,0 +1,3 @@
+# type into terminal to connect to ASU network
+# if off campus, use sslvpn.asu.edu /opt/cisco/anyconnect/bin
+ssh -l zmertens en4046105.dhcp.asu.edu

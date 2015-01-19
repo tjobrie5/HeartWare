@@ -2,5 +2,6 @@ HeartWare
 =========
 
 This branch contains the HeartWare Android application. 
-Design is focused primarily on the interface.
+
+It uses https://github.com/jjoe64/GraphView library.
 
