@@ -16,21 +16,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-public class NewProfile extends Activity {
-
-    static final String TAG = "NewProfile";
-    EditText firstName;
-    EditText lastName;
-    EditText phoneNumber;
-    EditText emailAddress;
-    EditText homeAddress;
-
-    DBTools dbTools = new DBTools(this);
+public class NewProfile extends Activity
+{
+    private static final String TAG = "NewProfile";
+    private EditText firstName;
+    private EditText lastName;
+    private EditText phoneNumber;
+    private EditText emailAddress;
+    private EditText homeAddress;
+    private DBAdapter dbAdapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_new_profile);
+
+        dbAdapter = new DBAdapter(this);
 
         // Initialize the EditText objects
         firstName = (EditText) findViewById(R.id.firstName);
@@ -42,7 +44,8 @@ public class NewProfile extends Activity {
         Log.d(TAG, " == onCreate() == ");
     }
 
-    public void addNewProfile(View view) {
+    public void addNewProfile(View view)
+    {
         HashMap<String, String> queryValuesMap =  new  HashMap<String, String>();
 
         // Get the values from the EditText boxes
@@ -53,18 +56,20 @@ public class NewProfile extends Activity {
         queryValuesMap.put("homeAddress", homeAddress.getText().toString());
 
         // Call for the HashMap to be added to the database
-        dbTools.insertProfile(queryValuesMap);
+        dbAdapter.insertProfile(queryValuesMap);
 
         // Call for MainActivity to execute
         this.callMainActivity(view);
     }
 
-    public void cancelAction(View view) {
+    public void cancelAction(View view)
+    {
         // cancel any database actions and return to main view
         this.callMainActivity(view);
     }
 
-    public void callMainActivity(View view) {
+    public void callMainActivity(View view)
+    {
         Intent theIntent = new Intent(getApplication(), MainActivity.class);
         startActivity(theIntent);
     }

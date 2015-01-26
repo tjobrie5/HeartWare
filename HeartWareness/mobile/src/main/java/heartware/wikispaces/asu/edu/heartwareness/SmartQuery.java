@@ -14,13 +14,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-public class SmartQuery extends Activity {
-
-    static final String TAG = "SmartQuery";
-    TextView queryText;
+public class SmartQuery extends Activity
+{
+    private static final String TAG = "SmartQuery";
+    private TextView queryText;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 

@@ -16,27 +16,31 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DBTools extends SQLiteOpenHelper {
-
-    public DBTools(Context appContext) {
+public class DBAdapter extends SQLiteOpenHelper
+{
+    public DBAdapter(Context appContext)
+    {
         // super(context, name of data base, version control, version number >= 1)
         super(appContext, "profiles.db", null, 1);
     }
 
-    public void onCreate(SQLiteDatabase database) {
+    public void onCreate(SQLiteDatabase database)
+    {
         // @NOTE : Make sure you don't put a ; at the end of the SQL query string
         String query = "CREATE TABLE profiles ( profileId INTEGER PRIMARY KEY, firstName TEXT, " +
                 "lastName TEXT, phoneNumber TEXT, emailAddress TEXT, homeAddress TEXT)";
         database.execSQL(query);
     }
 
-    public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
+    public void onUpgrade(SQLiteDatabase database, int version_old, int current_version)
+    {
         String query = "DROP TABLE IF EXISTS profiles";
         database.execSQL(query);
         onCreate(database);
     }
 
-    public void insertProfile(HashMap<String, String> queryValues) {
+    public void insertProfile(HashMap<String, String> queryValues)
+    {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("firstName", queryValues.get("firstName"));
@@ -48,7 +52,8 @@ public class DBTools extends SQLiteOpenHelper {
         database.close();
     }
 
-    public int updateProfile(HashMap<String, String> queryValues) {
+    public int updateProfile(HashMap<String, String> queryValues)
+    {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("firstName", queryValues.get("firstName"));
@@ -61,13 +66,15 @@ public class DBTools extends SQLiteOpenHelper {
             "profileId" + " = ?", new String[] { queryValues.get("profileId") });
     }
 
-    public void deleteProfile(String id) {
+    public void deleteProfile(String id)
+    {
         SQLiteDatabase database = this.getWritableDatabase();
         String deleteQuery = "DELETE FROM profiles where profileId='"+ id +"'";
         database.execSQL(deleteQuery);
     }
 
-    public ArrayList<HashMap<String, String>> getAllProfiles() {
+    public ArrayList<HashMap<String, String>> getAllProfiles()
+    {
         ArrayList<HashMap<String, String>> profileArrayList;
         profileArrayList = new ArrayList<HashMap<String, String>>();
         String selectQuery = "SELECT  * FROM profiles ORDER BY lastName ASC";
@@ -90,7 +97,8 @@ public class DBTools extends SQLiteOpenHelper {
         return profileArrayList;
     }
 
-    public HashMap<String, String> getProfileInfo(String id) {
+    public HashMap<String, String> getProfileInfo(String id)
+    {
         HashMap<String, String> profileMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM profiles where profileId='" + id + "'";

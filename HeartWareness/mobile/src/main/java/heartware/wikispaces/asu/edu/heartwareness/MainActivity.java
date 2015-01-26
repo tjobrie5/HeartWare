@@ -4,7 +4,7 @@
 // @authors Mark Aleheimer, Ryan Case, Tyler O'Brien, Amy Mazzola, Zach Mertens, New Guy
 // @version 1.0
 //
-// @class An active list view displaying user exercise profiles and graph.
+// @class An activity list view displaying user exercise profiles and graph.
 
 package heartware.wikispaces.asu.edu.heartwareness;
 
@@ -22,21 +22,19 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.ListView;
 
-// jjoe64 graph libraries
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+public class MainActivity extends ListActivity
+{
+    private static final String TAG = "MainActivity";
+    private TextView profileId;
+    private DBAdapter dbAdapter;
 
-public class MainActivity extends ListActivity {
-
-    static final String TAG = "MainActivity";
-    TextView profileId;
-    DBTools dbTools = new DBTools(this);
-
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<HashMap<String, String>> profileList =  dbTools.getAllProfiles();
+
+        dbAdapter = new DBAdapter(this);
+        ArrayList<HashMap<String, String>> profileList =  dbAdapter.getAllProfiles();
 
         if(profileList.size() != 0) {
             ListView listView = (ListView) findViewById(android.R.id.list);
@@ -50,6 +48,15 @@ public class MainActivity extends ListActivity {
                 }
             });
 
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+            {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    return false; // @TODO : delete profile based on long click
+                }
+            });
+
             ListAdapter adapter = new SimpleAdapter( MainActivity.this, profileList, R.layout.profile_entry,
                     new String[] { "profileId", "firstName", "lastName"},
                     new int[] {R.id.profileId, R.id.firstName, R.id.lastName});
@@ -57,21 +64,11 @@ public class MainActivity extends ListActivity {
             setListAdapter(adapter);
         }
 
-        // @TESTING : testing graph capabilities
-//        GraphView graph = (GraphView) findViewById(R.id.graph);
-//        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-//                new DataPoint(0, 1),
-//                new DataPoint(1, 5),
-//                new DataPoint(2, 3),
-//                new DataPoint(3, 2),
-//                new DataPoint(4, 6)
-//        });
-//        graph.addSeries(series);
-
         Log.d(TAG, " == onCreate() == ");
     }
 
-    public void showAddProfile(View view) {
+    public void showAddProfile(View view)
+    {
         Intent theIntent = new Intent(getApplication(), NewProfile.class);
         startActivity(theIntent);
     }

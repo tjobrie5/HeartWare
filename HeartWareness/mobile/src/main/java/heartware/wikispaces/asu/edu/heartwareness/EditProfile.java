@@ -16,20 +16,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-public class EditProfile extends Activity {
+public class EditProfile extends Activity
+{
+    private static final String TAG = "EditProfile";
+    private EditText firstName;
+    private EditText lastName;
+    private EditText phoneNumber;
+    private EditText emailAddress;
+    private EditText homeAddress;
+    private DBAdapter dbAdapter;
 
-    static final String TAG = "EditProfile";
-    EditText firstName;
-    EditText lastName;
-    EditText phoneNumber;
-    EditText emailAddress;
-    EditText homeAddress;
-
-    DBTools dbTools = new DBTools(this);
-
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile);
+
+        dbAdapter = new DBAdapter(this);
 
         // Get the EditText objects
         firstName = (EditText) findViewById(R.id.firstName);
@@ -42,7 +44,7 @@ public class EditProfile extends Activity {
         String profileId = theIntent.getStringExtra("profileId");
 
         // Get the HashMap of data associated with the profileId
-        HashMap<String, String> profileList = dbTools.getProfileInfo(profileId);
+        HashMap<String, String> profileList = dbAdapter.getProfileInfo(profileId);
 
         if(profileList.size() != 0) {
 
@@ -57,7 +59,8 @@ public class EditProfile extends Activity {
         Log.d(TAG, " == onCreate() == ");
     }
 
-    public void editProfile(View view) {
+    public void editProfile(View view)
+    {
         HashMap<String, String> queryValuesMap =  new  HashMap<String, String>();
 
         // Get the EditText objects
@@ -78,31 +81,35 @@ public class EditProfile extends Activity {
         queryValuesMap.put("emailAddress", emailAddress.getText().toString());
         queryValuesMap.put("homeAddress", homeAddress.getText().toString());
 
-        dbTools.updateProfile(queryValuesMap);
+        dbAdapter.updateProfile(queryValuesMap);
 
         this.callMainActivity(view);
     }
 
-    public void removeProfile(View view) {
+    public void removeProfile(View view)
+    {
         Intent theIntent = getIntent();
         String profileId = theIntent.getStringExtra("profileId");
-        dbTools.deleteProfile(profileId);
+        dbAdapter.deleteProfile(profileId);
         this.callMainActivity(view);
     }
 
-    public void graph(View view) {
-        Intent dataIntent = new Intent(getApplication(), DataView.class);
+    public void graph(View view)
+    {
+        Intent dataIntent = new Intent(getApplication(), GraphActivity.class);
         startActivity(dataIntent);
     }
 
-    public void query(View view) {
+    public void query(View view)
+    {
         Intent qIntent = new Intent(getApplication(), SmartQuery.class);
         qIntent.putExtra("query", "This is a placeholder - everything looks good");
         startActivity(qIntent);
     }
 
     // switches the view to the MainActivity
-    public void callMainActivity(View view) {
+    public void callMainActivity(View view)
+    {
         Intent objIntent = new Intent(getApplication(), MainActivity.class);
         startActivity(objIntent);
     }
