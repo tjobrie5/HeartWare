@@ -53,7 +53,7 @@ public class MainActivity extends ListActivity
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
                 {
-                    return false; // @TODO : delete profile based on long click
+                    return false; // @TODO : could delete profile based on long click
                 }
             });
 
