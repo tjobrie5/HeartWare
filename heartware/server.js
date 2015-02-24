@@ -5,7 +5,7 @@ NODE SETUP
 for the project that are listed in package.json
 3. Make sure you have a MongoDb server up and running by runnning the command 'mongod'
 4. Finally run the command 'node server.js' this will spin up a node server on port 8080
-where the url is localhost:8080
+where the url is qqroute.com:8x
 */
 
 
@@ -49,7 +49,7 @@ RESTful API
 =============================
 */
 //this is the api you will use in the Android app. The url for it will look the following way.
-//http://localhost:8080/getData?username=mazzolaamy@cox.net&password=heartware
+//http://qqroute.com:8x/getData?username=mazzolaamy@cox.net&password=heartware
 //This is a POST request
 app.get('/', function(req, res){
  			        python_shell.run('script.py', function(err, results){
@@ -124,5 +124,6 @@ app.get('/getData', function(req, res){
 });
 
 //port app is running on http://localhost:8080
-app.listen(8080);
+res.send("If error: fix listening port in server.js");
+app.listen(8x);
 console.log('server up');
