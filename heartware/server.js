@@ -123,7 +123,6 @@ app.get('/getData', function(req, res){
 
 });
 
-//port app is running on http://localhost:8080
-res.send("If error: fix listening port in server.js");
+//port app is running on http://qqroute:8x
 app.listen(8x);
 console.log('server up');
