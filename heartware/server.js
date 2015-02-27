@@ -124,5 +124,5 @@ app.get('/getData', function(req, res){
 });
 
 //port app is running on http://qqroute:8x
-app.listen(83);
+app.listen(8083);
 console.log('server up');
