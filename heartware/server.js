@@ -30,7 +30,7 @@ var dbUrl = 'mongodb://localhost:27017/heartware';
 Hardcoded values for api calls
 */
 var movement = "https://jawbone.com/nudge/api/v.1.1/users/@me/moves";
-var token = 'Bearer CHSvNoQb5olFNO4lSqs72yqWgdnkcicIGWilKcrLMVZ2ahETv37EE4DTJMD5Pw2a3__E7PglkcVrijZtkonp9FECdgRlo_GULMgGZS0EumxrKbZFiOmnmAPChBPDZ5JP'
+var token = 'Bearer b6_3pfGGwEgExBe8MniV7vFK59dIENPZNLNnPrpoH8wtGScc3zGFLjBV7Kjl0K288EvaJSumcI0GoYT-V9UbpVECdgRlo_GULMgGZS0EumxrKbZFiOmnmAPChBPDZ5JP'
 var options = {
 	url: movement,
 	headers : {
