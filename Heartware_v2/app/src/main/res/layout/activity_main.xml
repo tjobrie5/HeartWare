@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Home"
-        android:id="@+id/button3"
+        android:id="@+id/bHome"
         android:width="85dp"
         android:layout_alignTop="@+id/bFriends"
         android:layout_centerHorizontal="true" />
@@ -112,7 +112,7 @@
         android:id="@+id/etDisabilities"
         android:layout_alignTop="@+id/tvDisabilities"
         android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/button3"
+        android:layout_alignStart="@+id/bHome"
         android:layout_above="@+id/tvWorkoutLocations"/>
 
     <EditText

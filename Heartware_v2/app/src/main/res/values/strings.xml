@@ -8,7 +8,8 @@
     <string name="title_activity_graph_list">graph_list</string>
     <string name="goals">Goals</string>
     <string name="add_button">Add</string>
-
-
+    <string name="login_question">How do you want to login?</string>
+    <string name="fb_login">Facebook</string>
+    <string name="manual_login">Manual</string>
 
 </resources>

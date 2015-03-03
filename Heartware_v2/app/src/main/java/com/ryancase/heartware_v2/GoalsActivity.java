@@ -1,6 +1,6 @@
 package com.ryancase.heartware_v2;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,21 +13,37 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoalsActivity extends Activity
+public class GoalsActivity extends ListActivity
 {
     private static final String TAG = GoalsActivity.class.getSimpleName();
-
-    ListView list;
-    Button bAdd;
+    private Button bAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph_list);
+        setContentView(R.layout.activity_goals_list);
 
-        list = (ListView) findViewById(R.id.listView);
+        ListView list = (ListView) findViewById(android.R.id.list);
 
-        List<String> graph_List= new ArrayList<String>();
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // @TODO : goto graph view based on int position in list
+                startActivity(new Intent(getApplication(), GraphsActivity.class));
+                Log.d(TAG, "in onItemSelected listener");
+            }
+        });
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // @TODO : delete a goal
+                Log.d(TAG, "in the onItemLongClick listener");
+                return false;
+            }
+        });
+
+        List<String> graph_List = new ArrayList<String>();
 
         graph_List.add("steps");
         graph_List.add("calories");
@@ -58,29 +74,7 @@ public class GoalsActivity extends Activity
                 graph_List
         );
 
-        list.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView parentView, View childView, int position, long id) {
-                // @TODO : goto graph view -- this is broken for some reason
-                startActivity(new Intent(getApplicationContext(), GraphsActivity.class));
-                Log.d(TAG, "in onItemSelected listener");
-            }
-            public void onNothingSelected(AdapterView parentView) {
-
-            }
-        });
-
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                // @TODO : delete a goal
-                Log.d(TAG, "in the onItemLongClick listener");
-                return false;
-            }
-        });
-
-        list.setAdapter(arrayAdapter);
+        setListAdapter(arrayAdapter);
 
         bAdd = (Button) findViewById(R.id.bAdd);
         bAdd.setOnClickListener(new View.OnClickListener()
@@ -92,6 +86,5 @@ public class GoalsActivity extends Activity
                 Log.d(TAG, "in the Add Button onClick");
             }
         });
-
     }
 } // graph_list class

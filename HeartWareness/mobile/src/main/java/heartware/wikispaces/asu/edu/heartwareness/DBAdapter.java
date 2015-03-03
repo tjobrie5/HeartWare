@@ -18,10 +18,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBAdapter extends SQLiteOpenHelper
 {
+    private static final String dbName = "profiles";
+
     public DBAdapter(Context appContext)
     {
         // super(context, name of data base, version control, version number >= 1)
-        super(appContext, "profiles.db", null, 1);
+        super(appContext, dbName + ".db", null, 1);
     }
 
     public void onCreate(SQLiteDatabase database)

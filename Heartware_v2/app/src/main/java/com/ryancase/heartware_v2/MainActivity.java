@@ -1,22 +1,27 @@
 package com.ryancase.heartware_v2;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener {
-
-    Button b_friends;
-    Button b_graphs;
-    Button b_home;
+public class MainActivity extends Activity implements View.OnClickListener
+{
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private Button b_friends;
+    private Button b_graphs;
+    private Button b_home;
+    private LoginDialogFragment mLoginDialog;
+    //private DBAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //dbAdapter = new DBAdapter(this);
 
         b_graphs = (Button) findViewById(R.id.bGoals);
         b_graphs.setOnClickListener(this);
@@ -24,8 +29,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         b_friends = (Button) findViewById(R.id.bFriends);
         b_friends.setOnClickListener(this);
 
-        b_home = (Button) findViewById(R.id.button3);
+        b_home = (Button) findViewById(R.id.bHome);
         b_home.setOnClickListener(this);
+
+        mLoginDialog = new LoginDialogFragment();
+
+        boolean profileExists = false;
+        if(!profileExists) {
+            mLoginDialog.show(getFragmentManager(), TAG);
+        }
     }
 
     @Override
@@ -40,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(),FriendsActivity.class));
                 break;
 
-            case R.id.button3:
+            case R.id.bHome:
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 break;
 
@@ -49,4 +61,4 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
     }
-}
+} // MainActivity class

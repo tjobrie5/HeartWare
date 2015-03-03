@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBAdapter extends SQLiteOpenHelper
 {
+    private static final String TAG = DBAdapter.class.getSimpleName();
+    private static final String DB_Name = "Profile";
+
     public DBAdapter(Context appContext)
     {
         // super(context, name of data base, version control, version number >= 1)
