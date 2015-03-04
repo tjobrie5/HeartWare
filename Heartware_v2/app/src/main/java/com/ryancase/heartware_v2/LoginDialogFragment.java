@@ -19,6 +19,7 @@ public class LoginDialogFragment extends DialogFragment
                 .setPositiveButton(R.string.fb_login, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Log.d(TAG, "using Facebook to login");
+                        // @TODO : launch FB activity
                     }
                 })
                 .setNegativeButton(R.string.manual_login, new DialogInterface.OnClickListener() {
