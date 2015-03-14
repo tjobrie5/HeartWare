@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile project (':UpPlatformSdk')
+    compile 'com.jjoe64:graphview:4.0.0'
 }
