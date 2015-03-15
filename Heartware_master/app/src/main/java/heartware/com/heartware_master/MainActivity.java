@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.widget.LoginButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,13 +33,13 @@ public class MainActivity extends Activity implements View.OnClickListener
     private Button b_graphs;
     private Button b_home;
     private Button bUpdate;
-    private LoginDialogFragment mLoginDialog;
     private EditText etUserName;
     private EditText etSex;
     private EditText etExercises;
     private EditText etDisabilities;
     private EditText etWorkoutLocations;
     private DBAdapter dbAdapter;
+    private LoginButton bAuthButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,9 @@ public class MainActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_main);
 
         dbAdapter = new DBAdapter(this);
+
+        bAuthButton = (LoginButton) findViewById(R.id.bAuthButton);
+        bAuthButton.setOnClickListener(this);
 
         b_graphs = (Button) findViewById(R.id.bGoals);
         b_graphs.setOnClickListener(this);
@@ -65,11 +69,8 @@ public class MainActivity extends Activity implements View.OnClickListener
         etDisabilities = (EditText) findViewById(R.id.etDisabilities);
         etWorkoutLocations = (EditText) findViewById(R.id.etWorkoutLocations);
 
-        mLoginDialog = new LoginDialogFragment();
-
         ArrayList<HashMap<String, String>> profiles = dbAdapter.getAllProfiles();
         if(profiles.size() == 0) {
-            mLoginDialog.show(getFragmentManager(), TAG); // @TODO : change min API ?
             // @TODO : verify if user is using facebook data or manual data
         }
         else {
@@ -113,7 +114,14 @@ public class MainActivity extends Activity implements View.OnClickListener
                 }
                 else {
                     // perform update to database
-
+                    HashMap<String, String> queryValues = new HashMap<>();
+                    queryValues.put(DBAdapter.PROFILE_ID, new String("0")); // only 1 profile
+                    queryValues.put(DBAdapter.USER_NAME, etUserName.getText().toString());
+                    queryValues.put(DBAdapter.SEX, etSex.getText().toString());
+                    queryValues.put(DBAdapter.FAV_EXERCISE, etExercises.getText().toString());
+                    queryValues.put(DBAdapter.DISABILITIES, etDisabilities.getText().toString());
+                    queryValues.put(DBAdapter.WORKOUT_LOC, etWorkoutLocations.getText().toString());
+                    dbAdapter.updateProfile(queryValues);
                 }
                 break;
 
@@ -128,7 +136,7 @@ public class MainActivity extends Activity implements View.OnClickListener
     {
         super.onResume();
         // Logs 'install' and 'app activate' App Events
-//        AppEventsLogger.activateApp(this);
+        AppEventsLogger.activateApp(this);
     }
 
     @Override
@@ -136,6 +144,6 @@ public class MainActivity extends Activity implements View.OnClickListener
     {
         super.onPause();
         // Logs 'app deactivate' App Event.
-//        AppEventsLogger.deactivateApp(this);
+        AppEventsLogger.deactivateApp(this);
     }
 } // MainActivity class

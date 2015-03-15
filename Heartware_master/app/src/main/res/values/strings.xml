@@ -10,6 +10,7 @@
     <string name="add_button">Add</string>
     <string name="login_question">How do you want to login?</string>
     <string name="fb_login">Facebook</string>
-    <string name="manual_login">Manual</string>
+    <string name="nope">Nope</string>
     <string name="friends">Friends</string>
+    <string name="facebook_app_id">795766887172566</string>
 </resources>
