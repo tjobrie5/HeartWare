@@ -1,4 +1,0 @@
-HeartWare
-=========
-
-HeartWare Capstone Project

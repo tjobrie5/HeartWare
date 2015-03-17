@@ -1,4 +1,0 @@
-workouts("Run").
-workouts("Walk").
-workouts("Hike").
-steps_for_days(500).

@@ -1,7 +1,0 @@
-
-#domain steps_for_days(S).
-#domain workouts(W).
-
-1{result(W)}1.
-:- S>5000.
-
