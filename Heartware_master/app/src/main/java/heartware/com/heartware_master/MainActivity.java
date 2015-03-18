@@ -46,6 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener
     private EditText etDisabilities;
     private EditText etWorkoutLocations;
     private DBAdapter dbAdapter;
+    private LoginDialogFragment mLoginDialog;
     // Facebook stuff
     private LoginButton bAuthButton;
     private GraphUser mUser;
@@ -65,6 +66,10 @@ public class MainActivity extends Activity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // create and show the login pop up as soon as the main activity is created
+        mLoginDialog = new LoginDialogFragment();
+        mLoginDialog.show(getFragmentManager(), TAG);
 
         mUIHelper = new UiLifecycleHelper(this, callback);
         mUIHelper.onCreate(savedInstanceState);
@@ -106,7 +111,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         ArrayList<HashMap<String, String>> profiles = dbAdapter.getAllProfiles();
         if(profiles.size() == 0) {
-            // @TODO : verify if user is using facebook data or manual data
+            // @NOTE : there is no data in the SQLite on this Android device
         }
         else {
             bUpdate.setText("Update");
