@@ -38,14 +38,15 @@ public class MainActivity extends Activity implements View.OnClickListener
     private static final String TAG = MainActivity.class.getSimpleName();
     private Button b_friends;
     private Button b_graphs;
-    private Button b_home;
     private Button bUpdate;
+    private Button bSync;
     private EditText etUserName;
     private EditText etSex;
     private EditText etExercises;
     private EditText etDisabilities;
     private EditText etWorkoutLocations;
     private DBAdapter dbAdapter;
+    private LoginDialogFragment mLoginDialog;
     // Facebook stuff
     private LoginButton bAuthButton;
     private GraphUser mUser;
@@ -65,6 +66,10 @@ public class MainActivity extends Activity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // create and show the login pop up as soon as the main activity is created
+        mLoginDialog = new LoginDialogFragment();
+        mLoginDialog.show(getFragmentManager(), TAG);
 
         mUIHelper = new UiLifecycleHelper(this, callback);
         mUIHelper.onCreate(savedInstanceState);
@@ -92,8 +97,8 @@ public class MainActivity extends Activity implements View.OnClickListener
         b_friends = (Button) findViewById(R.id.bFriends);
         b_friends.setOnClickListener(this);
 
-        b_home = (Button) findViewById(R.id.bHome);
-        b_home.setOnClickListener(this);
+        bSync = (Button) findViewById(R.id.bSync);
+        bSync.setOnClickListener(this);
 
         bUpdate = (Button) findViewById(R.id.bUpdate);
         bUpdate.setOnClickListener(this);
@@ -106,7 +111,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         ArrayList<HashMap<String, String>> profiles = dbAdapter.getAllProfiles();
         if(profiles.size() == 0) {
-            // @TODO : verify if user is using facebook data or manual data
+            // @NOTE : there is no data in the SQLite on this Android device
         }
         else {
             bUpdate.setText("Update");
@@ -131,8 +136,9 @@ public class MainActivity extends Activity implements View.OnClickListener
                 startActivity(new Intent(getApplicationContext(), FriendsActivity.class));
                 break;
 
-            case R.id.bHome:
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            case R.id.bSync:
+                // @TODO : perform some kind of sync between Android and Jawbone UP
+                Log.d(TAG, "bSync has been pressed ------");
                 break;
 
             case R.id.bUpdate:
