@@ -28,8 +28,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home"
-        android:id="@+id/bHome"
+        android:text="@string/sync"
+        android:id="@+id/bSync"
         android:width="85dp"
         android:layout_alignTop="@+id/bFriends"
         android:layout_centerHorizontal="true" />
