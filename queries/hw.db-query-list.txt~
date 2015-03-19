@@ -5,7 +5,7 @@ sqlite3 hw.db
 .mode columns
 .headers on
 
-// show tables
+// tables
 .tables
 
 // creating a table called profiles
