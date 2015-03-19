@@ -1,0 +1,239 @@
+1. Each command ends with a semi-colon
+2. There are 3 types of values
+	a. String literals, which are characters surrounded almost always with single quotes
+	b. Numeric literals, which are numbers of any type without quotes
+	c. Binary literals are numbers represented as hexidecimals
+	
+3. There are 5 types in SQLite
+	a. integer
+	b. real
+	c. text
+	d. blob
+	e. null
+	
+4. To use single quotes in a string add 2 in a row rather then one ''
+5. Single line comments start with 2 lines --
+6. Multiline comments start with /* and end with */
+7. SQL is case insensitive
+8. Each table can have only one primary key
+
+select * // The action / verb
+from general_power // The subject of your query
+where power_type='Invulnerability'; // The predicate which describes the subject
+
+CREATE TABLE origin_issue (id INTEGER PRIMARY KEY, 
+comic_name TEXT NOT NULL COLLATE NOCASE,
+issue_number INTEGER NOT NULL DEFAULT '0',
+comic_issn INTEGER UNIQUE CHECK(comic_issn>0),
+character_id integer,
+FOREIGN KEY(character_id) REFERENCES identity(id));
+
+// primary key means this will auto increment by 1 and remain unique
+// NOT NULL means it can't contain a null value
+// COLLATE NOCASE converts upper case characters to lowercase characters when comparing
+// COLLATE BINARY if 2 strings are compared, they are compared using the exact characters
+// COLLATE RTRIM compares just like BINARY except trailing white space is ignored
+// DEFAULT defines a default value to use
+// UNIQUE makes sure that the same number isn't used in this column
+// CHECK sets a rule that all data in the column must obey
+// A FOREIGN KEY in one table references a PRIMARY KEY in another table
+
+// To add a column 
+// It Can't be UNIQUE, PRIMARY KEY
+// It can't have a default value CURRENT_TIME, CURRENT_DATE, CURRENT_TIMESTAMP, // or an expression in parentheses
+// If NOT NULL it can't have a NULL value
+
+ALTER TABLE origin_issue
+ADD COLUMN writer TEXT;
+
+// You can rename a table
+
+ALTER TABLE origin_issue RENAME TO first_issue;
+
+// You can't delete columns in any way
+
+// SELECT is used to query your database
+
+// When using SELECT you define many clauses that narrow down to a specific type // of data
+
+SELECT id, character 
+FROM identity;
+
+select * from superhuman;
+
+.schema superhuman
+
+select identity_id
+from superhuman
+where power_id_1 = 6; 
+
+select identity_id
+from superhuman
+where power_id_2 = 14 and power_id_3 = 14; 
+
+select identity_id
+from superhuman
+where power_id_2 = 14 or power_id_3 = 14; 
+
+// LIKE can be used with % to match a series of characters and zero or more 
+// characters there after
+
+select power_type
+from general_power
+where power_type LIKE 'Superhuman%';
+
+// Return all matches for Superhuman followed by an s word
+
+select power_type
+from general_power
+where power_type LIKE 'Superhuman%s%';
+
+// Return all matches for Superhuman followed by an s word
+
+select power_type
+from general_power
+where power_type LIKE 'Superhuman%s%'
+AND power_type NOT LIKE '%strength%';
+
+// _ can be used to represent any 1 character or space
+
+select power_type
+from general_power
+where power_type LIKE 'Power_________';
+
+// ORDER BY allows you to define sorting either DESC or ASC
+// LIMIT allows you to limit your results
+// OFFSET will skip the first number or results 
+
+select power_type, general_power_desc
+from general_power
+where general_power_desc LIKE '%control%'
+ORDER BY power_type ASC, power_type LIMIT 10 OFFSET 2;
+
+// You can also use a comma after LIMIT offset_number, limit_number
+
+select power_type, general_power_desc
+from general_power
+where general_power_desc LIKE '%control%'
+ORDER BY power_type ASC, power_type LIMIT 2, 10;
+
+// You can change the title of columns with AS like this
+
+SELECT power_type AS 'Common Power'
+FROM general_power WHERE power_type LIKE 'Superhuman%';
+
+// Fix Captain Americas Last Name
+
+select * from identity;
+
+UPDATE identity SET secret_identity='Steve Rogers'
+WHERE id=2;
+
+// Use DISTINCT to output the first result and then ignore duplicates
+
+INSERT INTO identity (secret_identity, character)
+VALUES ('Scott Lang', 'Ant-Man');
+
+select * from identity;
+
+SELECT DISTINCT character
+FROM identity;
+
+// DELETE a row in a table
+
+DELETE FROM identity
+WHERE id=7;
+
+select * from identity;
+
+// SQLites SELECT can also be used to perform numerous Arithmetic, Boolean, 
+// Bitwise, Relational and other Operations
+
+SELECT (1+2) / (6-3) * 10;
+
+SELECT 15 % 10;
+
+// You can perform boolean operations in which 0 is false and any other number 
+// is true
+
+SELECT 1 AND 0, 1 OR 0, NOT 1;
+
+// Relational Operators all work as well
+// <, <=, >, >=, =, ==, !=, <>
+
+SELECT 1 < 2, 3 >= 2, 1 = 1, 1 <> 2;
+
+// Other Operators
+
+SELECT 'Super' || 'hero'; // String concatenation
+
+SELECT 'Paul' IN ('Mike', 'Phil', 'Paul');
+
+SELECT * FROM identity WHERE character IN ('Iron Man', 'Hulk');
+
+// GLOB is like LIKE, but it is case sensitive and it uses the UNIX file 
+// globbing syntax
+
+// Find results that contain super, but not Super
+
+SELECT * FROM general_power
+WHERE general_power_desc
+GLOB '*super*';
+
+// Find any match that has 9 characters
+
+SELECT * FROM general_power
+WHERE power_type
+GLOB '?????????';
+
+// BETWEEN can be used to make comparisons as well
+
+SELECT * FROM power;
+
+SELECT * FROM power
+WHERE power_type_id
+BETWEEN 1 AND 40; 
+
+Random SQLite Functions
+
+SELECT random(); // Generate random number
+
+SELECT ABS(RANDOM() % 100); // Random number between 0 and 100
+
+// Generate minimum and maximum values from a result
+
+SELECT min(id), max(id)
+FROM identity;
+
+SELECT LOWER(secret_identity), 
+UPPER(character)
+FROM identity;
+
+SELECT total_changes(); // Returns the total number of changes made to the 
+// database since it was last opened
+
+SELECT LENGTH('Iron Man'); // Returns the number of characters in a string
+
+SELECT COUNT(*) FROM identity; // Number of rows in the table
+
+SELECT date(); // Return the current date
+
+SELECT time(); // Return the current time
+
+SELECT datetime(); // Return the current date and time
+
+SELECT date('now', '-30 days'); // Get the date 30 days ago
+
+SELECT date('now', '-20 months'); // Get the date 30 days ago
+
+SELECT date('now', 'weekday 0'); // Get the date of the next Sunday
+
+SELECT time('now', '-1000 minutes');
+
+SELECT time('now', '-1000 seconds');
+
+SELECT strftime('%m-%d-%Y'); // You can modify the date format
+
+// Find Thanksgiving day
+
+SELECT date('now', 'start of year', '10 months', '21 days', 'weekday 4');
