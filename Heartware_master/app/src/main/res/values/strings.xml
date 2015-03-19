@@ -12,6 +12,11 @@
     <string name="new_user">New User</string>
     <string name="returning_user">Returning User</string>
     <string name="friends">Friends</string>
+    <string name="workoutLocations">Workout Locations</string>
+    <string name="workoutLevel">Workout Level</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
     <string name="sync">Sync</string>
     <string name="facebook_app_id">795766887172566</string> <!-- necessary for Facebook SDK -->
 </resources>

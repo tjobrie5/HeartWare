@@ -27,10 +27,12 @@ public class DBAdapter extends SQLiteOpenHelper
     public static final String PROFILE_ID = "profileID";
     public static final String USER_NAME = "userName";
     public static final String SEX = "sex";
-    public static final String FAV_EXERCISE = "favoriteExercise";
+    public static final String FAV_EXERCISE = "favExercise";
     public static final String DISABILITIES = "disabilities";
     public static final String WORKOUT_LOC = "workoutLocation";
-    private static final String GOAL = "goal";
+    public static final String WORKOUT_LEVEL = "workoutLevel";
+    public static final String GOAL = "goal";
+    public static final String STEPS = "steps";
 
     public DBAdapter(Context appContext)
     {
