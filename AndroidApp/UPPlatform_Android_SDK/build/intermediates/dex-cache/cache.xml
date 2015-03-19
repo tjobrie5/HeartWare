@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/exploded-aar/UPPlatform_Android_SDK/UpPlatformSdk/unspecified/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="f55b89da87c1853bc3f3147328df0af2be8a0803">
+        <dex dex="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/pre-dexed/debug/classes-2453e0fe1628837958a54a6d0d6df42d36adf8ca.jar" />
+    </item>
+    <item
+        jar="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
+        <dex dex="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/pre-dexed/debug/classes-b0cd941e7f2eddf509015d92c5c28ee2fcbabe16.jar" />
+    </item>
+    <item
+        jar="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/exploded-aar/UPPlatform_Android_SDK/UpPlatformSdk/unspecified/libs/okhttp-2.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="4c8d1536dba3812cc1592090dc20c47a4ed3c35e">
+        <dex dex="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/pre-dexed/debug/okhttp-2.0.0-fa55eaff48190ae560e8632aad07f55dcb948638.jar" />
+    </item>
+    <item
+        jar="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/exploded-aar/UPPlatform_Android_SDK/UpPlatformSdk/unspecified/libs/retrofit-1.6.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="efb0a36546aa8857ab8df358b106c1817e03cbee">
+        <dex dex="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/pre-dexed/debug/retrofit-1.6.1-424b62a812d8d854167990c72f50fd569f84319d.jar" />
+    </item>
+    <item
+        jar="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/exploded-aar/UPPlatform_Android_SDK/UpPlatformSdk/unspecified/libs/okhttp-urlconnection-2.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="afe8399d352713b66e597e9670c741d1e60ae923">
+        <dex dex="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/pre-dexed/debug/okhttp-urlconnection-2.0.0-0dfa7a85d610d795ff6b49629ed3cf81fbc1510d.jar" />
+    </item>
+    <item
+        jar="/Users/markahlemeier/Library/Android/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
+        <dex dex="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/pre-dexed/debug/support-v4-19.1.0-d343a674e1c65a3a3a2327e6aa2737861c5b2156.jar" />
+    </item>
+    <item
+        jar="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/exploded-aar/UPPlatform_Android_SDK/UpPlatformSdk/unspecified/libs/gson-2.3.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
+        <dex dex="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/pre-dexed/debug/gson-2.3-3b9fc0ab9516112e00b9a06798e43d0ee41bad4b.jar" />
+    </item>
+    <item
+        jar="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/exploded-aar/UPPlatform_Android_SDK/UpPlatformSdk/unspecified/libs/okio-1.0.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="39eff75ddcb987ff65888361a29f489c178429a3">
+        <dex dex="/Users/markahlemeier/HeartWare/AndroidApp/UPPlatform_Android_SDK/Examples/HelloUp/build/intermediates/pre-dexed/debug/okio-1.0.1-a76662638b84e24191c7fd3350ce32e05bc1c2a8.jar" />
+    </item>
+
+</items>
