@@ -8,14 +8,20 @@ sqlite3 hw.db
 // show tables
 .tables
 
-// creating a table called profiles
+// creating a table called profiles 
 CREATE TABLE profiles
     ( profileId INTEGER PRIMARY KEY, userName TEXT NOT NULL,
-    sex TEXT, favoriteExercise TEXT, disabilities TEXT,
+    sex TEXT, favExercise TEXT, disabilities TEXT,
     workoutLocation TEXT, workoutLevel TEXT, steps INTEGER );
 
+CREATE TABLE meetups 
+	( meetupsId INTEGER PRIMARY KEY,
+		date TEXT,
+		FOREIGN KEY (profileId) REFERENCES profiles(meetupsId)
+);
+
 // inserting into the profiles table
-INSERT INTO profiles (userName, sex, favoriteExercise, disabilities, workoutLocation, workoutLevel)
+INSERT INTO profiles (userName, sex, favExercise, disabilities, workoutLocation, workoutLevel)
     values ('steve', 'male', 'skiing', 'none', 'Miami', 'easy');
 
 // update
