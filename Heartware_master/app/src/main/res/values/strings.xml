@@ -12,6 +12,8 @@
     <string name="new_user">New User</string>
     <string name="returning_user">Returning User</string>
     <string name="friends">Friends</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="workoutLocations">Workout Locations</string>
     <string name="workoutLevel">Workout Level</string>
     <string name="easy">Easy</string>

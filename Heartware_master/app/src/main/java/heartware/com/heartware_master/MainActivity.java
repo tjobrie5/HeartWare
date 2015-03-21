@@ -13,8 +13,10 @@
 package heartware.com.heartware_master;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -25,7 +27,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 // @TODO : use M/F sex radio buttons
-public class MainActivity extends Activity implements View.OnClickListener
+public class MainActivity extends ActionBarActivity implements View.OnClickListener,
+        LoginDialogFragment.LoginDialogListener
 {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Button b_friends;
@@ -47,9 +50,7 @@ public class MainActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // create and show the login pop up as soon as the main activity is created
-        mLoginDialog = new LoginDialogFragment();
-        mLoginDialog.show(getFragmentManager(), TAG);
+        showLoginDialog();
 
         dbAdapter = new DBAdapter(this);
 
@@ -96,7 +97,6 @@ public class MainActivity extends Activity implements View.OnClickListener
     public void onClick(View v)
     {
         switch (v.getId()) {
-
             case R.id.bGoals:
                 startActivity(new Intent(getApplicationContext(), GoalsActivity.class));
                 break;
@@ -141,5 +141,24 @@ public class MainActivity extends Activity implements View.OnClickListener
             default:
                 break;
         }
+    }
+
+    public void showLoginDialog()
+    {
+        // create and show the login pop up as soon as the main activity is created
+        mLoginDialog = new LoginDialogFragment();
+        mLoginDialog.show(getFragmentManager(), TAG);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog)
+    {
+        Log.d(TAG, " onDialogPositiveClick");
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog)
+    {
+        Log.d(TAG, " onDialogNegativeClick");
     }
 } // MainActivity class

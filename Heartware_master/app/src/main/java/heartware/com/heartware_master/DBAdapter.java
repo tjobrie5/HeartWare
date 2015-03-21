@@ -26,6 +26,7 @@ public class DBAdapter extends SQLiteOpenHelper
     private static final String DB_Name = "Profile";
     public static final String PROFILE_ID = "profileID";
     public static final String USER_NAME = "userName";
+    public static final String USER_PASSWORD = "userPassword";
     public static final String SEX = "sex";
     public static final String FAV_EXERCISE = "favExercise";
     public static final String DISABILITIES = "disabilities";
