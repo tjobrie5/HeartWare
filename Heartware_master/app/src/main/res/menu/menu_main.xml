@@ -2,7 +2,14 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
-    <item android:id="@+id/action_settings"
-          android:title="@string/app_name"
-          app:showAsAction="always"/>
+    <item android:title="@string/app_name"
+        android:id="@+id/action_search"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="always" />
+    <item android:title="@string/goals"
+          android:id="@+id/action_goals"
+          app:showAsAction="ifRoom|withText" />
+    <item android:title="@string/friends"
+          android:id="@+id/action_friends"
+          app:showAsAction="ifRoom|withText" />
 </menu>
