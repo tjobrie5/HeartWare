@@ -161,6 +161,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         if(profile.size() == 0) {
             // no profile exist, force the user to enter again
             Log.d(TAG, user + " does not exist");
+            // not sure the best way to keep the dialog open, but this way works
+            mLoginDialog.dismiss();
+            mLoginDialog.show(getFragmentManager(), TAG);
         }
         else {
             bUpdate.setText(R.string.update);
