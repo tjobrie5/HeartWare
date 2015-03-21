@@ -94,7 +94,6 @@ public class DBAdapter extends SQLiteOpenHelper
         database.execSQL(deleteQuery);
     }
 
-    // @TODO : refactor into something useful
     public ArrayList<HashMap<String, String>> getAllProfiles()
     {
         ArrayList<HashMap<String, String>> profileArrayList;
@@ -123,7 +122,28 @@ public class DBAdapter extends SQLiteOpenHelper
     {
         HashMap<String, String> profileMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM profiles where profileID='" + id + "'";
+        String selectQuery = "SELECT * FROM " + DB_Name + " WHERE " + PROFILE_ID + "='" + id + "'";
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                profileMap.put(PROFILE_ID, cursor.getString(0));
+                profileMap.put(USER_NAME, cursor.getString(1));
+                profileMap.put(SEX, cursor.getString(2));
+                profileMap.put(FAV_EXERCISE, cursor.getString(3));
+                profileMap.put(DISABILITIES, cursor.getString(4));
+                profileMap.put(WORKOUT_LOC, cursor.getString(5));
+
+            } while (cursor.moveToNext());
+        }
+        return profileMap;
+    }
+
+    public HashMap<String, String> getProfileInfo(String user, String pw)
+    {
+        HashMap<String, String> profileMap = new HashMap<String, String>();
+        SQLiteDatabase database = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + DB_Name + " WHERE " + USER_NAME + "='" + user + "'";
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {

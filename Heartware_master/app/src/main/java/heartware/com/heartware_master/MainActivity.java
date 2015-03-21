@@ -26,9 +26,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-// @TODO : use M/F sex radio buttons
+
 public class MainActivity extends ActionBarActivity implements View.OnClickListener,
         LoginDialogFragment.LoginDialogListener
 {
@@ -37,6 +36,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Button b_graphs;
     private Button bUpdate;
     private Button bSync;
+    private Button bLogout;
     private EditText etUserName;
     private EditText etSex;
     private EditText etExercises;
@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private EditText etWorkoutLocations;
     private DBAdapter dbAdapter;
     private LoginDialogFragment mLoginDialog;
-    private static int ProfileCounter = 1; // count the number of profiles on this device
+    private String mCurrentProfileId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        showLoginDialog();
+        createLoginDialog();
 
         dbAdapter = new DBAdapter(this);
 
@@ -68,24 +68,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         bUpdate = (Button) findViewById(R.id.bUpdate);
         bUpdate.setOnClickListener(this);
 
+        bLogout = (Button) findViewById(R.id.bLogout);
+        bLogout.setOnClickListener(this);
+
         etUserName = (EditText) findViewById(R.id.etUserName);
         etSex = (EditText) findViewById(R.id.etSex);
         etExercises = (EditText) findViewById(R.id.etExercises);
         etDisabilities = (EditText) findViewById(R.id.etDisabilities);
         etWorkoutLocations = (EditText) findViewById(R.id.etWorkoutLocations);
-
-        ArrayList<HashMap<String, String>> profiles = dbAdapter.getAllProfiles();
-        if(profiles.size() == 0) {
-            // no data in the SQLite on this Android device
-        }
-        else {
-            bUpdate.setText("Update");
-            etUserName.setText(profiles.get(0).get(DBAdapter.USER_NAME));
-            etSex.setText(profiles.get(0).get(DBAdapter.SEX));
-            etExercises.setText(profiles.get(0).get(DBAdapter.FAV_EXERCISE));
-            etDisabilities.setText(profiles.get(0).get(DBAdapter.DISABILITIES));
-            etWorkoutLocations.setText(profiles.get(0).get(DBAdapter.WORKOUT_LOC));
-        }
     } // onCreate
 
     @Override
@@ -107,6 +97,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * handle all possible button clicks for this view
+     * @param v
+     */
     @Override
     public void onClick(View v)
     {
@@ -116,7 +110,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 break;
 
             case R.id.bFriends:
-                // @TODO : verify that the user is logged into Facebook first (mUser != null)
                 startActivity(new Intent(getApplicationContext(), FriendsActivity.class));
                 break;
 
@@ -128,51 +121,89 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             case R.id.bUpdate:
                 Log.d(TAG, "updating " + etUserName.getText().toString());
-                if(bUpdate.getText().toString().equals("Create")) {
-                    bUpdate.setText("Update");
-                    // insert into database
-                    HashMap<String, String> queryValues = new HashMap<>();
-                    queryValues.put(DBAdapter.USER_NAME, etUserName.getText().toString());
-                    queryValues.put(DBAdapter.SEX, etSex.getText().toString());
-                    queryValues.put(DBAdapter.FAV_EXERCISE, etExercises.getText().toString());
-                    queryValues.put(DBAdapter.DISABILITIES, etDisabilities.getText().toString());
-                    queryValues.put(DBAdapter.WORKOUT_LOC, etWorkoutLocations.getText().toString());
-                    dbAdapter.createProfile(queryValues);
-                }
-                else {
-                    // perform update to database
-                    HashMap<String, String> queryValues = new HashMap<>();
-                    // Profile_ID is hardcoded - only 1 profile
-                    queryValues.put(DBAdapter.PROFILE_ID, new String(String.valueOf(ProfileCounter)));
-                    queryValues.put(DBAdapter.USER_NAME, etUserName.getText().toString());
-                    queryValues.put(DBAdapter.SEX, etSex.getText().toString());
-                    queryValues.put(DBAdapter.FAV_EXERCISE, etExercises.getText().toString());
-                    queryValues.put(DBAdapter.DISABILITIES, etDisabilities.getText().toString());
-                    queryValues.put(DBAdapter.WORKOUT_LOC, etWorkoutLocations.getText().toString());
-                    dbAdapter.updateProfile(queryValues);
-                }
+                HashMap<String, String> queryValues = new HashMap<>();
+                queryValues.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
+                queryValues.put(DBAdapter.USER_NAME, etUserName.getText().toString());
+                queryValues.put(DBAdapter.SEX, etSex.getText().toString());
+                queryValues.put(DBAdapter.FAV_EXERCISE, etExercises.getText().toString());
+                queryValues.put(DBAdapter.DISABILITIES, etDisabilities.getText().toString());
+                queryValues.put(DBAdapter.WORKOUT_LOC, etWorkoutLocations.getText().toString());
+                dbAdapter.updateProfile(queryValues);
                 break;
-            default:
+
+            case R.id.bLogout:
+                Log.d(TAG, " logging out");
+                clearEditTexts();
+                mLoginDialog.show(getFragmentManager(), TAG);
                 break;
         }
-    }
+    } // onClick()
 
-    public void showLoginDialog()
+    /**
+     * create and show the login dialog
+     */
+    public void createLoginDialog()
     {
         // create and show the login pop up as soon as the main activity is created
         mLoginDialog = new LoginDialogFragment();
         mLoginDialog.show(getFragmentManager(), TAG);
     }
 
+    /**
+     * returning user
+     * @param dialog
+     */
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog)
+    public void onDialogPositiveClick(DialogFragment dialog, final String user, final String pw)
     {
-        Log.d(TAG, " onDialogPositiveClick");
+        Log.d(TAG, " onDialogPositiveClick " + user + " " + pw);
+        HashMap<String, String> profile = dbAdapter.getProfileInfo(user, pw);
+        if(profile.size() == 0) {
+            // no profile exist, force the user to enter again
+            Log.d(TAG, user + " does not exist");
+        }
+        else {
+            bUpdate.setText(R.string.update);
+            etUserName.setText(profile.get(DBAdapter.USER_NAME));
+            etSex.setText(profile.get(DBAdapter.SEX));
+            etExercises.setText(profile.get(DBAdapter.FAV_EXERCISE));
+            etDisabilities.setText(profile.get(DBAdapter.DISABILITIES));
+            etWorkoutLocations.setText(profile.get(DBAdapter.WORKOUT_LOC));
+            mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
+            mLoginDialog.dismiss();
+        }
     }
 
+    /**
+     * new user
+     * @param dialog
+     */
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog)
+    public void onDialogNegativeClick(DialogFragment dialog, final String user, final String pw)
     {
-        Log.d(TAG, " onDialogNegativeClick");
+        Log.d(TAG, " onDialogNegativeClick " + user + " " + pw);
+        Log.d(TAG, "creating " + user);
+        // insert into database
+        HashMap<String, String> queryValues = new HashMap<>();
+        queryValues.put(DBAdapter.USER_NAME, user);
+        queryValues.put(DBAdapter.SEX, etSex.getText().toString());
+        queryValues.put(DBAdapter.FAV_EXERCISE, etExercises.getText().toString());
+        queryValues.put(DBAdapter.DISABILITIES, etDisabilities.getText().toString());
+        queryValues.put(DBAdapter.WORKOUT_LOC, etWorkoutLocations.getText().toString());
+        dbAdapter.createProfile(queryValues);
+        // this is sloppy, but once the profile is created a new profileId is made and we need it
+        mCurrentProfileId = dbAdapter.getProfileInfo(user, pw).get(DBAdapter.PROFILE_ID);
+        mLoginDialog.dismiss();
+        // set the edit text for the user name on the main layout
+        etUserName.setText(user);
+    }
+
+    public void clearEditTexts()
+    {
+        etUserName.setText("");
+        etSex.setText("");
+        etExercises.setText("");
+        etDisabilities.setText("");
+        etWorkoutLocations.setText("");
     }
 } // MainActivity class

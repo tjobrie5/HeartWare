@@ -25,16 +25,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 public class LoginDialogFragment extends DialogFragment
 {
-
     public interface LoginDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-        public void onDialogNegativeClick(DialogFragment dialog);
+        public void onDialogPositiveClick(DialogFragment dialog,
+                                          final String user, final String pw);
+        public void onDialogNegativeClick(DialogFragment dialog,
+                                          final String user, final String pw);
     }
 
-    private static final String TAG = LoginDialogFragment.class.getSimpleName();
     private LoginDialogListener mListener;
 
     @Override
@@ -55,23 +56,24 @@ public class LoginDialogFragment extends DialogFragment
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_login, null));
+        View view = inflater.inflate(R.layout.dialog_login, null);
+        builder.setView(view);
+        final EditText username = (EditText) view.findViewById(R.id.username);
+        final EditText password = (EditText) view.findViewById(R.id.password);
         // add the buttons
         builder.setPositiveButton(R.string.returning_user, new DialogInterface.OnClickListener()
         {
+            public void onClick(DialogInterface dialog, int id) {
+                mListener.onDialogPositiveClick(LoginDialogFragment.this,
+                        username.getText().toString(), password.getText().toString());
+            }
+        }).setNegativeButton(R.string.new_user, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id)
             {
-                Log.d(TAG, "this is a returning user");
-                mListener.onDialogPositiveClick(LoginDialogFragment.this);
+                mListener.onDialogNegativeClick(LoginDialogFragment.this,
+                        username.getText().toString(), password.getText().toString());
             }
-        }).setNegativeButton(R.string.new_user, new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int id)
-                {
-                    Log.d(TAG, "this is a new user"); // have them fill out a new form
-                    mListener.onDialogNegativeClick(LoginDialogFragment.this);
-                }
-            });
+        });
         // Create the AlertDialog object and return it
         return builder.create();
     }
