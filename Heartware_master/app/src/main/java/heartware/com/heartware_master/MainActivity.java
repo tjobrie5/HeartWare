@@ -15,48 +15,23 @@
 package heartware.com.heartware_master;
 
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.jawbone.upplatformsdk.api.ApiManager;
-import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
-import com.jawbone.upplatformsdk.api.response.OauthAccessTokenResponse;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
-public class MainActivity extends ActionBarActivity implements View.OnClickListener,
+public class MainActivity extends FragmentActivity implements View.OnClickListener,
         LoginDialogFragment.LoginDialogListener
 {
     private static final String TAG = MainActivity.class.getSimpleName();
-    // Jawbone stuff
-    private static final String CLIENT_ID = "7cXqsS_BjH8";
-    private static final String CLIENT_SECRET = "eba2d19923c18c57393b289653302ff633817012";
 
     private Button b_friends;
     private Button b_graphs;
@@ -71,6 +46,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private DBAdapter dbAdapter;
     private LoginDialogFragment mLoginDialog;
+    private JawboneUpHelper mJboneHelper;
     private String mCurrentProfileId;
 
     @Override
@@ -78,6 +54,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // adding invisible worker fragments:
+        //  https://developer.android.com/guide/components/fragments.html
+        mJboneHelper = new JawboneUpHelper();
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().add(mJboneHelper, JawboneUpHelper.TAG).commit();
 
         createLoginDialog();
 
@@ -105,6 +86,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         etWorkoutLocations = (EditText) findViewById(R.id.etWorkoutLocations);
     } // onCreate
 
+// @TODO : add action bar activity ?
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -123,106 +105,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    // @TODO : this is the start of Mark's Jawbone Up API changes, but they don't work correctly
-//    /**
-//     * handles Jawbone authentication
-//     * @param requestCode
-//     * @param resultCode
-//     * @param data
-//     */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-//    {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == UpPlatformSdkConstants.JAWBONE_AUTHORIZE_REQUEST_CODE
-//            && resultCode == RESULT_OK) {
-//                String code = data.getStringExtra(UpPlatformSdkConstants.ACCESS_CODE);
-//                if (code != null) {
-//                     //first clear older accessToken, if it exists..
-//                     ApiManager.getRequestInterceptor().clearAccessToken();
-//                     ApiManager.getRestApiInterface().getAccessToken(
-//                             CLIENT_ID,
-//                             CLIENT_SECRET,
-//                             code,
-//                             accessTokenRequestListener);
-//            }
-//         }
-//    }
-//
-//    private Callback accessTokenRequestListener = new Callback<OauthAccessTokenResponse>()
-//    {
-//        @Override
-//        public void success(OauthAccessTokenResponse result, Response response)
-//        {
-//            if (result.access_token != null) {
-////                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(HelloUpActivity.this);
-////                SharedPreferences.Editor editor = preferences.edit();
-////                editor.putString(UpPlatformSdkConstants.UP_PLATFORM_ACCESS_TOKEN, result.access_token);
-////                editor.putString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, result.refresh_token);
-////                editor.commit();
-//                // @TODO : clean this up - here's the start of mark's changes
-//                TokenToServer example = (TokenToServer) new TokenToServer().execute(
-//                        new String(result.access_token));
-//                //Posting token to server side
-//                //THIS IS THE BEGINNING OF OUR APP. Change Homepage.class to "nameofouractivity.class"
-//                //Include name of our activity in android manifest.xml
-//                //Intent intent = new Intent(HelloUpActivity.this, Homepage.class);
-//                //intent.putExtra(UpPlatformSdkConstants.CLIENT_SECRET, CLIENT_SECRET);
-//                //startActivity(intent);
-//                Toast.makeText(getApplicationContext(), "Jawbone API working", Toast.LENGTH_SHORT);
-//
-//                Log.d(TAG, result.access_token + " THIS");
-//                Log.d(TAG, "accessToken:" + result.access_token);
-//            } else {
-//                Log.d(TAG, "accessToken not returned by Oauth call, exiting...");
-//            }
-//        }
-//
-//        @Override
-//        public void failure(RetrofitError retrofitError)
-//        {
-//            Log.d(TAG, "failed to get accessToken: " + retrofitError.getMessage());
-//        }
-//    };
-//
-//    private class TokenToServer extends AsyncTask<String, Void, String> {
-//        private static final String URL = "http://qqroute.com:8080/sendToken";
-//        @Override
-//        protected String doInBackground(String... params)
-//        {
-//            try {
-//                HttpClient httpClient = new DefaultHttpClient();
-//                HttpPost httpPost = new HttpPost(URL);
-//                List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
-//                nameValuePair.add(new BasicNameValuePair("token", params[0]));
-//
-//                try {
-//                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-//                }
-//                catch(UnsupportedEncodingException ex) {
-//                    Log.d(TAG, ex.getMessage().toString());
-//                }
-//
-//                try {
-//                    HttpResponse res = httpClient.execute(httpPost);
-//                    Log.d(TAG, "Http Post Response: " + res.toString());
-//                }
-//                catch(ClientProtocolException ex) {
-//                    Log.d(TAG, ex.getMessage().toString());
-//                }
-//                catch(IOException ex) {
-//                    Log.d(TAG, ex.getMessage().toString());
-//                }
-//            }
-//            catch(Exception e) {
-//                Log.d(TAG, e.getMessage().toString());
-//                return e.getMessage().toString();
-//            }
-//
-//            return "doInBackground() -- TokenToServer";
-//        }
-//    }
 
     /**
      * handle all possible button clicks for this view
@@ -243,7 +125,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.bSync:
                 // @TODO : perform some kind of sync between Android and Jawbone UP
                 Log.d(TAG, "bSync has been pressed ------");
-                Toast.makeText(this, "Syncing Data from Jawbone UP", Toast.LENGTH_LONG).show();
+                mJboneHelper.sync();
                 break;
 
             case R.id.bUpdate:
@@ -328,6 +210,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         etUserName.setText(user);
     }
 
+    /**
+     * Erase the text fields when user logs out
+     */
     public void clearEditTexts()
     {
         etUserName.setText("");
