@@ -9,48 +9,52 @@ where the url is qqroute.com:8x
 */
 
 
-// call the packages we need
+// Retrieve the packages we need
 var python_shell = require('python-shell');
-var parser = require('body-parser');
 var express    = require('express');
 var app        = express();
 var async 	   = require('async');
 var url 	   = require('url');
 var request	   = require('request');
-console.log("Top");
+var bodyParser = require('body-parser');
+
 //Data base connection
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 
-var dbUrl = 'mongodb://localhost:27017/heartware';
+var dbUrl = 'mongodb://localhost/heartware';
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
 /*
 =========================================================================
-Hardcoded values for api calls
+Put all API's being used here
 */
+var retrieveUser = "https://jawbone.com//nudge/api/v.1.1/users/@me"
 var movement = "https://jawbone.com/nudge/api/v.1.1/users/@me/moves";
-var token = 'Bearer b6_3pfGGwEgExBe8MniV7vFK59dIENPZNLNnPrpoH8wtGScc3zGFLjBV7Kjl0K288EvaJSumcI0GoYT-V9UbpVECdgRlo_GULMgGZS0EumxrKbZFiOmnmAPChBPDZ5JP'
-var options = {
-	url: movement,
-	headers : {
-	'Accept':'application/json',
-	'Authorization': token
-	}
-}
 
-//============================================================================
 /*
-RESTful API
-==============
-1. Authenticate user
-2. Pull data from devices
-3. write data to mongoDB
-=============================
+=======================================================================
 */
-//this is the api you will use in the Android app. The url for it will look the following way.
-//http://qqroute.com:8x/getData?username=mazzolaamy@cox.net&password=heartware
-//This is a POST request
+
+// function called before every request api it structures all api requests
+	var optionsConstruct = function(Url, Token){
+		var Options = {url: Url, 
+					   headers: {
+					   	'Accept': 'application/json',
+					   	'Authorization': 'Bearer ' + Token
+					   }
+
+					}
+		return Options			
+	}
+
+
+/* 
+All our our API's which we are developing
+*/
 app.get('/', function(req, res){
  			        python_shell.run('script.py', function(err, results){
 		               		 console.log('ran python');
@@ -58,71 +62,140 @@ app.get('/', function(req, res){
 					res.json(results);
   				});
 });
-app.get('/getData', function(req, res){
-	
-	//parse request url and grab the query parameters
-	var URL = url.parse(req.url, true);
-	var query = URL.query;
-	/*
-	hard coded in for now We'll have to figure out proper auth later on.
-	Possibly use Passport, an authentication framework in node that has support
-	for OAuth 2.0
-	*/
-	
-	if(query.username == 'mazzolaamy@cox.net' && query.password == 'heartware')
-	{
 
-		//RESTful api call for movement
-		request(options, function(error, response, body)
-		{
-			//check to make sure jawbone api call is successful
-			if(!error && response.statusCode == 200)
-			{
+/* 
+Called from android app when initially connecting with Jawbone UP
+Auth Token is recieved and stored in MongoDB associated with the name that is returned
+from retrieveuser API.
 
-				//function used for inserting data into mongo
-				var insertDocuments = function(db, callback) {
-				  // Get the documents collection
-				  var collection = db.collection('document2');
-				  // Insert some documents. JSON.parse(body) contains the jawbone data
-				  collection.insert(JSON.parse(body), function(err, result) {
-				    assert.equal(err, null);
-//				    callback(result);
-				  });
+*/
+app.post('/sendToken', function(req, res){
+        console.log("token recieved");
 
-				};
-				//actually connects to mongodb and calls the insertDocuments function
-				MongoClient.connect(dbUrl, function(err, db){
+        request(optionsConstruct(retrieveUser, req.body.token),
+         function(error, response, body){
+         	body = JSON.parse(body); 
+         	console.log(body.data.last);
+         	var insertDocuments = function(db, callback){
+         		var collection = db.collection('users');
+         		collection.update(
+         			{user : body.data.last}, 
+         			{$set:{token : req.body.token}}, 
+         			{upsert : true}, function(err, result) {
+         				callback(err);
+         			}
+         		);
+         		
+         	}
+
+         	MongoClient.connect(dbUrl, function(err, db){
 					assert.equal(null, err);
 
 					insertDocuments(db, function(){
 						db.close();
 					});
 				});
+         	
+        })
+
+        res.send(200);
+
+})
+
+/*
+	orale
+
+	So this is the new Getdata API. Its a post now so I recommend you get a REST client called postman(its a chrome extension) so you can\
+	test it out. Right now the token is being stored in mongodb in the users collection associated with the USERS last name.
+
+	To test this API go to the postman client and use the URL http://qqroute.com:8080/getData MAKE SURE its a POST request. Next find a tab that says
+	x-www-form-urlencoded, click on it and where it says key enter user and where it says value enter in Mazzola. These values will be sent from the Android
+	App when the actual application is working
+
+	Ok so this API works as follows
+	1. Searchs mongodb for the token associated with lastName(in this case Mazzola)
+	2. Deletes old data.
+	3. Uses the token from step 1 calls jawbone movement API and inserts into the DataBase in the movement collection.
+	4. Then calls and does whatever your python stuff does
+
+	I did an initial run of this on qqroute so mongodb will have the necessary info to work.
+
+	IF it doesn't work that is probably because somebody ran the helloUp app and it reissued a new token so the 
+	JAwbone api's won't work correctly(This could happen often). So just post something on Facebook so I can get the new token in the db
+
+	Once the above /sendToken API is integrated with our Android app this won't be a problem
+
+*/
+app.post('/getData', function(req, res){
+
+	var token;
+
+	var findDocuments = function(db, callback){
+		var collection = db.collection('users');
+	    db.createCollection('movement', function(err, collection) {});
+
+		collection.findOne({user: req.body.user}, function(err, doc){
+			console.log("userFound");
+			if(err)
+				throw err;
+			token = doc.token;
+			callback(doc);
+
+		})
+	}
 
 
- 			        python_shell.run('script.py', function(err, results){
+	var deleteDocuments = function(db, callback){
+		var movementCollection = db.collection('movement');
+		movementCollection.remove({}, function(err, result){
+			console.log("documents deleted");
+			callback(result);
+		});
+
+	}
+
+	var insertDocuments = function(db, callback) {
+	  // Get the documents collection
+	  var collection = db.collection('movement');
+	  console.log("inserstion area");
+	  //console.log(token);
+	  request(optionsConstruct(movement, token),
+				function(error, response, body){
+				
+	  collection.insert(JSON.parse(body), function(err, result) {
+	    assert.equal(err, null);
+	    console.log("documents inserted");
+	    callback(result);
+
+	    //IMPORTANT -- make sure you run your python code in the insertDocuments method to ensure that it runs after the new data has been inserted
+	    // into the db.
+	    /*
+	    Crashes the server so I commented it out
+	    python_shell.run('script.py', function(err, results){
 		               		 console.log('ran python');
         		       		 console.log( results);
 					res.json(results);
   				});
+		*/
+	  });
+	 });
+	};
 
-				//send back a success response to the client calling
-				
-			}
-			else
-				//jawbone api error. Send error back to client
-				res.send(400);
+	MongoClient.connect(dbUrl, function(err, db){
+		  assert.equal(null, err);
+
+		findDocuments(db, function(){
+			deleteDocuments(db, function(){
+				insertDocuments(db, function(){
+					db.close();
+				});
+			});
 		});
-	}
+	});
 
-	else
-	{
-		//Failed Authorization response
-		res.send(401, "Incorrect Username or Password");
-	}
-
+	res.send(200);
 });
 
 //port app is running on http://qqroute:8x
-app.listen(8x);
+app.listen(8080);
 console.log('server up');
