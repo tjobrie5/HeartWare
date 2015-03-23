@@ -31,23 +31,29 @@ import java.util.List;
 public class WorkoutsActivity extends ListActivity
 {
     private static final String TAG = WorkoutsActivity.class.getSimpleName();
-    private Button bAdd;
+    private Button bNewWorkout;
+    private DBAdapter dbAdapter;
+    private String mCurrentProfileId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workouts);
+        dbAdapter = new DBAdapter(this);
+        // get the current profile Id from the activity that started this one
+        mCurrentProfileId = getIntent().getStringExtra(DBAdapter.PROFILE_ID);
 
         ListView list = (ListView) findViewById(android.R.id.list);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                // @TODO : goto graph view based on int position in list
-                startActivity(new Intent(getApplication(), GraphsActivity.class));
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // send a map of data over to the view workout
+                Intent intent = new Intent(getApplication(), GraphsActivity.class);
+                //intent.putExtra(DBAdapter.EXERCISE, theExercise);
+                startActivity(intent);
                 Log.d(TAG, "in onItemSelected listener");
             }
         });
@@ -55,9 +61,8 @@ public class WorkoutsActivity extends ListActivity
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                // @TODO : delete a goal
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // @TODO : delete a workout
                 Log.d(TAG, "in the onItemLongClick listener");
                 return false;
             }
@@ -96,13 +101,14 @@ public class WorkoutsActivity extends ListActivity
 
         setListAdapter(arrayAdapter);
 
-        bAdd = (Button) findViewById(R.id.bAdd);
-        bAdd.setOnClickListener(new View.OnClickListener()
+        bNewWorkout = (Button) findViewById(R.id.bNewWorkout);
+        bNewWorkout.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                // @TODO : create a new goal
+                // @TODO : create a new workout
+                startActivity(new Intent(getApplication(), ViewWorkout.class));
                 Log.d(TAG, "in the Add Button onClick");
             }
         });

@@ -38,9 +38,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Button bLogout;
     private EditText etUserName;
     private EditText etSex;
-    private EditText etExercises;
-    private EditText etDisabilities;
-    private EditText etWorkoutLocations;
 
     private DBAdapter dbAdapter;
     private LoginDialogFragment mLoginDialog;
@@ -73,9 +70,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         etUserName = (EditText) findViewById(R.id.etUserName);
         etSex = (EditText) findViewById(R.id.etSex);
-        etExercises = (EditText) findViewById(R.id.etExercises);
-        etDisabilities = (EditText) findViewById(R.id.etDisabilities);
-        etWorkoutLocations = (EditText) findViewById(R.id.etWorkoutLocations);
     } // onCreate
 
     @Override
@@ -91,8 +85,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch(item.getItemId()) {
             case R.id.action_search:
                 return true;
-            case R.id.action_goals:
-                startActivity(new Intent(getApplicationContext(), WorkoutsActivity.class));
+            case R.id.action_workouts:
+                Intent intent = new Intent(getApplicationContext(), WorkoutsActivity.class);
+                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
+                startActivity(intent);
                 return true;
             case R.id.action_friends:
                 startActivity(new Intent(getApplicationContext(), FriendsActivity.class));
@@ -119,17 +115,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Log.d(TAG, "updating " + etUserName.getText().toString());
                 HashMap<String, String> queryValues = new HashMap<>();
                 queryValues.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                queryValues.put(DBAdapter.USER_NAME, etUserName.getText().toString());
+                queryValues.put(DBAdapter.USERNAME, etUserName.getText().toString());
                 queryValues.put(DBAdapter.SEX, etSex.getText().toString());
-                queryValues.put(DBAdapter.FAV_EXERCISE, etExercises.getText().toString());
-                queryValues.put(DBAdapter.DISABILITIES, etDisabilities.getText().toString());
-                queryValues.put(DBAdapter.WORKOUT_LOC, etWorkoutLocations.getText().toString());
                 dbAdapter.updateProfile(queryValues);
                 break;
 
             case R.id.bLogout:
                 Log.d(TAG, " logging out");
                 clearEditTexts();
+                mCurrentProfileId = "0";
                 mLoginDialog.show(getFragmentManager(), TAG);
                 break;
         }
@@ -163,11 +157,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
         else {
             bUpdate.setText(R.string.update);
-            etUserName.setText(profile.get(DBAdapter.USER_NAME));
+            etUserName.setText(profile.get(DBAdapter.USERNAME));
             etSex.setText(profile.get(DBAdapter.SEX));
-            etExercises.setText(profile.get(DBAdapter.FAV_EXERCISE));
-            etDisabilities.setText(profile.get(DBAdapter.DISABILITIES));
-            etWorkoutLocations.setText(profile.get(DBAdapter.WORKOUT_LOC));
             mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
             mLoginDialog.dismiss();
         }
@@ -183,13 +174,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         Log.d(TAG, " onDialogNegativeClick " + user + " " + pw);
         Log.d(TAG, "creating " + user);
         // insert into database
-        HashMap<String, String> queryValues = new HashMap<>();
-        queryValues.put(DBAdapter.USER_NAME, user);
-        queryValues.put(DBAdapter.SEX, etSex.getText().toString());
-        queryValues.put(DBAdapter.FAV_EXERCISE, etExercises.getText().toString());
-        queryValues.put(DBAdapter.DISABILITIES, etDisabilities.getText().toString());
-        queryValues.put(DBAdapter.WORKOUT_LOC, etWorkoutLocations.getText().toString());
-        dbAdapter.createProfile(queryValues);
+        HashMap<String, String> newProfile = new HashMap<>();
+        newProfile.put(DBAdapter.USERNAME, user);
+        newProfile.put(DBAdapter.PASSWORD, pw);
+        dbAdapter.createProfile(newProfile);
         // this is sloppy, but once the profile is created a new profileId is made and we need it
         mCurrentProfileId = dbAdapter.getProfileInfo(user, pw).get(DBAdapter.PROFILE_ID);
         mLoginDialog.dismiss();
@@ -204,8 +192,5 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     {
         etUserName.setText("");
         etSex.setText("");
-        etExercises.setText("");
-        etDisabilities.setText("");
-        etWorkoutLocations.setText("");
     }
 } // MainActivity class

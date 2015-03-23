@@ -16,8 +16,13 @@
     <string name="friends">Friends</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="workoutLocations">Workout Locations</string>
-    <string name="workoutLevel">Workout Level</string>
+    <string name="exercise">Exercise</string>
+    <string name="goal">Goal</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="exemptions">Exemptions</string>
+    <string name="data">Data</string>
+    <string name="place">Place</string>
+    <string name="time">Time</string>
     <string name="create">Create</string>
     <string name="update">Update</string>
     <string name="easy">Easy</string>
@@ -25,5 +30,7 @@
     <string name="logout">Logout</string>
     <string name="hard">Hard</string>
     <string name="sync">Sync</string>
-    <string name="facebook_app_id">795766887172566</string> <!-- necessary for Facebook SDK -->
+    <string name="facebook_app_id">795766887172566</string>
+    <string name="new_workout">New Workout</string>
+    <!-- necessary for Facebook SDK -->
 </resources>

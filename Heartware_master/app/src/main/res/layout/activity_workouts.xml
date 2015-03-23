@@ -25,9 +25,9 @@
             android:textColor="#FFFFFF" />
 
         <Button
-            android:id="@+id/bAdd"
+            android:id="@+id/bNewWorkout"
             android:background="#444444"
-            android:text="@string/add_button"
+            android:text="@string/new_workout"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
     </TableRow>

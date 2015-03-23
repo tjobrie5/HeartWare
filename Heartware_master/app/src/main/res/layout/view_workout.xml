@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:id="@+id/workoutBackground"
+              android:background="#ff134544">
+
+    <TableLayout
+        android:id="@+id/tableWorkouts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TableRow
+        android:id="@+id/tr0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/workouts"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/tvLabel"
+            android:textColor="#FFFFFF"/>
+
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tr1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exercise"
+            android:id="@+id/tvExercise"
+            android:textColor="#FFFFFF"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etExercise"
+            android:textColor="#ffff0011"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tr2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exemptions"
+            android:id="@+id/tvExemptions"
+            android:textColor="#FFFFFF"
+            android:layout_below="@+id/tvExercise"
+            android:layout_alignEnd="@+id/tvUserName"
+            android:layout_alignRight="@+id/tvUserName"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etExemptions"
+            android:textColor="#ffff0011"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tr3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/place"
+            android:id="@+id/tvPlace"
+            android:textColor="#FFFFFF"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etPlace"
+            android:textColor="#ffff0011"
+            android:textSize="20sp"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tr4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:id="@+id/tvTime"
+            android:textColor="#FFFFFF"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etTime"
+            android:textColor="#ffff0011"
+            android:textSize="20sp"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tr5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/difficulty"
+            android:id="@+id/tvDifficulty"
+            android:textColor="#FFFFFF"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioGroup
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                >
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/easy"
+                    android:id="@+id/rbEasy"
+                    />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/medium"
+                    android:id="@+id/rbMedium"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hard"
+                    android:id="@+id/rbHard"/>
+            </RadioGroup>
+        </LinearLayout>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sync"
+            android:id="@+id/bSync"
+            android:layout_centerHorizontal="true" />
+    </TableRow>
+
+</TableLayout>
+
+</LinearLayout>
