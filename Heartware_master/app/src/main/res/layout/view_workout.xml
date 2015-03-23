@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="@string/workouts"
             android:layout_gravity="center_vertical"
-            android:id="@+id/tvLabel"
+            android:id="@+id/tvViewLabel"
             android:textColor="#FFFFFF"/>
 
 
@@ -47,6 +47,26 @@
 
     </TableRow>
 
+        <TableRow
+            android:id="@+id/tr7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/goal"
+                android:id="@+id/tvGoal"
+                android:textColor="#FFFFFF"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/etGoal"
+                android:textColor="#ffff0011"/>
+
+        </TableRow>
+
     <TableRow
         android:id="@+id/tr2"
         android:layout_width="match_parent"
@@ -57,15 +77,31 @@
             android:layout_height="wrap_content"
             android:text="@string/exemptions"
             android:id="@+id/tvExemptions"
-            android:textColor="#FFFFFF"
-            android:layout_below="@+id/tvExercise"
-            android:layout_alignEnd="@+id/tvUserName"
-            android:layout_alignRight="@+id/tvUserName"/>
+            android:textColor="#FFFFFF" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/etExemptions"
+            android:textColor="#ffff0011"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tr6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/data"
+            android:id="@+id/tvData"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etData"
             android:textColor="#ffff0011"/>
     </TableRow>
 
@@ -92,11 +128,11 @@
 
     <TableRow
         android:id="@+id/tr4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/time"
             android:id="@+id/tvTime"
@@ -108,7 +144,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/etTime"
             android:textColor="#ffff0011"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
     </TableRow>
 
     <TableRow
@@ -128,6 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RadioGroup
+                android:id="@+id/rgDifficulty"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 >
@@ -160,11 +198,11 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/sync"
-            android:id="@+id/bSync"
+            android:text="@string/confirm"
+            android:id="@+id/bConfirm"
             android:layout_centerHorizontal="true" />
     </TableRow>
 
 </TableLayout>
 
-</LinearLayout>
+</RelativeLayout>

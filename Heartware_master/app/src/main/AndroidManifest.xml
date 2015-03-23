@@ -35,6 +35,8 @@
                   android:label="@string/app_name" />
         <activity android:name=".GraphsActivity"
                   android:label="@string/app_name" />
+        <activity android:name=".ViewWorkout"
+                  android:label="@string/app_name" />
     </application>
 
 </manifest>

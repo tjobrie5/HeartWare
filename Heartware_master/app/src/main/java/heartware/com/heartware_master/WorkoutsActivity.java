@@ -24,16 +24,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class WorkoutsActivity extends ListActivity
 {
     private static final String TAG = WorkoutsActivity.class.getSimpleName();
+    private ListView mListView;
     private Button bNewWorkout;
     private DBAdapter dbAdapter;
     private String mCurrentProfileId;
+    private TextView mExercise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,62 +48,48 @@ public class WorkoutsActivity extends ListActivity
         // get the current profile Id from the activity that started this one
         mCurrentProfileId = getIntent().getStringExtra(DBAdapter.PROFILE_ID);
 
-        ListView list = (ListView) findViewById(android.R.id.list);
+        mListView = (ListView) findViewById(android.R.id.list);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // send a map of data over to the view workout
-                Intent intent = new Intent(getApplication(), GraphsActivity.class);
-                //intent.putExtra(DBAdapter.EXERCISE, theExercise);
-                startActivity(intent);
-                Log.d(TAG, "in onItemSelected listener");
-            }
-        });
+        ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts();
 
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                // @TODO : delete a workout
-                Log.d(TAG, "in the onItemLongClick listener");
-                return false;
-            }
-        });
-
-        List<String> graph_List = new ArrayList<String>();
-
-        graph_List.add("steps");
-        graph_List.add("calories");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-        graph_List.add("placeholder");
-
+        // populate listview
+        List<String> list = new ArrayList<String>();
+        for(HashMap<String, String> w : workouts) {
+            list.add(w.get(DBAdapter.EXERCISE));
+        }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                graph_List
+                list
         );
 
         setListAdapter(arrayAdapter);
+
+        if(workouts.size() != 0) {
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // send a map of data over to the view workout
+                    Intent intent = new Intent(getApplication(), ViewWorkout.class);
+                    intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
+                    //intent.putExtra(DBAdapter.EXERCISE, )
+                    startActivity(intent);
+                    Log.d(TAG, "in onItemSelected listener");
+                }
+            });
+
+            mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+            {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    // @TODO : delete a workout
+                    Log.d(TAG, "in the onItemLongClick listener");
+                    return false;
+                }
+            });
+
+        }
 
         bNewWorkout = (Button) findViewById(R.id.bNewWorkout);
         bNewWorkout.setOnClickListener(new View.OnClickListener()
@@ -107,9 +97,10 @@ public class WorkoutsActivity extends ListActivity
             @Override
             public void onClick(View v)
             {
-                // @TODO : create a new workout
-                startActivity(new Intent(getApplication(), ViewWorkout.class));
-                Log.d(TAG, "in the Add Button onClick");
+                Intent intent = new Intent(getApplication(), ViewWorkout.class);
+                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
+                startActivity(intent);
+                Log.d(TAG, "Creating a New Workout.");
             }
         });
     }

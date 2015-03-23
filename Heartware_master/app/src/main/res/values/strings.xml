@@ -25,6 +25,7 @@
     <string name="time">Time</string>
     <string name="create">Create</string>
     <string name="update">Update</string>
+    <string name="confirm">Confirm</string>
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
     <string name="logout">Logout</string>

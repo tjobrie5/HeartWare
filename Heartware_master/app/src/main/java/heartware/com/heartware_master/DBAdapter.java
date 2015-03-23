@@ -103,7 +103,7 @@ public class DBAdapter extends SQLiteOpenHelper
     public void deleteProfile(String id)
     {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + PROFILES_TABLE + " where " + PROFILE_ID + "='" + id + "'";
+        String deleteQuery = "DELETE FROM " + PROFILES_TABLE + " WHERE " + PROFILE_ID + "='" + id + "'";
         database.execSQL(deleteQuery);
     }
 
@@ -180,5 +180,84 @@ public class DBAdapter extends SQLiteOpenHelper
             } while (cursor.moveToNext());
         }
         return profileMap;
+    }
+
+    public void createWorkout(HashMap<String, String> queryValues)
+    {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(USER_ID, queryValues.get(USER_ID));
+        values.put(PASSWORD, queryValues.get(PASSWORD));
+        values.put(SEX, queryValues.get(SEX));
+        database.insert(WORKOUTS_TABLE, null, values);
+        database.close();
+    }
+
+    public int updateWorkout(HashMap<String, String> queryValues)
+    {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(USERNAME, queryValues.get(USERNAME));
+        values.put(PASSWORD, getProfilePassword(queryValues.get(USER_ID)).get(PASSWORD));
+        values.put(SEX, queryValues.get(SEX));
+        // update(TableName, ContentValueForTable, WhereClause, ArgumentForWhereClause)
+        return database.update(WORKOUTS_TABLE, values,
+                USER_ID + " = ?", new String[] { queryValues.get(USER_ID) });
+    }
+
+    public void deleteWorkout(String id)
+    {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + WORKOUTS_TABLE + " WHERE " + USER_ID + "='" + id + "'";
+        database.execSQL(deleteQuery);
+    }
+
+    public ArrayList<HashMap<String, String>> getAllWorkouts()
+    {
+        ArrayList<HashMap<String, String>> workoutList;
+        workoutList = new ArrayList<HashMap<String, String>>();
+        String selectQuery = "SELECT * FROM " + WORKOUTS_TABLE + " ORDER BY " + USER_ID + " ASC";
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> workoutMap = new HashMap<String, String>();
+                workoutMap.put(USER_ID, cursor.getString(0));
+                workoutMap.put(EXERCISE, cursor.getString(1));
+                workoutMap.put(GOAL, cursor.getString(2));
+                workoutMap.put(DIFFICULTY, cursor.getString(3));
+                workoutMap.put(EXEMPTIONS, cursor.getString(4));
+                workoutMap.put(DATA, cursor.getString(5));
+                workoutMap.put(PLACE, cursor.getString(6));
+                workoutMap.put(TIME, cursor.getString(7));
+                workoutList.add(workoutMap);
+            } while (cursor.moveToNext());
+        }
+
+        return workoutList;
+    }
+
+    // assumes all exercises are uniquely named
+    public HashMap<String, String> getWorkoutInfo(String exercise)
+    {
+        HashMap<String, String> workoutMap = new HashMap<String, String>();
+        SQLiteDatabase database = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + WORKOUTS_TABLE + " WHERE " + EXERCISE + "='" + exercise + "'";
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                workoutMap.put(USER_ID, cursor.getString(0));
+                workoutMap.put(EXERCISE, cursor.getString(1));
+                workoutMap.put(GOAL, cursor.getString(2));
+                workoutMap.put(DIFFICULTY, cursor.getString(3));
+                workoutMap.put(EXEMPTIONS, cursor.getString(4));
+                workoutMap.put(DATA, cursor.getString(5));
+                workoutMap.put(PLACE, cursor.getString(6));
+                workoutMap.put(TIME, cursor.getString(7));
+            } while (cursor.moveToNext());
+        }
+        return workoutMap;
     }
 } // DBAdapter class
