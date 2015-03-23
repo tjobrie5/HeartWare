@@ -1,5 +1,5 @@
 // create the database file with sqlite3
-sqlite3 hw.db
+sqlite3 heartware.db
 
 // modify output
 .mode columns
@@ -8,24 +8,46 @@ sqlite3 hw.db
 // show tables
 .tables
 
-// creating a table called profiles 
+// creating a table called profiles
 CREATE TABLE profiles
-    ( profileId INTEGER PRIMARY KEY, userName TEXT NOT NULL,
-    sex TEXT, favExercise TEXT, disabilities TEXT,
-    workoutLocation TEXT, workoutLevel TEXT, steps INTEGER );
+    ( profileId INTEGER PRIMARY KEY, username TEXT NOT NULL,
+    password TEXT NOT NULL, sex TEXT );
 
-CREATE TABLE meetups 
-	( meetupsId INTEGER PRIMARY KEY,
-		date TEXT,
-		FOREIGN KEY (profileId) REFERENCES profiles(meetupsId) );
+CREATE TABLE workouts
+    ( userId INTEGER NOT NULL, exercise TEXT, goal TEXT,
+    difficulty TEXT, exemptions TEXT, data INTEGER, place TEXT,
+    time TEXT, FOREIGN KEY (userId) REFERENCES profiles (profileId) );
+
+// Selecting
+SELECT * FROM workouts;
+SELECT * FROM profiles;
 
 // inserting into the profiles table
-INSERT INTO profiles (userName, sex, favExercise, disabilities, workoutLocation, workoutLevel)
-    values ('steve', 'male', 'skiing', 'none', 'Miami', 'easy');
+INSERT INTO profiles (username, password, sex)
+    VALUES ('steve', 'stevepassword', 'male');
+INSERT INTO profiles (username, password)
+    VALUES ('billy', 'goat');
+
+SELECT profileId FROM profiles WHERE username = 'Steve';
+
+// inserting into workouts table (note the username must match profiles table)
+INSERT INTO workouts (userId, exercise) VALUES (1, 'hiking');
+
+INSERT INTO workouts (userId, exercise, goal, difficulty, exemptions,
+    data, place, time) VALUES (1, 'fishing', 'lose weight', 'easy', 'diabetes',
+    544, 'anywhere', 'anytime');
+
+INSERT INTO workouts (userId, exercise, goal, difficulty, exemptions,
+    data, place, time) VALUES (3, 'fishing', 'lose weight', 'easy', 'diabetes',
+    544, 'anywhere', 'anytime');
+
+INSERT INTO workouts (exercise) VALUES ('jogging');
 
 // update
-UPDATE profiles SET steps = 4, workoutLevel = 'medium' WHERE userName = 'steve';
+UPDATE profiles SET password = 'password', sex = 'female' WHERE username = 'steve';
+UPDATE profiles SET sex = 'unknown' WHERE username = 'billy';
 
+DELETE FROM workouts WHERE workoutId = 1;
 
 // exit
 .exit

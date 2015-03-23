@@ -25,7 +25,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBAdapter extends SQLiteOpenHelper
 {
     private static final String TAG = DBAdapter.class.getSimpleName();
-    private static final String DB_Name = "Profile";
+    private static final String DB_Name = "Profile"; // @TODO : create table names
     public static final String PROFILE_ID = "profileID";
     public static final String USER_NAME = "userName";
     public static final String USER_PASSWORD = "userPassword";
@@ -43,6 +43,7 @@ public class DBAdapter extends SQLiteOpenHelper
         super(appContext, DB_Name + ".db", null, 1);
     }
 
+    @Override
     public void onCreate(SQLiteDatabase database)
     {
         // @NOTE : Make sure you don't put a ; at the end of the SQL query string
@@ -53,6 +54,7 @@ public class DBAdapter extends SQLiteOpenHelper
         database.execSQL(query);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int version_old, int current_version)
     {
         String query = "DROP TABLE IF EXISTS " + DB_Name;
@@ -160,4 +162,3 @@ public class DBAdapter extends SQLiteOpenHelper
         return profileMap;
     }
 } // DBAdapter class
-
