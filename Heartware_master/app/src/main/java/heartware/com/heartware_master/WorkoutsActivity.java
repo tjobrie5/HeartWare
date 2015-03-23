@@ -9,7 +9,8 @@
 //
 // Source code: github.com/tjobrie5/HeartWare
 //
-// Description:
+// Description: Selecting a workout lets you edit the details surrounding the workout.
+//  A profile (user) can have multiple workouts which are contained in a listview.
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 package heartware.com.heartware_master;
@@ -27,16 +28,16 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoalsActivity extends ListActivity
+public class WorkoutsActivity extends ListActivity
 {
-    private static final String TAG = GoalsActivity.class.getSimpleName();
+    private static final String TAG = WorkoutsActivity.class.getSimpleName();
     private Button bAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goals_list);
+        setContentView(R.layout.activity_workouts);
 
         ListView list = (ListView) findViewById(android.R.id.list);
 

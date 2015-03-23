@@ -146,15 +146,10 @@ public class JawboneUpHelper extends Fragment
                 editor.putString(UpPlatformSdkConstants.UP_PLATFORM_ACCESS_TOKEN, result.access_token);
                 editor.putString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, result.refresh_token);
                 editor.commit();
-                // @TODO : clean this up - here's the start of mark's changes
+
                 TokenToServer tokenToServer = (TokenToServer) new TokenToServer().execute(
                         new String(result.access_token));
-                //Posting token to server side
-                //THIS IS THE BEGINNING OF OUR APP. Change Homepage.class to "nameofouractivity.class"
-                //Include name of our activity in android manifest.xml
-                //Intent intent = new Intent(HelloUpActivity.this, Homepage.class);
-                //intent.putExtra(UpPlatformSdkConstants.CLIENT_SECRET, CLIENT_SECRET);
-                //startActivity(intent);
+
                 Toast.makeText(getActivity(), "Connected with Jawbone UP Device", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, result.access_token + " THIS");
                 Log.d(TAG, "accessToken:" + result.access_token);

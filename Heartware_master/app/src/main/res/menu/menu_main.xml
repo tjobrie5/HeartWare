@@ -6,7 +6,7 @@
         android:id="@+id/action_search"
         android:icon="@mipmap/ic_launcher"
         app:showAsAction="always" />
-    <item android:title="@string/goals"
+    <item android:title="@string/workouts"
           android:id="@+id/action_goals"
           app:showAsAction="ifRoom|withText" />
     <item android:title="@string/friends"

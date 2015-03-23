@@ -18,7 +18,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,13 +28,11 @@ import android.widget.EditText;
 
 import java.util.HashMap;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener,
+public class MainActivity extends ActionBarActivity implements View.OnClickListener,
         LoginDialogFragment.LoginDialogListener
 {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private Button b_friends;
-    private Button b_graphs;
     private Button bUpdate;
     private Button bSync;
     private Button bLogout;
@@ -64,12 +62,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         dbAdapter = new DBAdapter(this);
 
-        b_graphs = (Button) findViewById(R.id.bGoals);
-        b_graphs.setOnClickListener(this);
-
-        b_friends = (Button) findViewById(R.id.bFriends);
-        b_friends.setOnClickListener(this);
-
         bSync = (Button) findViewById(R.id.bSync);
         bSync.setOnClickListener(this);
 
@@ -86,7 +78,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         etWorkoutLocations = (EditText) findViewById(R.id.etWorkoutLocations);
     } // onCreate
 
-// @TODO : add action bar activity ?
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -98,9 +89,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch(item.getItemId()) {
-            case R.id.action_search: return true;
-            case R.id.action_goals: return true;
-            case R.id.action_friends: return true;
+            case R.id.action_search:
+                return true;
+            case R.id.action_goals:
+                startActivity(new Intent(getApplicationContext(), WorkoutsActivity.class));
+                return true;
+            case R.id.action_friends:
+                startActivity(new Intent(getApplicationContext(), FriendsActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -114,16 +110,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View v)
     {
         switch (v.getId()) {
-            case R.id.bGoals:
-                startActivity(new Intent(getApplicationContext(), GoalsActivity.class));
-                break;
-
-            case R.id.bFriends:
-                startActivity(new Intent(getApplicationContext(), FriendsActivity.class));
-                break;
-
             case R.id.bSync:
-                // @TODO : perform some kind of sync between Android and Jawbone UP
                 Log.d(TAG, "bSync has been pressed ------");
                 mJboneHelper.sync();
                 break;
