@@ -53,7 +53,7 @@ public class WorkoutsActivity extends ListActivity
 
         mListView = (ListView) findViewById(android.R.id.list);
 
-        final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts();
+        final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts(mCurrentProfileId);
 
         ListAdapter arrayAdapter = new SimpleAdapter(this, workouts, R.layout.workout_entry,
                 new String[] { "userId", "exercise" }, new int[] {R.id.workoutId, R.id.tvExercise}

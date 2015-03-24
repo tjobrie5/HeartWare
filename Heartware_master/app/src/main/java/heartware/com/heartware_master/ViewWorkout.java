@@ -114,12 +114,14 @@ public class ViewWorkout extends Activity
                     // update workout
                     dbAdapter.updateWorkout(queryValues);
                     Toast.makeText(getApplicationContext(), "Updating " + mExercise, Toast.LENGTH_SHORT).show();
+                    // @TODO : update isn't working
                 }
                 else {
                     // create a new workout
                     dbAdapter.createWorkout(queryValues);
                     Toast.makeText(getApplicationContext(), "Created new workout " + etExercise.getText().toString(),
                             Toast.LENGTH_SHORT).show();
+                    // @TODO : create workout isn't working
                 }
                 startActivity(new Intent(getApplication(), WorkoutsActivity.class));
             }

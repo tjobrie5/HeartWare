@@ -167,7 +167,7 @@ public class DBAdapter extends SQLiteOpenHelper
     {
         HashMap<String, String> profileMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + PROFILES_TABLE + " WHERE " + USERNAME + "='" + user + "'";
+        String selectQuery = "SELECT * FROM " + PROFILES_TABLE + " WHERE " + USERNAME + "='" + user + "'" + " AND " + PASSWORD + "='" + pw + "'";
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
@@ -222,6 +222,7 @@ public class DBAdapter extends SQLiteOpenHelper
         database.execSQL(deleteQuery);
     }
 
+    // get every workout in the table
     public ArrayList<HashMap<String, String>> getAllWorkouts()
     {
         ArrayList<HashMap<String, String>> workoutList;
@@ -244,7 +245,32 @@ public class DBAdapter extends SQLiteOpenHelper
                 workoutList.add(workoutMap);
             } while (cursor.moveToNext());
         }
+        return workoutList;
+    }
 
+    // get every workout for a specific userid
+    public ArrayList<HashMap<String, String>> getAllWorkouts(final String userId)
+    {
+        ArrayList<HashMap<String, String>> workoutList;
+        workoutList = new ArrayList<HashMap<String, String>>();
+        String selectQuery = "SELECT * FROM " + WORKOUTS_TABLE + " WHERE " + USER_ID + " ='" + userId + "' ORDER BY " + USER_ID + " ASC";
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> workoutMap = new HashMap<String, String>();
+                workoutMap.put(USER_ID, cursor.getString(0));
+                workoutMap.put(EXERCISE, cursor.getString(1));
+                workoutMap.put(GOAL, cursor.getString(2));
+                workoutMap.put(DIFFICULTY, cursor.getString(3));
+                workoutMap.put(EXEMPTIONS, cursor.getString(4));
+                workoutMap.put(DATA, cursor.getString(5));
+                workoutMap.put(PLACE, cursor.getString(6));
+                workoutMap.put(TIME, cursor.getString(7));
+                workoutList.add(workoutMap);
+            } while (cursor.moveToNext());
+        }
         return workoutList;
     }
 
