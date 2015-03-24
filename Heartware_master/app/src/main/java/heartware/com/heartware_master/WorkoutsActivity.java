@@ -23,8 +23,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +40,7 @@ public class WorkoutsActivity extends ListActivity
     private Button bNewWorkout;
     private DBAdapter dbAdapter;
     private String mCurrentProfileId;
-    private TextView mExercise;
+    private TextView tvExercise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,18 +53,13 @@ public class WorkoutsActivity extends ListActivity
 
         mListView = (ListView) findViewById(android.R.id.list);
 
-        ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts();
+        final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts();
 
-        // populate listview
-        List<String> list = new ArrayList<String>();
-        for(HashMap<String, String> w : workouts) {
-            list.add(w.get(DBAdapter.EXERCISE));
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                list
+        ListAdapter arrayAdapter = new SimpleAdapter(this, workouts, R.layout.workout_entry,
+                new String[] { "userId", "exercise" }, new int[] {R.id.workoutId, R.id.tvExercise}
         );
+
+//        final ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.workout_entry, R.id.tvExercise, workouts);
 
         setListAdapter(arrayAdapter);
 
@@ -70,10 +68,12 @@ public class WorkoutsActivity extends ListActivity
             {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
+                    String exerciseName = tvExercise.getText().toString();
                     // send a map of data over to the view workout
                     Intent intent = new Intent(getApplication(), ViewWorkout.class);
                     intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                    //intent.putExtra(DBAdapter.EXERCISE, )
+                    intent.putExtra(DBAdapter.EXERCISE, exerciseName);
                     startActivity(intent);
                     Log.d(TAG, "in onItemSelected listener");
                 }
@@ -83,9 +83,15 @@ public class WorkoutsActivity extends ListActivity
             {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    // @TODO : delete a workout
                     Log.d(TAG, "in the onItemLongClick listener");
-                    return false;
+                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
+                    final String exName = tvExercise.getText().toString();
+                    dbAdapter.deleteWorkout(exName);
+                    // @TODO : make sure the row is dynamically updated after delete
+//                    workouts.remove(exName);
+//                    arrayAdapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), "Deleting " + exName, Toast.LENGTH_SHORT).show();
+                    return true;
                 }
             });
 

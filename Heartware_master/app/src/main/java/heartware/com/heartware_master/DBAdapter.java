@@ -187,8 +187,13 @@ public class DBAdapter extends SQLiteOpenHelper
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(USER_ID, queryValues.get(USER_ID));
-        values.put(PASSWORD, queryValues.get(PASSWORD));
-        values.put(SEX, queryValues.get(SEX));
+        values.put(EXERCISE, queryValues.get(EXERCISE));
+        values.put(GOAL, queryValues.get(GOAL));
+        values.put(DIFFICULTY, queryValues.get(DIFFICULTY));
+        values.put(EXEMPTIONS, queryValues.get(EXEMPTIONS));
+        values.put(DATA, queryValues.get(DATA));
+        values.put(PLACE, queryValues.get(PLACE));
+        values.put(TIME, queryValues.get(TIME));
         database.insert(WORKOUTS_TABLE, null, values);
         database.close();
     }
@@ -197,18 +202,23 @@ public class DBAdapter extends SQLiteOpenHelper
     {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(USERNAME, queryValues.get(USERNAME));
-        values.put(PASSWORD, getProfilePassword(queryValues.get(USER_ID)).get(PASSWORD));
-        values.put(SEX, queryValues.get(SEX));
+        values.put(USER_ID, queryValues.get(USER_ID));
+        values.put(EXERCISE, queryValues.get(EXERCISE));
+        values.put(GOAL, queryValues.get(GOAL));
+        values.put(DIFFICULTY, queryValues.get(DIFFICULTY));
+        values.put(EXEMPTIONS, queryValues.get(EXEMPTIONS));
+        values.put(DATA, queryValues.get(DATA));
+        values.put(PLACE, queryValues.get(PLACE));
+        values.put(TIME, queryValues.get(TIME));
         // update(TableName, ContentValueForTable, WhereClause, ArgumentForWhereClause)
         return database.update(WORKOUTS_TABLE, values,
-                USER_ID + " = ?", new String[] { queryValues.get(USER_ID) });
+                EXERCISE + " = ?", new String[] { queryValues.get(EXERCISE) });
     }
 
     public void deleteWorkout(String id)
     {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + WORKOUTS_TABLE + " WHERE " + USER_ID + "='" + id + "'";
+        String deleteQuery = "DELETE FROM " + WORKOUTS_TABLE + " WHERE " + EXERCISE + "='" + id + "'";
         database.execSQL(deleteQuery);
     }
 
