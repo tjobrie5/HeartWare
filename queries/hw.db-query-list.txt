@@ -21,14 +21,14 @@ CREATE TABLE workouts
 // Selecting
 SELECT * FROM workouts;
 SELECT * FROM profiles;
+SELECT profileId FROM profiles WHERE username = 'Steve';
+SELECT * FROM workouts ORDER BY userId ASC;
 
 // inserting into the profiles table
 INSERT INTO profiles (username, password, sex)
     VALUES ('steve', 'stevepassword', 'male');
 INSERT INTO profiles (username, password)
     VALUES ('billy', 'goat');
-
-SELECT profileId FROM profiles WHERE username = 'Steve';
 
 // inserting into workouts table (note the username must match profiles table)
 INSERT INTO workouts (userId, exercise) VALUES (1, 'hiking');
@@ -47,7 +47,14 @@ INSERT INTO workouts (exercise) VALUES ('jogging');
 UPDATE profiles SET password = 'password', sex = 'female' WHERE username = 'steve';
 UPDATE profiles SET sex = 'unknown' WHERE username = 'billy';
 
-DELETE FROM workouts WHERE workoutId = 1;
+UPDATE workouts SET goal = 'lose weight' WHERE exercise = 'hiking';
+UPDATE workouts SET goal = 'make money' WHERE exercise = 'hiking';
+
+// delete
+
+DELETE FROM workouts WHERE userId = 1;
+
+DELETE FROM workouts WHERE exercise = 'fishing' AND userId = 1;
 
 // exit
 .exit
