@@ -120,7 +120,9 @@ public class ViewWorkout extends Activity
                     dbAdapter.createWorkout(queryValues);
                     Toast.makeText(getApplicationContext(), "Created new workout " + etExercise.getText().toString(),
                             Toast.LENGTH_SHORT).show();
-                    // @TODO : create workout isn't working
+                    Intent intent = new Intent();
+                    intent.putExtra(DBAdapter.EXERCISE, etExercise.getText().toString());
+                    setResult(RESULT_OK, intent);
                 }
                 //startActivity(new Intent(getApplication(), WorkoutsActivity.class));
                 finish(); // return to WorkoutsActivity

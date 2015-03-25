@@ -122,16 +122,18 @@ public class WorkoutsActivity extends ListActivity
             {
                 Intent intent = new Intent(getApplication(), ViewWorkout.class);
                 intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                startActivity(intent);
+                startActivityForResult(intent, RESULT_OK);
                 Log.d(TAG, "Creating a New Workout.");
             }
         });
     }
 
     @Override
-    protected void onRestart()
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onRestart();
-        mArrayAdapter.notifyDataSetChanged();
+        super.onActivityResult(requestCode, resultCode, data);
+        //if(data.getStringExtra(DBAdapter.EXERCISE).equals())
+        // @TODO finish listview update once update / new workout is added
+
     }
 } // GoalsActivity class
