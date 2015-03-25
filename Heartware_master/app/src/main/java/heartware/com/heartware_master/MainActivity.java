@@ -147,7 +147,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onDialogPositiveClick(DialogFragment dialog, final String user, final String pw)
     {
         Log.d(TAG, " onDialogPositiveClick " + user + " " + pw);
-        HashMap<String, String> profile = dbAdapter.getProfileInfo(user, pw);
+        HashMap<String, String> profile = dbAdapter.getProfileByUserAndPass(user, pw);
         if(profile.size() == 0) {
             // no profile exist, force the user to enter again
             Log.d(TAG, user + " does not exist");
@@ -179,7 +179,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         newProfile.put(DBAdapter.PASSWORD, pw);
         dbAdapter.createProfile(newProfile);
         // this is sloppy, but once the profile is created a new profileId is made and we need it
-        mCurrentProfileId = dbAdapter.getProfileInfo(user, pw).get(DBAdapter.PROFILE_ID);
+        mCurrentProfileId = dbAdapter.getProfileByUserAndPass(user, pw).get(DBAdapter.PROFILE_ID);
         mLoginDialog.dismiss();
         // set the edit text for the user name on the main layout
         etUserName.setText(user);

@@ -56,13 +56,13 @@ public class ViewWorkout extends Activity
         etTime = (EditText) findViewById(R.id.etTime);
         tvViewLabel = (TextView) findViewById(R.id.tvViewLabel);
 
-        final String mCurrentProfileId = getIntent().getStringExtra(DBAdapter.PROFILE_ID);
-        final String mExercise = getIntent().getStringExtra(DBAdapter.EXERCISE);
+        final String theCurrentProfileId = getIntent().getStringExtra(DBAdapter.PROFILE_ID);
+        final String theCurrentExercise = getIntent().getStringExtra(DBAdapter.EXERCISE);
 
         // load workout info based on the exercise
-        if(mExercise != null) {
+        if(theCurrentExercise != null) {
             tvViewLabel.setText("Workout View");
-            HashMap<String, String> workout = dbAdapter.getWorkoutInfo(mExercise);
+            HashMap<String, String> workout = dbAdapter.getWorkoutInfo(theCurrentExercise, theCurrentProfileId);
             etExercise.setText(workout.get(DBAdapter.EXERCISE));
             etGoal.setText(workout.get(DBAdapter.GOAL));
             etExemptions.setText(workout.get(DBAdapter.EXEMPTIONS));
@@ -102,7 +102,7 @@ public class ViewWorkout extends Activity
                         break;
                 }
                 HashMap<String, String> queryValues = new HashMap<String, String>();
-                queryValues.put(DBAdapter.USER_ID, mCurrentProfileId);
+                queryValues.put(DBAdapter.USER_ID, theCurrentProfileId);
                 queryValues.put(DBAdapter.EXERCISE, etExercise.getText().toString());
                 queryValues.put(DBAdapter.GOAL, etGoal.getText().toString());
                 queryValues.put(DBAdapter.DIFFICULTY, difficulty);
@@ -110,11 +110,10 @@ public class ViewWorkout extends Activity
                 queryValues.put(DBAdapter.DATA, etData.getText().toString());
                 queryValues.put(DBAdapter.PLACE, etPlace.getText().toString());
                 queryValues.put(DBAdapter.TIME, etPlace.getText().toString());
-                if(mExercise != null) {
+                if(theCurrentExercise != null) {
                     // update workout
-                    dbAdapter.updateWorkout(queryValues);
-                    Toast.makeText(getApplicationContext(), "Updating " + mExercise, Toast.LENGTH_SHORT).show();
-                    // @TODO : update isn't working
+                    dbAdapter.updateWorkout(theCurrentExercise, theCurrentProfileId, queryValues);
+                    Toast.makeText(getApplicationContext(), "Updating " + theCurrentExercise, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     // create a new workout
@@ -123,7 +122,8 @@ public class ViewWorkout extends Activity
                             Toast.LENGTH_SHORT).show();
                     // @TODO : create workout isn't working
                 }
-                startActivity(new Intent(getApplication(), WorkoutsActivity.class));
+                //startActivity(new Intent(getApplication(), WorkoutsActivity.class));
+                finish(); // return to WorkoutsActivity
             }
         });
     }

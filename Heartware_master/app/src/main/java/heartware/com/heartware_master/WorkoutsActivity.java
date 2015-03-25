@@ -17,6 +17,7 @@ package heartware.com.heartware_master;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,7 @@ public class WorkoutsActivity extends ListActivity
     private DBAdapter dbAdapter;
     private String mCurrentProfileId;
     private TextView tvExercise;
+    private ArrayAdapter mArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,20 +56,23 @@ public class WorkoutsActivity extends ListActivity
         mListView = (ListView) findViewById(android.R.id.list);
 
         final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts(mCurrentProfileId);
+        final ArrayList<String> workoutArray = new ArrayList<>(workouts.size());
 
-        ListAdapter arrayAdapter = new SimpleAdapter(this, workouts, R.layout.workout_entry,
-                new String[] { "userId", "exercise" }, new int[] {R.id.workoutId, R.id.tvExercise}
-        );
+        int i = 0;
+        for(HashMap<String, String> workout : workouts) {
+            workoutArray.add(i++, workout.get(DBAdapter.EXERCISE));
+        }
 
-//        final ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.workout_entry, R.id.tvExercise, workouts);
+        mArrayAdapter = new ArrayAdapter(this, R.layout.workout_entry, R.id.tvExercise, workoutArray);
 
-        setListAdapter(arrayAdapter);
+        setListAdapter(mArrayAdapter);
 
         if(workouts.size() != 0) {
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d(TAG, "in onItemSelected listener");
                     tvExercise = (TextView) view.findViewById(R.id.tvExercise);
                     String exerciseName = tvExercise.getText().toString();
                     // send a map of data over to the view workout
@@ -75,26 +80,38 @@ public class WorkoutsActivity extends ListActivity
                     intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
                     intent.putExtra(DBAdapter.EXERCISE, exerciseName);
                     startActivity(intent);
-                    Log.d(TAG, "in onItemSelected listener");
                 }
             });
 
             mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
             {
                 @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
                     Log.d(TAG, "in the onItemLongClick listener");
                     tvExercise = (TextView) view.findViewById(R.id.tvExercise);
                     final String exName = tvExercise.getText().toString();
                     dbAdapter.deleteWorkout(exName);
-                    // @TODO : make sure the row is dynamically updated after delete
-//                    workouts.remove(exName);
-//                    arrayAdapter.notifyDataSetChanged();
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        view.animate().setDuration(2000).alpha(0)
+                                .withEndAction(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        workoutArray.remove(exName);
+                                        mArrayAdapter.notifyDataSetChanged();
+                                        view.setAlpha(1);
+                                    }
+                                });
+                    }
+                    else {
+                        workoutArray.remove(exName);
+                        mArrayAdapter.notifyDataSetChanged();
+                    }
                     Toast.makeText(getApplicationContext(), "Deleting " + exName, Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
-
         }
 
         bNewWorkout = (Button) findViewById(R.id.bNewWorkout);
@@ -109,5 +126,12 @@ public class WorkoutsActivity extends ListActivity
                 Log.d(TAG, "Creating a New Workout.");
             }
         });
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        mArrayAdapter.notifyDataSetChanged();
     }
 } // GoalsActivity class

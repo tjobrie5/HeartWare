@@ -129,7 +129,7 @@ public class DBAdapter extends SQLiteOpenHelper
         return profileArrayList;
     }
 
-    public HashMap<String, String> getProfileInfo(String id)
+    public HashMap<String, String> getProfileById(String id)
     {
         HashMap<String, String> profileMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
@@ -163,7 +163,7 @@ public class DBAdapter extends SQLiteOpenHelper
         return profileMap;
     }
 
-    public HashMap<String, String> getProfileInfo(String user, String pw)
+    public HashMap<String, String> getProfileByUserAndPass(String user, String pw)
     {
         HashMap<String, String> profileMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
@@ -198,7 +198,7 @@ public class DBAdapter extends SQLiteOpenHelper
         database.close();
     }
 
-    public int updateWorkout(HashMap<String, String> queryValues)
+    public int updateWorkout(final String oldEx, final String userId, HashMap<String, String> queryValues)
     {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -212,7 +212,7 @@ public class DBAdapter extends SQLiteOpenHelper
         values.put(TIME, queryValues.get(TIME));
         // update(TableName, ContentValueForTable, WhereClause, ArgumentForWhereClause)
         return database.update(WORKOUTS_TABLE, values,
-                EXERCISE + " = ?", new String[] { queryValues.get(EXERCISE) });
+                EXERCISE + " = '" + oldEx + "' AND " + USER_ID + " = " + userId, null);
     }
 
     public void deleteWorkout(String id)
@@ -275,11 +275,11 @@ public class DBAdapter extends SQLiteOpenHelper
     }
 
     // assumes all exercises are uniquely named
-    public HashMap<String, String> getWorkoutInfo(String exercise)
+    public HashMap<String, String> getWorkoutInfo(final String exercise, final String userId)
     {
         HashMap<String, String> workoutMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + WORKOUTS_TABLE + " WHERE " + EXERCISE + "='" + exercise + "'";
+        String selectQuery = "SELECT * FROM " + WORKOUTS_TABLE + " WHERE " + EXERCISE + "='" + exercise + "'" + " AND " + USER_ID + " = " + userId;
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {

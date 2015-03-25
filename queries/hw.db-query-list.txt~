@@ -47,8 +47,8 @@ INSERT INTO workouts (exercise) VALUES ('jogging');
 UPDATE profiles SET password = 'password', sex = 'female' WHERE username = 'steve';
 UPDATE profiles SET sex = 'unknown' WHERE username = 'billy';
 
-UPDATE workouts SET goal = 'lose weight' WHERE exercise = 'hiking' AND userId = 1;
-UPDATE workouts SET goal = 'make money' WHERE exercise = 'hiking' AND userId = 1;
+UPDATE workouts SET goal = 'lose weight' WHERE exercise = 'hiking';
+UPDATE workouts SET goal = 'make money' WHERE exercise = 'hiking';
 
 // delete
 

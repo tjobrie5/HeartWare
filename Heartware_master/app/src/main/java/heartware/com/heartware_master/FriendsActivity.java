@@ -29,7 +29,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 
-// @TODO : create a listview of friends and meetups
+// @TODO : create a listview of friends and allow user to do social stuff
 public class FriendsActivity extends Activity
 {
     private static final String TAG = FriendsActivity.class.getSimpleName();
