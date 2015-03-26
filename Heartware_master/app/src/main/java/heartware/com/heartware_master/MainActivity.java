@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -118,6 +119,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 queryValues.put(DBAdapter.USERNAME, etUserName.getText().toString());
                 queryValues.put(DBAdapter.SEX, etSex.getText().toString());
                 dbAdapter.updateProfile(queryValues);
+                Toast.makeText(this, "Updating Profile Information",
+                        Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.bLogout:
