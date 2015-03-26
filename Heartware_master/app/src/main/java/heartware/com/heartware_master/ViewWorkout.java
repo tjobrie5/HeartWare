@@ -38,6 +38,8 @@ public class ViewWorkout extends Activity
     private EditText etPlace, etTime;
     private DBAdapter dbAdapter;
     private TextView tvViewLabel;
+    public static final String NEW_WORKOUT = "NEW_WORKOUT";
+    public static final String OLD_WORKOUT = "OLD_WORKOUT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -114,6 +116,10 @@ public class ViewWorkout extends Activity
                     // update workout
                     dbAdapter.updateWorkout(theCurrentExercise, theCurrentProfileId, queryValues);
                     Toast.makeText(getApplicationContext(), "Updating " + theCurrentExercise, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.putExtra(OLD_WORKOUT, theCurrentExercise);
+                    intent.putExtra(NEW_WORKOUT, etExercise.getText().toString());
+                    setResult(RESULT_OK, intent);
                 }
                 else {
                     // create a new workout
@@ -121,10 +127,9 @@ public class ViewWorkout extends Activity
                     Toast.makeText(getApplicationContext(), "Created new workout " + etExercise.getText().toString(),
                             Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
-                    intent.putExtra(DBAdapter.EXERCISE, etExercise.getText().toString());
+                    intent.putExtra(NEW_WORKOUT, etExercise.getText().toString());
                     setResult(RESULT_OK, intent);
                 }
-                //startActivity(new Intent(getApplication(), WorkoutsActivity.class));
                 finish(); // return to WorkoutsActivity
             }
         });

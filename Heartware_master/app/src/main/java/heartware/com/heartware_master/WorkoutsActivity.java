@@ -24,15 +24,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class WorkoutsActivity extends ListActivity
 {
@@ -43,6 +40,7 @@ public class WorkoutsActivity extends ListActivity
     private String mCurrentProfileId;
     private TextView tvExercise;
     private ArrayAdapter mArrayAdapter;
+    private ArrayList<String> mWorkoutArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,14 +54,11 @@ public class WorkoutsActivity extends ListActivity
         mListView = (ListView) findViewById(android.R.id.list);
 
         final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts(mCurrentProfileId);
-        final ArrayList<String> workoutArray = new ArrayList<>(workouts.size());
+        mWorkoutArray = new ArrayList<>(workouts.size());
 
-        int i = 0;
-        for(HashMap<String, String> workout : workouts) {
-            workoutArray.add(i++, workout.get(DBAdapter.EXERCISE));
-        }
+        setWorkoutArray(workouts);
 
-        mArrayAdapter = new ArrayAdapter(this, R.layout.workout_entry, R.id.tvExercise, workoutArray);
+        mArrayAdapter = new ArrayAdapter(this, R.layout.workout_entry, R.id.tvExercise, mWorkoutArray);
 
         setListAdapter(mArrayAdapter);
 
@@ -79,7 +74,7 @@ public class WorkoutsActivity extends ListActivity
                     Intent intent = new Intent(getApplication(), ViewWorkout.class);
                     intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
                     intent.putExtra(DBAdapter.EXERCISE, exerciseName);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
                 }
             });
 
@@ -98,14 +93,14 @@ public class WorkoutsActivity extends ListActivity
                                     @Override
                                     public void run()
                                     {
-                                        workoutArray.remove(exName);
+                                        mWorkoutArray.remove(exName);
                                         mArrayAdapter.notifyDataSetChanged();
                                         view.setAlpha(1);
                                     }
                                 });
                     }
                     else {
-                        workoutArray.remove(exName);
+                        mWorkoutArray.remove(exName);
                         mArrayAdapter.notifyDataSetChanged();
                     }
                     Toast.makeText(getApplicationContext(), "Deleting " + exName, Toast.LENGTH_SHORT).show();
@@ -122,7 +117,7 @@ public class WorkoutsActivity extends ListActivity
             {
                 Intent intent = new Intent(getApplication(), ViewWorkout.class);
                 intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                startActivityForResult(intent, RESULT_OK);
+                startActivityForResult(intent, 1);
                 Log.d(TAG, "Creating a New Workout.");
             }
         });
@@ -132,8 +127,28 @@ public class WorkoutsActivity extends ListActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        //if(data.getStringExtra(DBAdapter.EXERCISE).equals())
-        // @TODO finish listview update once update / new workout is added
+        final String oldWorkout = data.getStringExtra(ViewWorkout.OLD_WORKOUT);
+        final String newWorkout = data.getStringExtra(ViewWorkout.NEW_WORKOUT);
+        if(oldWorkout == null) { // new workout
+            mWorkoutArray.add(newWorkout);
+            mArrayAdapter.notifyDataSetChanged();
+        }
+        else { // updating current workout
+            for(int i = 0; i < mWorkoutArray.size(); ++i) {
+                if(mWorkoutArray.get(i).equals(oldWorkout)) {
+                    mWorkoutArray.set(i, newWorkout);
+                    mArrayAdapter.notifyDataSetChanged();
+                }
+            }
+        }
 
+    }
+
+    private void setWorkoutArray(ArrayList<HashMap<String, String>> listMap)
+    {
+        int i = 0;
+        for(HashMap<String, String> map : listMap) {
+            mWorkoutArray.add(i++, map.get(DBAdapter.EXERCISE));
+        }
     }
 } // GoalsActivity class
