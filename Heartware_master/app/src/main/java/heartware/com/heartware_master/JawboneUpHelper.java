@@ -16,11 +16,13 @@
 package heartware.com.heartware_master;
 
 import android.app.Fragment;
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -101,6 +103,15 @@ public class JawboneUpHelper extends Fragment
         startActivityForResult(intent, UpPlatformSdkConstants.JAWBONE_AUTHORIZE_REQUEST_CODE);
     }
 
+    /**
+     * Called to stop the syncing of data between Jawbone UP and Android devices.
+     * Called externally in MainActivity when user logouts out or stops.
+     */
+    public void stop()
+    {
+
+    }
+
     private Intent getIntentForWebView()
     {
         Uri.Builder builder = OauthUtils.setOauthParameters(
@@ -131,7 +142,7 @@ public class JawboneUpHelper extends Fragment
                          code,
                          accessTokenRequestListener);
             }
-         }
+        }
     }
 
     private Callback accessTokenRequestListener = new Callback<OauthAccessTokenResponse>()
@@ -165,6 +176,30 @@ public class JawboneUpHelper extends Fragment
             Log.d(TAG, "failed to get accessToken: " + retrofitError.getMessage());
         }
     };
+
+    /**
+     * Used to manage the synchornization of data between Android and Jawbone UP
+     * devices. It is used internally by this class.
+     */
+    private class JawboneUpDataSyncer extends Service {
+        @Override
+        public void onDestroy()
+        {
+            super.onDestroy();
+        }
+
+        @Override
+        public IBinder onBind(Intent intent)
+        {
+            return null;
+        }
+
+        @Override
+        public int onStartCommand(Intent intent, int flags, int startId)
+        {
+            return super.onStartCommand(intent, flags, startId);
+        }
+    }
 
     private class TokenToServer extends AsyncTask<String, Void, String> {
         private static final String URL = "http://qqroute.com:8080/sendToken";

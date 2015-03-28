@@ -109,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.bSync:
                 Log.d(TAG, "bSync has been pressed ------");
-                mJboneHelper.sync();
+//                mJboneHelper.sync();
                 break;
 
             case R.id.bUpdate:
@@ -127,6 +127,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Log.d(TAG, " logging out");
                 clearEditTexts();
                 mCurrentProfileId = "0";
+                mJboneHelper.stop(); // stop syncing data for this user
                 mLoginDialog.show(getFragmentManager(), TAG);
                 break;
         }
@@ -164,6 +165,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             etSex.setText(profile.get(DBAdapter.SEX));
             mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
             mLoginDialog.dismiss();
+            mJboneHelper.sync();
         }
     }
 
@@ -186,6 +188,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mLoginDialog.dismiss();
         // set the edit text for the user name on the main layout
         etUserName.setText(user);
+        mJboneHelper.sync();
     }
 
     /**
@@ -195,5 +198,25 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     {
         etUserName.setText("");
         etSex.setText("");
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        Log.d(TAG, "in on Start");
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        Log.d(TAG, "in on Stop)");
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
     }
 } // MainActivity class
