@@ -74,7 +74,7 @@ public class WorkoutsActivity extends ListActivity
                     Intent intent = new Intent(getApplication(), ViewWorkout.class);
                     intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
                     intent.putExtra(DBAdapter.EXERCISE, exerciseName);
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, 0);
                 }
             });
 
@@ -117,7 +117,7 @@ public class WorkoutsActivity extends ListActivity
             {
                 Intent intent = new Intent(getApplication(), ViewWorkout.class);
                 intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 0);
                 Log.d(TAG, "Creating a New Workout.");
             }
         });
@@ -127,21 +127,24 @@ public class WorkoutsActivity extends ListActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        final String oldWorkout = data.getStringExtra(ViewWorkout.OLD_WORKOUT);
-        final String newWorkout = data.getStringExtra(ViewWorkout.NEW_WORKOUT);
-        if(oldWorkout == null) { // new workout
-            mWorkoutArray.add(newWorkout);
-            mArrayAdapter.notifyDataSetChanged();
-        }
-        else { // updating current workout
-            for(int i = 0; i < mWorkoutArray.size(); ++i) {
-                if(mWorkoutArray.get(i).equals(oldWorkout)) {
-                    mWorkoutArray.set(i, newWorkout);
-                    mArrayAdapter.notifyDataSetChanged();
+        // there should always be a new workout, if there isn't the user just hit back
+        if(resultCode == RESULT_OK) {
+            final String oldWorkout = data.getStringExtra(ViewWorkout.OLD_WORKOUT);
+            final String newWorkout = data.getStringExtra(ViewWorkout.NEW_WORKOUT);
+            if(oldWorkout == null) { // new workout
+                mWorkoutArray.add(newWorkout);
+                mArrayAdapter.notifyDataSetChanged();
+            }
+            else { // updating current workout
+                for(int i = 0; i < mWorkoutArray.size(); ++i) {
+                    if(mWorkoutArray.get(i).equals(oldWorkout)) {
+                        mWorkoutArray.set(i, newWorkout);
+                        mArrayAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         }
-
+        // else, do nothing the user just hit back
     }
 
     private void setWorkoutArray(ArrayList<HashMap<String, String>> listMap)
@@ -150,5 +153,11 @@ public class WorkoutsActivity extends ListActivity
         for(HashMap<String, String> map : listMap) {
             mWorkoutArray.add(i++, map.get(DBAdapter.EXERCISE));
         }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
     }
 } // GoalsActivity class

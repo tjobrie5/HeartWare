@@ -87,7 +87,6 @@ public class ViewWorkout extends Activity
             tvViewLabel.setText("Create a new Workout");
         }
 
-
         bConfirm.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -133,5 +132,14 @@ public class ViewWorkout extends Activity
                 finish(); // return to WorkoutsActivity
             }
         });
+    }
+
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        setResult(RESULT_CANCELED, new Intent());
+        finish();
     }
 } // ViewWorkout class

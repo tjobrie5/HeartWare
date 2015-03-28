@@ -8,7 +8,8 @@
     <string name="title_activity_graph_list">graph_list</string>
     <string name="goals">Goals</string>
     <string name="workouts">Workouts</string>
-    <string name="jbone_login">Log in using your Jawbone UP info</string>
+    <string name="jbone_login">Enter Jawbone UP Info</string>
+    <string name="jbone_service">Jawbone UP Service Runner</string>
     <string name="add_button">Add</string>
     <string name="login_pop_up">Have you used Heartware before?</string>
     <string name="new_user">New User</string>
@@ -31,7 +32,7 @@
     <string name="logout">Logout</string>
     <string name="hard">Hard</string>
     <string name="sync">Sync</string>
-    <string name="facebook_app_id">795766887172566</string>
     <string name="new_workout">New Workout</string>
-    <!-- necessary for Facebook SDK -->
+    <string name="facebook_app_id">795766887172566</string>
+    <!-- facebook_app_id is necessary for Facebook SDK -->
 </resources>
