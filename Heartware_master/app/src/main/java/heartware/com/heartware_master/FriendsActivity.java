@@ -9,19 +9,26 @@
 //
 // Source code: github.com/tjobrie5/HeartWare
 //
-// Description: Handles Facebook API calls.
+// Description: Handles Facebook API calls and social networking functionality.
+//  Example: http://javatechig.com/android/using-facebook-sdk-in-android-example
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 package heartware.com.heartware_master;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AppEventsLogger;
-import com.facebook.FacebookAuthorizationException;
-import com.facebook.FacebookOperationCanceledException;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -29,24 +36,22 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 
-// @TODO : create a listview of friends and allow user to do social stuff
+import java.util.Arrays;
+import java.util.List;
+
 public class FriendsActivity extends Activity
 {
     private static final String TAG = FriendsActivity.class.getSimpleName();
+    private TextView tvUsername;
+    private Button bPostImage;
+    private Button bUpdateStatus;
     // Facebook stuff
+    private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
+    private static String TEST_MESSAGE = "Sample status posted from android app";
     private LoginButton bAuthButton;
     private GraphUser mUser;
     private ProfilePictureView mProfilePictureView;
-    private enum PendingAction { NONE, POST_PHOTO, POST_STATUS_UPDATE };
     private UiLifecycleHelper mUIHelper;
-    private PendingAction mPendingAction = PendingAction.NONE;
-
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,22 +59,131 @@ public class FriendsActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
 
-        mUIHelper = new UiLifecycleHelper(this, callback);
+        mProfilePictureView = (ProfilePictureView) findViewById(R.id.vProfilePicture);
+
+        mUIHelper = new UiLifecycleHelper(this, statusCallback);
         mUIHelper.onCreate(savedInstanceState);
 
+        tvUsername = (TextView) findViewById(R.id.tvUserName);
         bAuthButton = (LoginButton) findViewById(R.id.bAuthButton);
         bAuthButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser graphUser) {
-                Log.d(TAG, "in onUserInfoFetched - bAuthButton");
-                // save the user
-                mUser = graphUser;
-                updateUI();
-                handlePendingAction();
+                if(graphUser != null) {
+                    tvUsername.setText(graphUser.getName());
+                    mUser = graphUser;
+                    updateUI();
+                }
+                else {
+                    tvUsername.setText("You are not logged into Facebook");
+                    mUser = null;
+                    updateUI();
+                }
             }
         });
 
-        mProfilePictureView = (ProfilePictureView) findViewById(R.id.vProfilePicture);
+        bPostImage = (Button) findViewById(R.id.bPostImage);
+        bPostImage.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                postImage();
+            }
+        });
+
+        bUpdateStatus = (Button) findViewById(R.id.bUpdateStatus);
+        bUpdateStatus.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                postStatusMessage();
+            }
+        });
+
+        buttonsEnabled(false);
+    } // onCreate
+
+    /**
+     * Callback is invoked after user logs in and logs out.
+     */
+    private Session.StatusCallback statusCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state,
+                         Exception exception) {
+            if (state.isOpened()) {
+                buttonsEnabled(true);
+                Log.d(TAG, "Facebook session opened");
+            } else if (state.isClosed()) {
+                buttonsEnabled(false);
+                Log.d(TAG, "Facebook session closed");
+            }
+        }
+    };
+
+    /**
+     * Uploaded an image to the user's facebook page
+     */
+    public void postImage()
+    {
+        if(checkPermissions()) {
+            Bitmap img = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.ic_launcher);
+            Request uploadRequest = Request.newUploadPhotoRequest(
+                    Session.getActiveSession(), img, new Request.Callback() {
+                        @Override
+                        public void onCompleted(Response response) {
+                            Toast.makeText(FriendsActivity.this,
+                                    "Photo uploaded successfully",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+            uploadRequest.executeAsync();
+        }
+        else {
+            requestPermissions();
+        }
+    }
+
+    /**
+     * Post an update status to the user's Facebook page.
+     */
+    public void postStatusMessage()
+    {
+        if(checkPermissions()) {
+            Request request = Request.newStatusUpdateRequest(
+                    Session.getActiveSession(), TEST_MESSAGE,
+                    new Request.Callback() {
+                        @Override
+                        public void onCompleted(Response response) {
+                            if(response.getError() == null)
+                                Toast.makeText(FriendsActivity.this,
+                                        "Status updated successfully",
+                                        Toast.LENGTH_LONG).show();
+                        }
+                    });
+            request.executeAsync();
+        }
+        else {
+            requestPermissions();
+        }
+    }
+
+    public boolean checkPermissions()
+    {
+        Session s = Session.getActiveSession();
+        if(s != null)
+            return s.getPermissions().contains("publish_actions");
+        else
+            return false;
+    }
+
+    public void requestPermissions()
+    {
+        Session s = Session.getActiveSession();
+        if(s != null)
+            s.requestNewPublishPermissions(new Session.NewPermissionsRequest(this, PERMISSIONS));
     }
 
     @Override
@@ -91,7 +205,6 @@ public class FriendsActivity extends Activity
         AppEventsLogger.deactivateApp(this);
     }
 
-
     @Override
     protected void onDestroy()
     {
@@ -104,34 +217,22 @@ public class FriendsActivity extends Activity
     {
         super.onSaveInstanceState(outState);
         mUIHelper.onSaveInstanceState(outState);
-
-//        outState.putString(PENDING_ACTION_BUNDLE_KEY, pendingAction.name());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-//        uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
+        mUIHelper.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (mPendingAction != PendingAction.NONE &&
-                (exception instanceof FacebookOperationCanceledException ||
-                        exception instanceof FacebookAuthorizationException)) {
-//            new AlertDialog.Builder(HelloFacebookSampleActivity.this)
-//                    .setTitle(R.string.cancelled)
-//                    .setMessage(R.string.permission_not_granted)
-//                    .setPositiveButton(R.string.ok, null)
-//                    .show();
-            mPendingAction = PendingAction.NONE;
-        } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
-            handlePendingAction();
-        }
-        updateUI();
+    public void buttonsEnabled(boolean isEnabled)
+    {
+        bPostImage.setEnabled(isEnabled);
+        bUpdateStatus.setEnabled(isEnabled);
     }
 
-    // UI updates after user logins in
+    // UI updates after user logs in
     private void updateUI()
     {
         Session session = Session.getActiveSession();
@@ -139,26 +240,11 @@ public class FriendsActivity extends Activity
 
         if(enableButtons && mUser != null) {
             mProfilePictureView.setProfileId(mUser.getId());
+            buttonsEnabled(true);
         }
         else {
             mProfilePictureView.setProfileId(null);
-        }
-    }
-
-    @SuppressWarnings("incomplete-switch")
-    private void handlePendingAction() {
-        PendingAction previouslyPendingAction = mPendingAction;
-        // These actions may re-set pendingAction if they are still pending, but we assume they
-        // will succeed.
-        mPendingAction = PendingAction.NONE;
-
-        switch (previouslyPendingAction) {
-            case POST_PHOTO:
-//                postPhoto();
-                break;
-            case POST_STATUS_UPDATE:
-//                postStatusUpdate();
-                break;
+            buttonsEnabled(false);
         }
     }
 } // FriendsActivity class

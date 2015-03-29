@@ -23,6 +23,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class GraphsActivity extends ActionBarActivity
 {
+    // @TODO : add graph to workout view
     private static final String TAG = GraphsActivity.class.getSimpleName();
     private GraphView mGraph;
 

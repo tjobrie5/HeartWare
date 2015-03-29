@@ -11,7 +11,6 @@
     <string name="jbone_login">Enter Jawbone UP Info</string>
     <string name="jbone_service">Jawbone UP Service Runner</string>
     <string name="add_button">Add</string>
-    <string name="login_pop_up">Have you used Heartware before?</string>
     <string name="new_user">New User</string>
     <string name="returning_user">Returning User</string>
     <string name="friends">Friends</string>
@@ -33,6 +32,8 @@
     <string name="hard">Hard</string>
     <string name="sync">Sync</string>
     <string name="new_workout">New Workout</string>
+    <string name="fb_update">Update Status</string>
+    <string name="fb_post_image">Post Image</string>
     <string name="facebook_app_id">795766887172566</string>
     <!-- facebook_app_id is necessary for Facebook SDK -->
 </resources>

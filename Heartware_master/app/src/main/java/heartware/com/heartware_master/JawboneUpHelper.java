@@ -178,10 +178,10 @@ public class JawboneUpHelper extends Fragment
     };
 
     /**
-     * Used to manage the synchornization of data between Android and Jawbone UP
-     * devices. It is used internally by this class.
+     * Used to manage the background synchornization of data
+     * between Android and Jawbone UP devices.
      */
-    private class JawboneUpDataSyncer extends Service {
+    private class JawboneUpDataSyncer extends Service { // @TODO : add service tags in Manifest
         @Override
         public void onDestroy()
         {
