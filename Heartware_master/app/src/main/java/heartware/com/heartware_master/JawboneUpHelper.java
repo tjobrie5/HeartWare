@@ -49,6 +49,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit.Callback;
@@ -158,6 +159,12 @@ public class JawboneUpHelper extends Fragment
                 editor.putString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, result.refresh_token);
                 editor.commit();
 
+                // get "Move" data list from Jawbone
+                ApiManager.getRestApiInterface().getMoveEventsList(
+                        UpPlatformSdkConstants.API_VERSION_STRING,
+                        getMoveEventsListRequestParams(),
+                        genericCallbackListener);
+
                 TokenToServer tokenToServer = (TokenToServer) new TokenToServer().execute(
                         new String(result.access_token));
 
@@ -201,7 +208,8 @@ public class JawboneUpHelper extends Fragment
         }
     }
 
-    private class TokenToServer extends AsyncTask<String, Void, String> {
+    private class TokenToServer extends AsyncTask<String, Void, String>
+    {
         private static final String URL = "http://qqroute.com:8080/sendToken";
         @Override
         protected String doInBackground(String... params)
@@ -237,5 +245,36 @@ public class JawboneUpHelper extends Fragment
 
             return "doInBackground() -- TokenToServer";
         }
+    } // TokenToServer class
+
+    private Callback genericCallbackListener = new Callback<Object>() {
+        @Override
+        public void success(Object o, Response response) {
+            Log.e(TAG,  "api call successful, json output: " + o.toString());
+            Toast.makeText(getActivity(), o.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+            Log.e(TAG,  "api call failed, error message: " + retrofitError.getMessage());
+            Toast.makeText(getActivity(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    };
+
+    /**
+     * This controls how the "Moves Event" data is ordered when requested from Jawbone UP device.
+     * @return
+     */
+    private static HashMap<String, Integer> getMoveEventsListRequestParams() {
+        HashMap<String, Integer> queryHashMap = new HashMap<String, Integer>();
+
+        //uncomment to add as needed parameters
+//        queryHashMap.put("date", "<insert-date>");
+//        queryHashMap.put("page_token", "<insert-page-token>");
+//        queryHashMap.put("start_time", "<insert-time>");
+//        queryHashMap.put("end_time", "<insert-time>");
+//        queryHashMap.put("updated_after", "<insert-time>");
+
+        return queryHashMap;
     }
 } // JawboneUpHelper class
