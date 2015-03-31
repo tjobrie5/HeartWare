@@ -35,7 +35,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Button bUpdate;
-    private Button bSync;
     private Button bLogout;
     private EditText etUserName;
     private EditText etSex;
@@ -59,9 +58,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         createLoginDialog();
 
         dbAdapter = new DBAdapter(this);
-
-        bSync = (Button) findViewById(R.id.bSync);
-        bSync.setOnClickListener(this);
 
         bUpdate = (Button) findViewById(R.id.bUpdate);
         bUpdate.setOnClickListener(this);
@@ -107,11 +103,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v)
     {
         switch (v.getId()) {
-            case R.id.bSync:
-                Log.d(TAG, "bSync has been pressed ------");
-//                mJboneHelper.sync();
-                break;
-
             case R.id.bUpdate:
                 Log.d(TAG, "updating " + etUserName.getText().toString());
                 HashMap<String, String> queryValues = new HashMap<>();
@@ -127,7 +118,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Log.d(TAG, " logging out");
                 clearEditTexts();
                 mCurrentProfileId = "0";
-                mJboneHelper.stop(); // stop syncing data for this user
                 mLoginDialog.show(getFragmentManager(), TAG);
                 break;
         }
@@ -165,7 +155,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             etSex.setText(profile.get(DBAdapter.SEX));
             mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
             mLoginDialog.dismiss();
-            mJboneHelper.sync();
+            mJboneHelper.sendToken(); // send the token
         }
     }
 
@@ -188,7 +178,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mLoginDialog.dismiss();
         // set the edit text for the user name on the main layout
         etUserName.setText(user);
-        mJboneHelper.sync();
+        mJboneHelper.sendToken();
     }
 
     /**

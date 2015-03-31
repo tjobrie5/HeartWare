@@ -103,17 +103,6 @@
                 android:layout_column="0"/>
         </TableRow>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/sync"
-                android:id="@+id/bSync"
-                android:layout_centerHorizontal="true" />
-            </TableRow>
-
     </TableLayout>
 
 

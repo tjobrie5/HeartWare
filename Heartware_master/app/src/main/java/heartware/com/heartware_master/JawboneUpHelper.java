@@ -96,21 +96,12 @@ public class JawboneUpHelper extends Fragment
     }
 
     /**
-     * Called from MainActivity when user clicks the 'sync' button on the main UI view
+     * Called automatically when the user logs into the MainActivity
      */
-    public void sync()
+    public void sendToken()
     {
         Intent intent = getIntentForWebView();
         startActivityForResult(intent, UpPlatformSdkConstants.JAWBONE_AUTHORIZE_REQUEST_CODE);
-    }
-
-    /**
-     * Called to stop the syncing of data between Jawbone UP and Android devices.
-     * Called externally in MainActivity when user logouts out or stops.
-     */
-    public void stop()
-    {
-
     }
 
     private Intent getIntentForWebView()
@@ -159,12 +150,6 @@ public class JawboneUpHelper extends Fragment
                 editor.putString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, result.refresh_token);
                 editor.commit();
 
-                // get "Move" data list from Jawbone
-                ApiManager.getRestApiInterface().getMoveEventsList(
-                        UpPlatformSdkConstants.API_VERSION_STRING,
-                        getMoveEventsListRequestParams(),
-                        genericCallbackListener);
-
                 TokenToServer tokenToServer = (TokenToServer) new TokenToServer().execute(
                         new String(result.access_token));
 
@@ -183,30 +168,6 @@ public class JawboneUpHelper extends Fragment
             Log.d(TAG, "failed to get accessToken: " + retrofitError.getMessage());
         }
     };
-
-    /**
-     * Used to manage the background synchornization of data
-     * between Android and Jawbone UP devices.
-     */
-    private class JawboneUpDataSyncer extends Service { // @TODO : add service tags in Manifest
-        @Override
-        public void onDestroy()
-        {
-            super.onDestroy();
-        }
-
-        @Override
-        public IBinder onBind(Intent intent)
-        {
-            return null;
-        }
-
-        @Override
-        public int onStartCommand(Intent intent, int flags, int startId)
-        {
-            return super.onStartCommand(intent, flags, startId);
-        }
-    }
 
     private class TokenToServer extends AsyncTask<String, Void, String>
     {
@@ -246,35 +207,4 @@ public class JawboneUpHelper extends Fragment
             return "doInBackground() -- TokenToServer";
         }
     } // TokenToServer class
-
-    private Callback genericCallbackListener = new Callback<Object>() {
-        @Override
-        public void success(Object o, Response response) {
-            Log.e(TAG,  "api call successful, json output: " + o.toString());
-            Toast.makeText(getActivity(), o.toString(), Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void failure(RetrofitError retrofitError) {
-            Log.e(TAG,  "api call failed, error message: " + retrofitError.getMessage());
-            Toast.makeText(getActivity(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    };
-
-    /**
-     * This controls how the "Moves Event" data is ordered when requested from Jawbone UP device.
-     * @return
-     */
-    private static HashMap<String, Integer> getMoveEventsListRequestParams() {
-        HashMap<String, Integer> queryHashMap = new HashMap<String, Integer>();
-
-        //uncomment to add as needed parameters
-//        queryHashMap.put("date", "<insert-date>");
-//        queryHashMap.put("page_token", "<insert-page-token>");
-//        queryHashMap.put("start_time", "<insert-time>");
-//        queryHashMap.put("end_time", "<insert-time>");
-//        queryHashMap.put("updated_after", "<insert-time>");
-
-        return queryHashMap;
-    }
 } // JawboneUpHelper class
