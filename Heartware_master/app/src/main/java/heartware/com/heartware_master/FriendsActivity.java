@@ -129,7 +129,7 @@ public class FriendsActivity extends Activity
     {
         if(checkPermissions()) {
             Bitmap img = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.ic_launcher);
+                    R.mipmap.ic_launcher);
             Request uploadRequest = Request.newUploadPhotoRequest(
                     Session.getActiveSession(), img, new Request.Callback() {
                         @Override

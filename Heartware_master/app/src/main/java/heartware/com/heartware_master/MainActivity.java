@@ -22,22 +22,18 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.HashMap;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener,
-        LoginDialogFragment.LoginDialogListener
+public class MainActivity extends ActionBarActivity implements LoginDialogFragment.LoginDialogListener
 {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private Button bUpdate;
-    private Button bAuthButton;
     private EditText etUserName;
     private EditText etSex;
+    private boolean mLoggedIn;
 
     private DBAdapter dbAdapter;
     private LoginDialogFragment mLoginDialog;
@@ -54,16 +50,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mJboneHelper = new JawboneUpHelper();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().add(mJboneHelper, JawboneUpHelper.TAG).commit();
-
+        mLoggedIn = false;
         createLoginDialog();
 
         dbAdapter = new DBAdapter(this);
-
-        bUpdate = (Button) findViewById(R.id.bUpdate);
-        bUpdate.setOnClickListener(this);
-
-        bAuthButton = (Button) findViewById(R.id.bAuthButton);
-        bAuthButton.setOnClickListener(this);
 
         etUserName = (EditText) findViewById(R.id.etUserName);
         etSex = (EditText) findViewById(R.id.etSex);
@@ -80,7 +70,25 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch(item.getItemId()) {
-            case R.id.action_search:
+            case R.id.action_auth:
+                mLoggedIn = !mLoggedIn;
+                if(!mLoggedIn)
+                    item.setIcon(R.drawable.ic_action_logout);
+                else
+                    item.setIcon(R.drawable.ic_action_login);
+                clearEditTexts();
+                mCurrentProfileId = "0";
+                mLoginDialog.show(getFragmentManager(), TAG);
+                return true;
+            case R.id.action_update:
+                HashMap<String, String> queryValues = new HashMap<>();
+                queryValues.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
+                queryValues.put(DBAdapter.USERNAME, etUserName.getText().toString());
+                queryValues.put(DBAdapter.SEX, etSex.getText().toString());
+                dbAdapter.updateProfile(queryValues);
+                Toast.makeText(this, "Updating " + etUserName.getText().toString(),
+                        Toast.LENGTH_SHORT).show();
+
                 return true;
             case R.id.action_workouts:
                 Intent intent = new Intent(getApplicationContext(), WorkoutsActivity.class);
@@ -94,35 +102,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    /**
-     * handle all possible button clicks for this view
-     * @param v
-     */
-    @Override
-    public void onClick(View v)
-    {
-        switch (v.getId()) {
-            case R.id.bUpdate:
-                Log.d(TAG, "updating " + etUserName.getText().toString());
-                HashMap<String, String> queryValues = new HashMap<>();
-                queryValues.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                queryValues.put(DBAdapter.USERNAME, etUserName.getText().toString());
-                queryValues.put(DBAdapter.SEX, etSex.getText().toString());
-                dbAdapter.updateProfile(queryValues);
-                Toast.makeText(this, "Updating Profile Information",
-                        Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.bAuthButton:
-                Log.d(TAG, " logging out");
-                clearEditTexts();
-                mCurrentProfileId = "0";
-                mLoginDialog.show(getFragmentManager(), TAG);
-                flipAuthenticateButtonText();
-                break;
-        }
-    } // onClick()
 
     /**
      * create and show the login dialog
@@ -151,13 +130,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             mLoginDialog.show(getFragmentManager(), TAG);
         }
         else {
-            bUpdate.setText(R.string.update);
             etUserName.setText(profile.get(DBAdapter.USERNAME));
             etSex.setText(profile.get(DBAdapter.SEX));
             mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
             mLoginDialog.dismiss();
             mJboneHelper.sendToken(); // send the token
-            flipAuthenticateButtonText();
         }
     }
 
@@ -181,7 +158,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // set the edit text for the user name on the main layout
         etUserName.setText(user);
         mJboneHelper.sendToken();
-        flipAuthenticateButtonText();
     }
 
     /**
@@ -191,12 +167,5 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     {
         etUserName.setText("");
         etSex.setText("");
-    }
-
-    private void flipAuthenticateButtonText()
-    {
-        bAuthButton.setText(
-                (bAuthButton.getText().toString().equals(R.string.login))
-                        ? R.string.logout : R.string.logout);
     }
 } // MainActivity class

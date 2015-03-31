@@ -1,17 +1,14 @@
 <resources>
     <string name="app_name">Heartware</string>
 
-    <string name="graph_data">Steps taken</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_graphs">graphs</string>
-    <string name="title_activity_friends">friends</string>
-    <string name="title_activity_graph_list">graph_list</string>
+    <string name="graph_data">Graph Data</string>
     <string name="goals">Goals</string>
     <string name="workouts">Workouts</string>
     <string name="jbone_login">Enter Jawbone UP Info</string>
-    <string name="jbone_service">Jawbone UP Service Runner</string>
     <string name="add_button">Add</string>
     <string name="new_user">New User</string>
+    <string name="sex_hint">male, female, whatever</string>
+    <string name="username_hint">your name is ...</string>
     <string name="returning_user">Returning User</string>
     <string name="friends">Friends</string>
     <string name="username">Username</string>
