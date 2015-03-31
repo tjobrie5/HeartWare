@@ -35,7 +35,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Button bUpdate;
-    private Button bLogout;
+    private Button bAuthButton;
     private EditText etUserName;
     private EditText etSex;
 
@@ -62,8 +62,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         bUpdate = (Button) findViewById(R.id.bUpdate);
         bUpdate.setOnClickListener(this);
 
-        bLogout = (Button) findViewById(R.id.bLogout);
-        bLogout.setOnClickListener(this);
+        bAuthButton = (Button) findViewById(R.id.bAuthButton);
+        bAuthButton.setOnClickListener(this);
 
         etUserName = (EditText) findViewById(R.id.etUserName);
         etSex = (EditText) findViewById(R.id.etSex);
@@ -114,11 +114,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         Toast.LENGTH_SHORT).show();
                 break;
 
-            case R.id.bLogout:
+            case R.id.bAuthButton:
                 Log.d(TAG, " logging out");
                 clearEditTexts();
                 mCurrentProfileId = "0";
                 mLoginDialog.show(getFragmentManager(), TAG);
+                flipAuthenticateButtonText();
                 break;
         }
     } // onClick()
@@ -156,6 +157,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
             mLoginDialog.dismiss();
             mJboneHelper.sendToken(); // send the token
+            flipAuthenticateButtonText();
         }
     }
 
@@ -179,6 +181,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // set the edit text for the user name on the main layout
         etUserName.setText(user);
         mJboneHelper.sendToken();
+        flipAuthenticateButtonText();
     }
 
     /**
@@ -190,23 +193,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         etSex.setText("");
     }
 
-    @Override
-    protected void onStart()
+    private void flipAuthenticateButtonText()
     {
-        super.onStart();
-        Log.d(TAG, "in on Start");
-    }
-
-    @Override
-    protected void onStop()
-    {
-        super.onStop();
-        Log.d(TAG, "in on Stop)");
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
+        bAuthButton.setText(
+                (bAuthButton.getText().toString().equals(R.string.login))
+                        ? R.string.logout : R.string.logout);
     }
 } // MainActivity class

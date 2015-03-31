@@ -29,6 +29,7 @@
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
     <string name="logout">Logout</string>
+    <string name="login">Login</string>
     <string name="hard">Hard</string>
     <string name="sync">Sync</string>
     <string name="new_workout">New Workout</string>

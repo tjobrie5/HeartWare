@@ -98,8 +98,8 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/logout"
-                android:id="@+id/bLogout"
+                android:text="@string/login"
+                android:id="@+id/bAuthButton"
                 android:layout_column="0"/>
         </TableRow>
 
