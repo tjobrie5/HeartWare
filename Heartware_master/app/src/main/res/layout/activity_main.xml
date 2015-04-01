@@ -73,6 +73,25 @@
         <TableRow
             android:id="@+id/tr3"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/bUpdate"
+                android:text="@string/update"
+                android:layout_weight="0.5"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/bAuthButton"
+                android:text="@string/login"
+                android:layout_weight="0.5"/>
+            </TableRow>
+
+        <TableRow
+            android:id="@+id/tr4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <ImageView

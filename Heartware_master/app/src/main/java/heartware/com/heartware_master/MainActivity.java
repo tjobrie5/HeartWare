@@ -22,6 +22,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
 
     private EditText etUserName;
     private EditText etSex;
+    private Button bAuthButton, bUpdate;
     private boolean mLoggedIn;
 
     private DBAdapter dbAdapter;
@@ -50,10 +53,41 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         mJboneHelper = new JawboneUpHelper();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().add(mJboneHelper, JawboneUpHelper.TAG).commit();
-        mLoggedIn = false;
+
         createLoginDialog();
 
         dbAdapter = new DBAdapter(this);
+        mLoggedIn = false;
+        bAuthButton = (Button) findViewById(R.id.bAuthButton);
+        bAuthButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                clearEditTexts();
+                mCurrentProfileId = "0";
+                if(bAuthButton.getText().toString().equals(R.string.login))
+                    bAuthButton.setText(R.string.logout);
+                else
+                    bAuthButton.setText(R.string.login);
+                mLoginDialog.show(getFragmentManager(), TAG);
+            }
+        });
+        bUpdate = (Button) findViewById(R.id.bUpdate);
+        bUpdate.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                HashMap<String, String> queryValues = new HashMap<>();
+                queryValues.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
+                queryValues.put(DBAdapter.USERNAME, etUserName.getText().toString());
+                queryValues.put(DBAdapter.SEX, etSex.getText().toString());
+                dbAdapter.updateProfile(queryValues);
+                Toast.makeText(v.getContext(), "Updating " + etUserName.getText().toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
         etUserName = (EditText) findViewById(R.id.etUserName);
         etSex = (EditText) findViewById(R.id.etSex);
@@ -70,26 +104,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch(item.getItemId()) {
-            case R.id.action_auth:
-                mLoggedIn = !mLoggedIn;
-                if(!mLoggedIn)
-                    item.setIcon(R.drawable.ic_action_logout);
-                else
-                    item.setIcon(R.drawable.ic_action_login);
-                clearEditTexts();
-                mCurrentProfileId = "0";
-                mLoginDialog.show(getFragmentManager(), TAG);
-                return true;
-            case R.id.action_update:
-                HashMap<String, String> queryValues = new HashMap<>();
-                queryValues.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                queryValues.put(DBAdapter.USERNAME, etUserName.getText().toString());
-                queryValues.put(DBAdapter.SEX, etSex.getText().toString());
-                dbAdapter.updateProfile(queryValues);
-                Toast.makeText(this, "Updating " + etUserName.getText().toString(),
-                        Toast.LENGTH_SHORT).show();
-
-                return true;
             case R.id.action_workouts:
                 Intent intent = new Intent(getApplicationContext(), WorkoutsActivity.class);
                 intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
@@ -128,6 +142,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
             // not sure the best way to keep the dialog open, but this way works
             mLoginDialog.dismiss();
             mLoginDialog.show(getFragmentManager(), TAG);
+            bAuthButton.setText(R.string.login);
         }
         else {
             etUserName.setText(profile.get(DBAdapter.USERNAME));
@@ -135,6 +150,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
             mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
             mLoginDialog.dismiss();
             mJboneHelper.sendToken(); // send the token
+            bAuthButton.setText(R.string.logout);
         }
     }
 
@@ -158,6 +174,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         // set the edit text for the user name on the main layout
         etUserName.setText(user);
         mJboneHelper.sendToken();
+        bAuthButton.setText(R.string.logout);
     }
 
     /**
