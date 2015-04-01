@@ -10,6 +10,5 @@
           android:id="@+id/action_friends"
           android:icon="@drawable/ic_action_friends"
           app:showAsAction="always" />
-    <item android:title="@string/app_name"
-        app:showAsAction="never"/>
+
 </menu>
