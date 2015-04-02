@@ -17,6 +17,8 @@ package heartware.com.heartware_master;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -27,6 +29,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.util.HashMap;
 
 public class MainActivity extends ActionBarActivity implements LoginDialogFragment.LoginDialogListener
@@ -36,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
     private EditText etUserName;
     private EditText etSex;
     private Button bAuthButton, bUpdate;
-    private boolean mLoggedIn;
+    private GraphView mGraph;
 
     private DBAdapter dbAdapter;
     private LoginDialogFragment mLoginDialog;
@@ -57,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         createLoginDialog();
 
         dbAdapter = new DBAdapter(this);
-        mLoggedIn = false;
+
         bAuthButton = (Button) findViewById(R.id.bAuthButton);
         bAuthButton.setOnClickListener(new View.OnClickListener()
         {
@@ -91,6 +97,35 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
 
         etUserName = (EditText) findViewById(R.id.etUserName);
         etSex = (EditText) findViewById(R.id.etSex);
+
+        // Build the graph from user's data
+        mGraph = (GraphView) findViewById(R.id.userDataGraph);
+        mGraph.setTitle("Your Workouts");
+        //mGraph.setTitleTextSize(14.0f);
+        mGraph.setTitleColor(Color.YELLOW);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        series.setColor(Color.RED);
+        mGraph.getGridLabelRenderer().setGridColor(Color.WHITE);
+        mGraph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
+        mGraph.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.YELLOW);
+        mGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.YELLOW);
+        mGraph.getGridLabelRenderer().setVerticalAxisTitle("Space");
+        mGraph.getGridLabelRenderer().setVerticalAxisTitleColor(Color.YELLOW);
+        mGraph.getGridLabelRenderer().setVerticalLabelsColor(Color.YELLOW);
+        mGraph.addSeries(series);
+        mGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // @TODO : send user to a more DIALOG comprehensive data view
+                Log.d(TAG, "The Graph got clicked");
+            }
+        });
     } // onCreate
 
     @Override

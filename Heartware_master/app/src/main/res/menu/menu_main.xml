@@ -5,10 +5,12 @@
     <item android:title="@string/workouts"
           android:id="@+id/action_workouts"
           android:icon="@drawable/ic_action_workout"
+          android:orderInCategory="1"
           app:showAsAction="always" />
     <item android:title="@string/friends"
           android:id="@+id/action_friends"
           android:icon="@drawable/ic_action_friends"
-          app:showAsAction="always" />
+          android:orderInCategory="2"
+          app:showAsAction="ifRoom" />
 
 </menu>
