@@ -82,21 +82,9 @@
             android:text="@string/login"/>
         </TableRow>
 
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <ImageView
-            android:id="@+id/ivAnimated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_heartware_main_transparent"
-            android:layout_span="2"/>
-    </TableRow>
-
     <View
         android:layout_height="2dip"
-        android:background="#FF0000" />
+        android:background="#FFFFFFFF" />
 
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"

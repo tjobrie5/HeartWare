@@ -2,6 +2,7 @@
     android:shareInterpolator="true"
     android:interpolator="@android:anim/accelerate_interpolator"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 'hyperspace' animation from https://developer.android.com/guide/topics/graphics/view-animation.html -->
     <scale
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:fromXScale="1.0"

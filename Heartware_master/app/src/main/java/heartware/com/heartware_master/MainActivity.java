@@ -125,17 +125,10 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         mGraph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // @TODO : send user to a more DIALOG comprehensive data view
+                // @TODO : send user to a DIALOG comprehensive data view
                 Log.d(TAG, "The Graph got clicked");
             }
         });
-
-        // set up animation
-        ImageView animated = (ImageView) findViewById(R.id.ivAnimated);
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.animated_view);
-        animation.setRepeatMode(Animation.REVERSE);
-        animated.startAnimation(animation);
-
     } // onCreate
 
     @Override
@@ -222,12 +215,31 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         bAuthButton.setText(R.string.logout);
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        triggerAnimation();
+    }
+
     /**
      * Erase the text fields when user logs out
      */
-    public void clearEditTexts()
+    private void clearEditTexts()
     {
         etUserName.setText("");
         etSex.setText("");
+    }
+
+    /**
+     * start the animation on the graph
+     */
+    private void triggerAnimation()
+    {
+        // set up animation
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.animated_view);
+        animation.setRepeatMode(Animation.REVERSE);
+        animation.setRepeatCount(Animation.INFINITE);
+        mGraph.startAnimation(animation);
     }
 } // MainActivity class
