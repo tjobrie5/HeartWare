@@ -86,8 +86,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
         <ImageView
-            android:id="@+id/ivTemp"
-            android:layout_width="fill_parent"
+            android:id="@+id/ivAnimated"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_heartware_main_transparent"

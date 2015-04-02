@@ -25,8 +25,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
@@ -126,6 +129,13 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
                 Log.d(TAG, "The Graph got clicked");
             }
         });
+
+        // set up animation
+        ImageView animated = (ImageView) findViewById(R.id.ivAnimated);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.animated_view);
+        animation.setRepeatMode(Animation.REVERSE);
+        animated.startAnimation(animation);
+
     } // onCreate
 
     @Override
