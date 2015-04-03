@@ -18,7 +18,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -29,13 +29,22 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class MainActivity extends ActionBarActivity implements LoginDialogFragment.LoginDialogListener
@@ -100,14 +109,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
             }
         });
         bRecommend = (Button) findViewById(R.id.bRecommend);
-        bRecommend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),
-                        "Exercise more and you'll lose weight", Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
 
 
         etUserName = (EditText) findViewById(R.id.etUserName);
@@ -166,6 +167,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     /**
      * create and show the login dialog
@@ -253,5 +255,70 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         animation.setRepeatMode(Animation.REVERSE);
         animation.setRepeatCount(Animation.INFINITE);
         mGraph.startAnimation(animation);
+    }
+
+    /*
+    *
+    * To get recommended workouts
+    *
+     */
+
+    public void getWorkout(View v)
+    {
+        Log.d(TAG,"in getWorkout");
+        new LongRunningGetIO().execute();
+        System.out.println("FINISHED");
+    }
+
+    private class LongRunningGetIO extends AsyncTask<Void, Void, String> {
+        String body = "nada";
+        protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
+            InputStream in = entity.getContent();
+
+
+            StringBuffer out = new StringBuffer();
+            int n = 1;
+            while (n>0) {
+                byte[] b = new byte[4096];
+                n =  in.read(b);
+
+
+                if (n>0) out.append(new String(b, 0, n));
+            }
+
+
+            System.out.println("First string: "+out.toString());
+            return out.toString();
+        }
+
+
+        @Override
+        protected String doInBackground(Void... params) {
+            HttpClient client= new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet("http://qqroute.com:8080/getWorkout");
+            ResponseHandler<String> handler = new BasicResponseHandler();
+            Log.d(TAG," inside do in background");
+            try {
+                HttpResponse response = client.execute(httpGet);
+                body = handler.handleResponse(response);
+                Log.d(TAG, body + " got to try");
+                //Toast.makeText(getApplicationContext(), body, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),
+                        //"You haven't take that many steps today. Why don't you " + body + "?", Toast.LENGTH_LONG)
+                        //.show();
+            }
+            catch(IOException ex) {
+                Log.d(TAG, ex.getMessage().toString());
+            }
+            return "ayooo";
+        }
+
+        protected void onPostExecute(String results){
+            Toast.makeText(getApplicationContext(), "You have not been very active... " + body, Toast.LENGTH_LONG).show();
+        }
+
+
+
+
     }
 } // MainActivity class

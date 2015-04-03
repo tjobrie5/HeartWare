@@ -87,7 +87,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/bRecommend"
-        android:text="@string/recommendation"/>
+        android:text="@string/recommendation"
+        android:onClick="getWorkout" />
 
     <View
         android:layout_height="2dip"
