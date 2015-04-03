@@ -44,7 +44,9 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
 
     private EditText etUserName;
     private EditText etSex;
-    private Button bAuthButton, bUpdate;
+    private Button bAuthButton;
+    private Button bUpdate;
+    private Button bRecommend;
     private GraphView mGraph;
 
     private DBAdapter dbAdapter;
@@ -97,6 +99,16 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
                         Toast.LENGTH_SHORT).show();
             }
         });
+        bRecommend = (Button) findViewById(R.id.bRecommend);
+        bRecommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),
+                        "Exercise more and you'll lose weight", Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
+
 
         etUserName = (EditText) findViewById(R.id.etUserName);
         etSex = (EditText) findViewById(R.id.etSex);

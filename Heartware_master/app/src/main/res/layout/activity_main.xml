@@ -80,7 +80,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/bAuthButton"
             android:text="@string/login"/>
+
         </TableRow>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bRecommend"
+        android:text="@string/recommendation"/>
 
     <View
         android:layout_height="2dip"

@@ -45,6 +45,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -180,7 +181,7 @@ public class JawboneUpHelper extends Fragment
                 HttpPost httpPost = new HttpPost(URL);
                 List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
                 nameValuePair.add(new BasicNameValuePair("token", params[0]));
-
+                nameValuePair.add(new BasicNameValuePair("TEST_NAME", "TEST_NAME_STEVE"));
                 try {
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
                 }
