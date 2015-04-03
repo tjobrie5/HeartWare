@@ -1,0 +1,2 @@
+# ignore .idea files from Android Studio
+.idea/*
