@@ -18,11 +18,17 @@ CREATE TABLE workouts
     difficulty TEXT, exemptions TEXT, data INTEGER, place TEXT,
     time TEXT, FOREIGN KEY (userId) REFERENCES profiles (profileId) );
 
+CREATE TABLE meetups
+	( userId INTEGER NOT NULL, time TEXT, place TEXT, friend TEXT,
+	FOREIGN KEY (userId) REFERENCES profiles (profileId) );
+
 // Selecting
 SELECT * FROM workouts;
 SELECT * FROM profiles;
+SELECT * FROM meetups;
 SELECT profileId FROM profiles WHERE username = 'Steve';
 SELECT * FROM workouts ORDER BY userId ASC;
+SELECT * FROM meetups;
 
 // inserting into the profiles table
 INSERT INTO profiles (username, password, sex)
@@ -41,6 +47,9 @@ INSERT INTO workouts (userId, exercise, goal, difficulty, exemptions,
     data, place, time) VALUES (3, 'fishing', 'lose weight', 'easy', 'diabetes',
     544, 'anywhere', 'anytime');
 
+// inserting into meetups (note the username must match profiles table)
+INSERT INTO meetups (userId, time, place, friend) VALUES (1, 'March 13th 2015', 'Gold Gym', 'Steve');
+
 INSERT INTO workouts (exercise) VALUES ('jogging');
 
 // update
@@ -50,11 +59,15 @@ UPDATE profiles SET sex = 'unknown' WHERE username = 'billy';
 UPDATE workouts SET goal = 'lose weight' WHERE exercise = 'hiking' AND userId = 1;
 UPDATE workouts SET goal = 'make money' WHERE exercise = 'hiking' AND userId = 1;
 
+UPDATE meetups SET time = 'April 2nd 2015' WHERE userId = 1;
+
 // delete
 
 DELETE FROM workouts WHERE userId = 1;
 
 DELETE FROM workouts WHERE exercise = 'fishing' AND userId = 1;
+
+DELETE FROM meetups WHERE time = 'April 2nd 2015';
 
 // exit
 .exit
