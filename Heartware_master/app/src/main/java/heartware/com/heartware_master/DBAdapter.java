@@ -38,7 +38,8 @@ public class DBAdapter extends SQLiteOpenHelper
     public static final String EXERCISE = "exercise";
     public static final String GOAL = "goal";
     public static final String DIFFICULTY = "difficulty";
-    public static final String EXEMPTIONS = "exemptions";
+    public static final String EXEMPTIONS = "exemptions"; // disabilities
+    public static final String AGE = "age";
     public static final String DATA = "data";
     public static final String PLACE = "place";
     public static final String TIME = "time";
@@ -163,11 +164,11 @@ public class DBAdapter extends SQLiteOpenHelper
         return profileMap;
     }
 
-    public HashMap<String, String> getProfileByUserAndPass(String user, String pw)
+    public HashMap<String, String> getProfileByUserAndToken(String user, String token)
     {
         HashMap<String, String> profileMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + PROFILES_TABLE + " WHERE " + USERNAME + "='" + user + "'" + " AND " + PASSWORD + "='" + pw + "'";
+        String selectQuery = "SELECT * FROM " + PROFILES_TABLE + " WHERE " + USERNAME + "='" + user + "'" + " AND " + PASSWORD + "='" + token + "'";
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {

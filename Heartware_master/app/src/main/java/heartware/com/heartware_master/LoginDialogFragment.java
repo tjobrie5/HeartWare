@@ -30,10 +30,7 @@ import android.widget.EditText;
 public class LoginDialogFragment extends DialogFragment
 {
     public interface LoginDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog,
-                                          final String user, final String pw);
-        public void onDialogNegativeClick(DialogFragment dialog,
-                                          final String user, final String pw);
+        public void onDialogPositiveClick(DialogFragment dialog);
     }
 
     private LoginDialogListener mListener;
@@ -58,24 +55,13 @@ public class LoginDialogFragment extends DialogFragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_login, null);
         builder.setView(view);
-        final EditText username = (EditText) view.findViewById(R.id.username);
-        final EditText password = (EditText) view.findViewById(R.id.password);
         // add the buttons
-        builder.setPositiveButton(R.string.returning_user, new DialogInterface.OnClickListener()
-        {
+        builder.setPositiveButton(R.string.jbone_logo, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                mListener.onDialogPositiveClick(LoginDialogFragment.this,
-                        username.getText().toString(), password.getText().toString());
-            }
-        }).setNegativeButton(R.string.new_user, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id)
-            {
-                mListener.onDialogNegativeClick(LoginDialogFragment.this,
-                        username.getText().toString(), password.getText().toString());
+                mListener.onDialogPositiveClick(LoginDialogFragment.this);
             }
         });
         // Create the AlertDialog object and return it
         return builder.create();
     }
-
 } // LoginDialogFragment class

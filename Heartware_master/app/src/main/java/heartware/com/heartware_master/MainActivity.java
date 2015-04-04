@@ -51,19 +51,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-public class MainActivity extends ActionBarActivity implements LoginDialogFragment.LoginDialogListener
+public class MainActivity extends ActionBarActivity implements LoginDialogFragment.LoginDialogListener,
+        ProfileDialogFragment.ProfileDialogListener
 {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private EditText etUserName;
-    private EditText etSex;
-    private Button bAuthButton;
-    private Button bUpdate;
     private Button bRecommend;
+    private Button bUserInfo;
     private GraphView mGraph;
 
     private DBAdapter dbAdapter;
     private LoginDialogFragment mLoginDialog;
+    private ProfileDialogFragment mProfileDialog;
     private JawboneUpHelper mJboneHelper;
     private String mCurrentProfileId;
 
@@ -77,40 +76,51 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         mJboneHelper = new JawboneUpHelper();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().add(mJboneHelper, JawboneUpHelper.TAG).commit();
-
+        mCurrentProfileId = "0"; // zero means no current profile set
         dbAdapter = new DBAdapter(this);
-        createLoginDialog();
+        createDialogs();
+        mLoginDialog.show(getFragmentManager(), TAG);
 
-        bAuthButton = (Button) findViewById(R.id.bAuthButton);
-        bAuthButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                clearEditTexts();
-                mCurrentProfileId = "0";
-                if(bAuthButton.getText().toString().equals(R.string.login))
-                    bAuthButton.setText(R.string.logout);
-                else
-                    bAuthButton.setText(R.string.login);
-                mLoginDialog.show(getFragmentManager(), TAG);
-            }
-        });
-        bUpdate = (Button) findViewById(R.id.bUpdate);
-        bUpdate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                HashMap<String, String> queryValues = new HashMap<>();
-                queryValues.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                queryValues.put(DBAdapter.USERNAME, etUserName.getText().toString());
-                queryValues.put(DBAdapter.SEX, etSex.getText().toString());
-                dbAdapter.updateProfile(queryValues);
-                Toast.makeText(v.getContext(), "Updating " + etUserName.getText().toString(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        createButtons();
+        createGraph();
+    } // onCreate
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId()) {
+            case R.id.action_workouts:
+                Intent intent = new Intent(getApplicationContext(), WorkoutsActivity.class);
+                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
+                startActivity(intent);
+                return true;
+            case R.id.action_friends:
+                startActivity(new Intent(getApplicationContext(), FriendsActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * create dialogs and show the login dialog
+     */
+    private void createDialogs()
+    {
+        // create and show the login pop up as soon as the main activity is created
+        mLoginDialog = new LoginDialogFragment();
+        mProfileDialog = new ProfileDialogFragment();
+    }
+
+    private void createButtons()
+    {
         bRecommend = (Button) findViewById(R.id.bRecommend);
         bRecommend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,10 +128,19 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
                 new LongRunningGetIO().execute();
             }
         });
+        bUserInfo = (Button) findViewById(R.id.bUserInfo);
+        bUserInfo.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mProfileDialog.show(getFragmentManager(), TAG);
+            }
+        });
+    }
 
-        etUserName = (EditText) findViewById(R.id.etUserName);
-        etSex = (EditText) findViewById(R.id.etSex);
-
+    private void createGraph()
+    {
         // Build the graph from user's data
         mGraph = (GraphView) findViewById(R.id.userDataGraph);
         mGraph.setTitle("Your Workouts");
@@ -150,120 +169,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
                 Log.d(TAG, "The Graph got clicked");
             }
         });
-    } // onCreate
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId()) {
-            case R.id.action_workouts:
-                Intent intent = new Intent(getApplicationContext(), WorkoutsActivity.class);
-                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                startActivity(intent);
-                return true;
-            case R.id.action_friends:
-                startActivity(new Intent(getApplicationContext(), FriendsActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * create and show the login dialog
-     */
-    public void createLoginDialog()
-    {
-        // create and show the login pop up as soon as the main activity is created
-        mLoginDialog = new LoginDialogFragment();
-        mLoginDialog.show(getFragmentManager(), TAG);
-    }
-
-    /**
-     * returning user
-     * @param dialog
-     */
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog, final String user, final String pw)
-    {
-//        Log.d(TAG, " onDialogPositiveClick " + user + " " + pw);
-//        HashMap<String, String> profile = dbAdapter.getProfileByUserAndPass(user, pw);
-//        if(profile.size() == 0) {
-//            // no profile exist, force the user to enter again
-//            Log.d(TAG, user + " does not exist");
-//            // not sure the best way to keep the dialog open, but this way works
-//            mLoginDialog.dismiss();
-//            mLoginDialog.show(getFragmentManager(), TAG);
-//            bAuthButton.setText(R.string.login);
-//        }
-//        else {
-//            etUserName.setText(profile.get(DBAdapter.USERNAME));
-//            etSex.setText(profile.get(DBAdapter.SEX));
-//            mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
-//            mLoginDialog.dismiss();
-//            mJboneHelper.sendToken(); // send the token
-//            bAuthButton.setText(R.string.logout);
-//        }
-
-        // @NOTICE, this has to be called within the dialog (or anywhere outside onCreate)
-        mJboneHelper.sendToken(); // synchronize Android with Jawbone UP
-       // now that we're synced with Jawbone UP, set up this user's profile on SQLite in Android
-
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String username = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_ACCESS_TOKEN, "NULL");
-        String password = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
-        if(!username.equals("NULL") && !password.equals("NULL")) {
-            HashMap<String, String> profile = dbAdapter.getProfileByUserAndPass(username, password);
-            if(profile.size() == 0) { // new user
-                HashMap<String, String> newProfile = new HashMap<>();
-                newProfile.put(DBAdapter.USERNAME, username);
-                newProfile.put(DBAdapter.PASSWORD, password);
-                dbAdapter.createProfile(newProfile);
-                // this is sloppy, but once the profile is created a new profileId is made and we need to keep track of it
-                mCurrentProfileId = dbAdapter.getProfileByUserAndPass(username, password).get(DBAdapter.PROFILE_ID);
-            }
-            else { // returning user
-                etUserName.setText(profile.get(DBAdapter.USERNAME));
-                etSex.setText(profile.get(DBAdapter.SEX));
-                mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
-            }
-        }
-        else {
-            throw new RuntimeException(TAG + " User did not log into Jawbone UP");
-        }
-
-
-    }
-
-    /**
-     * new user
-     * @param dialog
-     */
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog, final String user, final String pw)
-    {
-        Log.d(TAG, " onDialogNegativeClick " + user + " " + pw);
-        Log.d(TAG, "creating " + user);
-        // insert into database
-        HashMap<String, String> newProfile = new HashMap<>();
-        newProfile.put(DBAdapter.USERNAME, user);
-        newProfile.put(DBAdapter.PASSWORD, pw);
-        dbAdapter.createProfile(newProfile);
-        // this is sloppy, but once the profile is created a new profileId is made and we need it
-        mCurrentProfileId = dbAdapter.getProfileByUserAndPass(user, pw).get(DBAdapter.PROFILE_ID);
-        mLoginDialog.dismiss();
-        // set the edit text for the user name on the main layout
-        etUserName.setText(user);
-        mJboneHelper.sendToken();
-        bAuthButton.setText(R.string.logout);
     }
 
     @Override
@@ -271,15 +176,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
     {
         super.onResume();
         triggerAnimation();
-    }
-
-    /**
-     * Erase the text fields when user logs out
-     */
-    private void clearEditTexts()
-    {
-        etUserName.setText("");
-        etSex.setText("");
     }
 
     /**
@@ -292,6 +188,65 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         animation.setRepeatMode(Animation.REVERSE);
         animation.setRepeatCount(Animation.INFINITE);
         mGraph.startAnimation(animation);
+    }
+
+    /**
+     * Update user information
+     * @param dialog
+     * @param user
+     * @param sex
+     * @param age
+     * @param height
+     * @param weight
+     * @param skill
+     * @param disability
+     */
+    @Override
+    public void onProfilePositiveClick(DialogFragment dialog, final String user, final String sex,
+                                       final String age, final String height,
+                                       final String weight, final String skill,
+                                       final String disability)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
+        HashMap<String, String> profile = dbAdapter.getProfileByUserAndToken(user, token);
+        if(profile.size() == 0) { // this is the first time the user has updated their information
+            HashMap<String, String> newProfile = new HashMap<>();
+            newProfile.put(DBAdapter.USERNAME, user);
+            newProfile.put(DBAdapter.PASSWORD, token);
+            dbAdapter.createProfile(newProfile);
+            // this is sloppy, but once the profile is created a new profileId is made and we need to keep track of it
+            mCurrentProfileId = dbAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
+            Toast.makeText(this, "Creating " + user, Toast.LENGTH_SHORT).show();
+        }
+        else { // user is already in database and now we should update their info
+            HashMap<String, String> updateProfile = new HashMap<>();
+            updateProfile.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
+            updateProfile.put(DBAdapter.USERNAME, user);
+            updateProfile.put(DBAdapter.PASSWORD, token);
+            dbAdapter.updateProfile(updateProfile);
+            Toast.makeText(this, "Updating " + user, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Don't do anything
+     * @param dialog
+     */
+    @Override
+    public void onProfileNegativeClick(DialogFragment dialog)
+    {
+
+    }
+
+    /**
+     * This dialog pops up when the app starts and the user syncs with Jawbone UP
+     * @param dialog
+     */
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog)
+    {
+        // @TODO : figure out persistent storage
     }
 
     private class LongRunningGetIO extends AsyncTask<Void, Void, String> {

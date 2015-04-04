@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:padding="2dp">
-
-    <TextView
-        android:layout_width="wrap_content"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+    <TableRow
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/user_info"
-        android:id="@+id/tvUserInfo"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="30dp" />
+        android:id="@+id/tableRow0">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:text="@string/user_info"
+            android:textColor="#ffffffff"
+            android:textSize="25sp"
+            android:background="#ff000000"
+            android:gravity="center_vertical|center_horizontal"/>
+
+    </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tableRow">
+        android:id="@+id/tableRow1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,7 +37,7 @@
             android:hint="@string/username_hint"
             android:textColorHint="@color/material_blue_grey_800"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/etName"
             android:layout_weight="1" />
     </TableRow>
 

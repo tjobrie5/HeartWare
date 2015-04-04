@@ -1,29 +1,50 @@
 <resources>
     <string name="app_name">Heartware</string>
 
+    <string-array name="disabilities_array">
+        <item name="diabetes">Diabetes</item>
+        <item name="paralyzed">Paralyzed</item>
+    </string-array>
+
     <string name="graph_data">Graph Data</string>
     <string name="goals">Goals</string>
     <string name="workouts">Workouts</string>
     <string name="jbone_login">Enter Jawbone UP Info</string>
     <string name="add_button">Add</string>
     <string name="new_user">New User</string>
+    <string name="sex">Sex</string>
     <string name="sex_hint">male, female, whatever</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="undefined">Undefined</string>
+    <string name="age">Age</string>
+    <string name="age_hint">0, 1, 2, 3, ..., N</string>
     <string name="username_hint">your name is ...</string>
     <string name="returning_user">Returning User</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
     <string name="friends">Friends</string>
     <string name="username">Username</string>
+    <string name="name">Name</string>
     <string name="password">Password</string>
     <string name="exercise">Exercise</string>
     <string name="goal">Goal</string>
     <string name="difficulty">Difficulty</string>
+    <string name="disabilities">Disabilities</string>
     <string name="exemptions">Exemptions</string>
     <string name="recommendation">Get Recommendation</string>
+    <string name="user_info">User Information</string>
     <string name="data">Data</string>
     <string name="place">Place</string>
     <string name="time">Time</string>
     <string name="create">Create</string>
     <string name="update">Update</string>
     <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="beginner">Beginner</string>
+    <string name="interm">Intermediate</string>
+    <string name="skill_level">Skill Level</string>
+    <string name="expert">Expert</string>
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
     <string name="logout">Logout</string>
@@ -34,5 +55,6 @@
     <string name="fb_update">Update Status</string>
     <string name="fb_post_image">Post Image</string>
     <string name="facebook_app_id">795766887172566</string>
+    <string name="jbone_logo">Jawbone</string>
     <!-- facebook_app_id is necessary for Facebook SDK -->
 </resources>

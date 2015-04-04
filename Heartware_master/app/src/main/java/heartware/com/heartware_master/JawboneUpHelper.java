@@ -181,7 +181,6 @@ public class JawboneUpHelper extends Fragment
                 HttpPost httpPost = new HttpPost(URL);
                 List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
                 nameValuePair.add(new BasicNameValuePair("token", params[0]));
-                nameValuePair.add(new BasicNameValuePair("TEST_NAME", "TEST_NAME_STEVE"));
                 try {
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
                 }
