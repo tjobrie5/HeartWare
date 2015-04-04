@@ -9,7 +9,8 @@
 //
 // Source code: github.com/tjobrie5/HeartWare
 //
-// Description: Main entry point for the application, handles user login
+// Description: Main entry point for the application, handles user login using Jawbone UP.
+//  If the user doesn't log into the app then it means they didn't log into Jawbone UP.
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 package heartware.com.heartware_master;
@@ -17,9 +18,11 @@ package heartware.com.heartware_master;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +34,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -74,9 +78,8 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().add(mJboneHelper, JawboneUpHelper.TAG).commit();
 
-        createLoginDialog();
-
         dbAdapter = new DBAdapter(this);
+        createLoginDialog();
 
         bAuthButton = (Button) findViewById(R.id.bAuthButton);
         bAuthButton.setOnClickListener(new View.OnClickListener()
@@ -109,7 +112,12 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
             }
         });
         bRecommend = (Button) findViewById(R.id.bRecommend);
-
+        bRecommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new LongRunningGetIO().execute();
+            }
+        });
 
         etUserName = (EditText) findViewById(R.id.etUserName);
         etSex = (EditText) findViewById(R.id.etSex);
@@ -168,7 +176,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         }
     }
 
-
     /**
      * create and show the login dialog
      */
@@ -186,24 +193,54 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, final String user, final String pw)
     {
-        Log.d(TAG, " onDialogPositiveClick " + user + " " + pw);
-        HashMap<String, String> profile = dbAdapter.getProfileByUserAndPass(user, pw);
-        if(profile.size() == 0) {
-            // no profile exist, force the user to enter again
-            Log.d(TAG, user + " does not exist");
-            // not sure the best way to keep the dialog open, but this way works
-            mLoginDialog.dismiss();
-            mLoginDialog.show(getFragmentManager(), TAG);
-            bAuthButton.setText(R.string.login);
+//        Log.d(TAG, " onDialogPositiveClick " + user + " " + pw);
+//        HashMap<String, String> profile = dbAdapter.getProfileByUserAndPass(user, pw);
+//        if(profile.size() == 0) {
+//            // no profile exist, force the user to enter again
+//            Log.d(TAG, user + " does not exist");
+//            // not sure the best way to keep the dialog open, but this way works
+//            mLoginDialog.dismiss();
+//            mLoginDialog.show(getFragmentManager(), TAG);
+//            bAuthButton.setText(R.string.login);
+//        }
+//        else {
+//            etUserName.setText(profile.get(DBAdapter.USERNAME));
+//            etSex.setText(profile.get(DBAdapter.SEX));
+//            mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
+//            mLoginDialog.dismiss();
+//            mJboneHelper.sendToken(); // send the token
+//            bAuthButton.setText(R.string.logout);
+//        }
+
+        // @NOTICE, this has to be called within the dialog (or anywhere outside onCreate)
+        mJboneHelper.sendToken(); // synchronize Android with Jawbone UP
+       // now that we're synced with Jawbone UP, set up this user's profile on SQLite in Android
+
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String username = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_ACCESS_TOKEN, "NULL");
+        String password = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
+        if(!username.equals("NULL") && !password.equals("NULL")) {
+            HashMap<String, String> profile = dbAdapter.getProfileByUserAndPass(username, password);
+            if(profile.size() == 0) { // new user
+                HashMap<String, String> newProfile = new HashMap<>();
+                newProfile.put(DBAdapter.USERNAME, username);
+                newProfile.put(DBAdapter.PASSWORD, password);
+                dbAdapter.createProfile(newProfile);
+                // this is sloppy, but once the profile is created a new profileId is made and we need to keep track of it
+                mCurrentProfileId = dbAdapter.getProfileByUserAndPass(username, password).get(DBAdapter.PROFILE_ID);
+            }
+            else { // returning user
+                etUserName.setText(profile.get(DBAdapter.USERNAME));
+                etSex.setText(profile.get(DBAdapter.SEX));
+                mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
+            }
         }
         else {
-            etUserName.setText(profile.get(DBAdapter.USERNAME));
-            etSex.setText(profile.get(DBAdapter.SEX));
-            mCurrentProfileId = profile.get(DBAdapter.PROFILE_ID);
-            mLoginDialog.dismiss();
-            mJboneHelper.sendToken(); // send the token
-            bAuthButton.setText(R.string.logout);
+            throw new RuntimeException(TAG + " User did not log into Jawbone UP");
         }
+
+
     }
 
     /**
@@ -257,19 +294,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         mGraph.startAnimation(animation);
     }
 
-    /*
-    *
-    * To get recommended workouts
-    *
-     */
-
-    public void getWorkout(View v)
-    {
-        Log.d(TAG,"in getWorkout");
-        new LongRunningGetIO().execute();
-        System.out.println("FINISHED");
-    }
-
     private class LongRunningGetIO extends AsyncTask<Void, Void, String> {
         String body = "nada";
         protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
@@ -313,12 +337,9 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
             return "ayooo";
         }
 
+        @Override
         protected void onPostExecute(String results){
             Toast.makeText(getApplicationContext(), "You have not been very active... " + body, Toast.LENGTH_LONG).show();
         }
-
-
-
-
-    }
+    } // LongRunningGetIO class
 } // MainActivity class
