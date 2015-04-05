@@ -23,43 +23,31 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+
+import android.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 
-public class MainActivity extends ActionBarActivity implements LoginDialogFragment.LoginDialogListener,
+public class MainActivity extends FragmentActivity implements LoginDialogFragment.LoginDialogListener,
         ProfileDialogFragment.ProfileDialogListener
 {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private Button bRecommend;
-    private Button bUserInfo;
-    private GraphView mGraph;
+    private ActionBar mActionBar;
+    private TabsPagerAdapter mTabsAdapter;
+    private ViewPager mViewPager;
 
     private DBAdapter dbAdapter;
     private LoginDialogFragment mLoginDialog;
@@ -79,11 +67,10 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         fm.beginTransaction().add(mJboneHelper, JawboneUpHelper.TAG).commit();
         mCurrentProfileId = "0"; // zero means no current profile set
         dbAdapter = new DBAdapter(this);
-        createDialogs();
+        mLoginDialog = new LoginDialogFragment();
         mLoginDialog.show(getFragmentManager(), TAG);
 
-        createButtons();
-        createGraph();
+        setupActionTabs();
     } // onCreate
 
     @Override
@@ -120,75 +107,51 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
         mProfileDialog = new ProfileDialogFragment();
     }
 
-    private void createButtons()
+    private void setupActionTabs()
     {
-        bRecommend = (Button) findViewById(R.id.bRecommend);
-        bRecommend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new LongRunningGetIO().execute();
-            }
-        });
-        bUserInfo = (Button) findViewById(R.id.bUserInfo);
-        bUserInfo.setOnClickListener(new View.OnClickListener()
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        // Tell the ActionBar to display tabs
+        mActionBar = getActionBar();
+//        setSupportActionBar(this);
+        mTabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mTabsAdapter);
+        mViewPager.setOnPageChangeListener(new SwipedListener());
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        mActionBar.setHomeButtonEnabled(false);
+        ActionBar.TabListener tabListener = new ActionBar.TabListener()
         {
             @Override
-            public void onClick(View v)
+            public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft)
             {
-                mProfileDialog.show(getFragmentManager(), TAG);
-            }
-        });
-    }
 
-    private void createGraph()
-    {
-        // Build the graph from user's data
-        mGraph = (GraphView) findViewById(R.id.userDataGraph);
-        mGraph.setTitle("Your Workouts");
-        //mGraph.setTitleTextSize(14.0f);
-        mGraph.setTitleColor(Color.YELLOW);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        series.setColor(Color.RED);
-        mGraph.getGridLabelRenderer().setGridColor(Color.WHITE);
-        mGraph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
-        mGraph.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.YELLOW);
-        mGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.YELLOW);
-        mGraph.getGridLabelRenderer().setVerticalAxisTitle("Space");
-        mGraph.getGridLabelRenderer().setVerticalAxisTitleColor(Color.YELLOW);
-        mGraph.getGridLabelRenderer().setVerticalLabelsColor(Color.YELLOW);
-        mGraph.addSeries(series);
-        mGraph.setOnClickListener(new View.OnClickListener() {
+            }
+
             @Override
-            public void onClick(View v) {
-                // @TODO : send user to a DIALOG comprehensive data view
-                Log.d(TAG, "The Graph got clicked");
+            public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction ft)
+            {
+
             }
-        });
-    }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        triggerAnimation();
-    }
+            @Override
+            public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction ft)
+            {
 
-    /**
-     * start the animation on the graph
-     */
-    private void triggerAnimation()
-    {
-        // set up animation
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.animated_view);
-        animation.setRepeatMode(Animation.REVERSE);
-        animation.setRepeatCount(Animation.INFINITE);
-        mGraph.startAnimation(animation);
+            }
+        };
+
+        // Now that listeners are in place we can safely add the tabs
+        mActionBar.addTab(
+                mActionBar.newTab()
+                        .setText(getString(R.string.profile_tab))
+                        .setTabListener(tabListener));
+//        mActionBar.addTab(
+//                mActionBar.newTab()
+//                        .setText(getString(R.string.Tab2Title))
+//                        .setTabListener(this));
+//        mActionBar.addTab(
+//                mActionBar.newTab()
+//                        .setText(getString(R.string.Tab3Title))
+//                        .setTabListener(this));
     }
 
     /**
@@ -248,54 +211,26 @@ public class MainActivity extends ActionBarActivity implements LoginDialogFragme
     public void onDialogPositiveClick(DialogFragment dialog)
     {
         // @TODO : figure out persistent storage
+        mJboneHelper.sendToken();
     }
 
-    private class LongRunningGetIO extends AsyncTask<Void, Void, String> {
-        String body = "nada";
-        protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
-            InputStream in = entity.getContent();
-
-
-            StringBuffer out = new StringBuffer();
-            int n = 1;
-            while (n>0) {
-                byte[] b = new byte[4096];
-                n =  in.read(b);
-
-
-                if (n>0) out.append(new String(b, 0, n));
-            }
-
-
-            System.out.println("First string: "+out.toString());
-            return out.toString();
-        }
-
-
+    private class SwipedListener implements ViewPager.OnPageChangeListener
+    {
         @Override
-        protected String doInBackground(Void... params) {
-            HttpClient client= new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet("http://qqroute.com:8080/getWorkout");
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            Log.d(TAG," inside do in background");
-            try {
-                HttpResponse response = client.execute(httpGet);
-                body = handler.handleResponse(response);
-                Log.d(TAG, body + " got to try");
-                //Toast.makeText(getApplicationContext(), body, Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(),
-                        //"You haven't take that many steps today. Why don't you " + body + "?", Toast.LENGTH_LONG)
-                        //.show();
-            }
-            catch(IOException ex) {
-                Log.d(TAG, ex.getMessage().toString());
-            }
-            return "ayooo";
+        public void onPageSelected(int position) {
+            // on changing the page
+            // make respected tab selected
+            mActionBar.setSelectedNavigationItem(position);
         }
 
         @Override
-        protected void onPostExecute(String results){
-            Toast.makeText(getApplicationContext(), "You have not been very active... " + body, Toast.LENGTH_LONG).show();
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+            // not used
         }
-    } // LongRunningGetIO class
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+            // not used
+        }
+    }
 } // MainActivity class
