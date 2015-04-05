@@ -161,7 +161,7 @@ app.post('/getData', function(req, res){
 	  //console.log(token);
 	  request(optionsConstruct(movement, token),
 				function(error, response, body){
-				
+	  if(response.statusCode != 401){	
 	  collection.insert(JSON.parse(body), function(err, result) {
 	    assert.equal(err, null);
 	    console.log("documents inserted");
@@ -177,6 +177,7 @@ app.post('/getData', function(req, res){
   				});
 		*/
 	  });
+	}
 	 });
 	};
 
