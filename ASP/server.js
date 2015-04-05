@@ -170,7 +170,6 @@ app.post('/getData', function(req, res){
 	    //IMPORTANT -- make sure you run your python code in the insertDocuments method to ensure that it runs after the new data has been inserted
 	    // into the db.
 	    /*
-	    Crashes the server so I commented it out
 	    python_shell.run('script.py', function(err, results){
 		               		 console.log('ran python');
         		       		 console.log( results);
@@ -196,6 +195,42 @@ app.post('/getData', function(req, res){
 	res.send(200);
 });
 
+app.get('/getWorkout', function(req, res){
+       MongoClient.connect(dbUrl, function(err,db) {
+
+                if (err) {
+                        throw err;
+                 } else {
+                        var collection = db.collection('movement');
+
+                        collection.find().toArray( function(err, results) {
+                                if(err || !results) {
+                                        console.log('odd data set');
+                                }  else {
+                                        var items = results[0].data.items;
+                                        var last_item = items.pop();
+
+                                        console.log(last_item.details.steps);
+                                }
+
+                                db.close();
+
+                        });
+                }
+
+        });
+
+
+
+
+
+                                python_shell.run('script.py', function(err, results){
+                                         console.log('ran python');
+                                         console.log( results);
+                                        res.send('Go on a hike today!');
+//                                      res.json(results);
+                                });
+});
 //port app is running on http://qqroute:8x
 app.listen(8080);
 console.log('server up');
