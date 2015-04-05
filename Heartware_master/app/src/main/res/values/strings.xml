@@ -6,12 +6,14 @@
         <item name="paralyzed">Paralyzed</item>
     </string-array>
 
-    <string name="profile_tab">Profile Tab</string>
-    <string name="friends_tab">Friends Tab</string>
-    <string name="meetups_tab">Meetups Tab</string>
+    <string name="profile_tab">Profile</string>
+    <string name="friends_tab">Friends</string>
+    <string name="meetups_tab">Meetups</string>
     <string name="graph_data">Graph Data</string>
     <string name="goals">Goals</string>
     <string name="workouts">Workouts</string>
+    <string name="meetups">Meetups</string>
+    <string name="new_meetup">New Meetup</string>
     <string name="jbone_login">Enter Jawbone UP Info</string>
     <string name="add_button">Add</string>
     <string name="new_user">New User</string>

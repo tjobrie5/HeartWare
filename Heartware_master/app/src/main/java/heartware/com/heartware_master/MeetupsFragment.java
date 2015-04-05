@@ -46,7 +46,7 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.meetups_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_meetups, container, false);
 
         dbAdapter = new DBAdapter(getActivity());
         // get the current profile Id from the activity that started this one
@@ -130,7 +130,7 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
 //    protected void onCreate(Bundle savedInstanceState)
 //    {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.meetups_fragment);
+//        setContentView(R.layout.fragment_meetups);
 //        dbAdapter = new DBAdapter(this);
 //        // get the current profile Id from the activity that started this one
 //        mCurrentProfileId = getIntent().getStringExtra(DBAdapter.PROFILE_ID);

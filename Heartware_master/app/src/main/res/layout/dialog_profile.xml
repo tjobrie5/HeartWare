@@ -3,20 +3,15 @@
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tableRow0">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:text="@string/user_info"
-            android:textColor="#ffffffff"
-            android:textSize="25sp"
-            android:background="#ff000000"
-            android:gravity="center_vertical|center_horizontal"/>
 
-    </TableRow>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="@string/user_info"
+        android:textColor="#ffffffff"
+        android:textSize="25sp"
+        android:background="#ff000000"
+        android:gravity="center_vertical|center_horizontal"/>
 
     <TableRow
         android:layout_width="fill_parent"
@@ -35,7 +30,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:hint="@string/username_hint"
-            android:textColorHint="@color/material_blue_grey_800"
+            android:textColorHint="@color/faded_hint"
             android:ems="10"
             android:id="@+id/etName"
             android:layout_weight="1" />
@@ -100,7 +95,7 @@
             android:ems="10"
             android:id="@+id/etAge"
             android:hint="@string/age_hint"
-            android:textColorHint="@color/material_blue_grey_800"
+            android:textColorHint="@color/faded_hint"
             android:layout_weight="1" />
     </TableRow>
 
@@ -123,7 +118,7 @@
             android:ems="10"
             android:id="@+id/etHeight"
             android:hint="@string/age_hint"
-            android:textColorHint="@color/material_blue_grey_800"
+            android:textColorHint="@color/faded_hint"
             android:layout_weight="1" />
     </TableRow>
 
@@ -146,7 +141,7 @@
             android:ems="10"
             android:id="@+id/etWeight"
             android:hint="@string/age_hint"
-            android:textColorHint="@color/material_blue_grey_800"
+            android:textColorHint="@color/faded_hint"
             android:layout_weight="1" />
     </TableRow>
 

@@ -20,14 +20,14 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:text="@string/workouts"
+            android:text="@string/meetups"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/bNewWorkout"
             android:background="#444444"
-            android:text="@string/new_workout"
+            android:text="@string/new_meetup"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
     </TableRow>

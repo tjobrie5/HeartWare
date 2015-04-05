@@ -1,3 +1,19 @@
+///////////////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) Heartware Group Fall 2014 - Spring 2015
+// @license
+// @purpose ASU Computer Science Capstone Project
+// @app a smart health application
+// @authors Mark Aleheimer, Ryan Case, Tyler O'Brien, Amy Mazzola, Zach Mertens, Sri Somanchi
+// @mailto zmertens@asu.edu
+// @version 1.0
+//
+// Source code: github.com/tjobrie5/HeartWare
+//
+// Description: Represents the a user and common profile information they can modify.
+//  Additionally, the user can recommendations from the server regarding their Jawbone UP
+//  data. There is a graph view that allows the user to see their data.
+///////////////////////////////////////////////////////////////////////////////////////////
+
 package heartware.com.heartware_master;
 
 import android.app.DialogFragment;
@@ -35,7 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-public class ProfileFragment extends Fragment implements ProfileDialogFragment.ProfileDialogListener
+public class ProfileFragment extends Fragment
 {
     private static final String TAG = ProfileFragment.class.getSimpleName();
     private Button bRecommend;
@@ -48,10 +64,10 @@ public class ProfileFragment extends Fragment implements ProfileDialogFragment.P
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.profile_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         dbAdapter = new DBAdapter(getActivity());
         mProfileDialog = new ProfileDialogFragment();
-        mCurrentProfileId = "0"; // zero means no current profile set
+        mCurrentProfileId = "1"; // zero means no current profile set
         createButtons(rootView);
         createGraph(rootView);
 
@@ -73,7 +89,7 @@ public class ProfileFragment extends Fragment implements ProfileDialogFragment.P
             @Override
             public void onClick(View v)
             {
-                mProfileDialog.show(getActivity().getFragmentManager(), TAG); // @TODO : this will crash
+                mProfileDialog.show(getActivity().getFragmentManager(), TAG);
             }
         });
     }
@@ -101,13 +117,13 @@ public class ProfileFragment extends Fragment implements ProfileDialogFragment.P
         mGraph.getGridLabelRenderer().setVerticalAxisTitleColor(Color.YELLOW);
         mGraph.getGridLabelRenderer().setVerticalLabelsColor(Color.YELLOW);
         mGraph.addSeries(series);
-        mGraph.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // @TODO : send user to a DIALOG comprehensive data view
-                Log.d(TAG, "The Graph got clicked");
-            }
-        });
+//        mGraph.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // @TODO : pop up a DIALOG with comprehensive data view
+//                Log.d(TAG, "The Graph got clicked");
+//            }
+//        });
     }
 
     @Override
@@ -129,78 +145,9 @@ public class ProfileFragment extends Fragment implements ProfileDialogFragment.P
         mGraph.startAnimation(animation);
     }
 
-    /**
-     * Update user information
-     * @param dialog
-     * @param user
-     * @param sex
-     * @param age
-     * @param height
-     * @param weight
-     * @param skill
-     * @param disability
-     */
-    @Override
-    public void onProfilePositiveClick(DialogFragment dialog, final String user, final String sex,
-                                       final String age, final String height,
-                                       final String weight, final String skill,
-                                       final String disability)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
-        HashMap<String, String> profile = dbAdapter.getProfileByUserAndToken(user, token);
-        if(profile.size() == 0) { // this is the first time the user has updated their information
-            HashMap<String, String> newProfile = new HashMap<>();
-            newProfile.put(DBAdapter.USERNAME, user);
-            newProfile.put(DBAdapter.PASSWORD, token);
-            dbAdapter.createProfile(newProfile);
-            // this is sloppy, but once the profile is created a new profileId is made and we need to keep track of it
-            mCurrentProfileId = dbAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
-            Toast.makeText(getActivity(), "Creating " + user, Toast.LENGTH_SHORT).show();
-        }
-        else { // user is already in database and now we should update their info
-            HashMap<String, String> updateProfile = new HashMap<>();
-            updateProfile.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
-            updateProfile.put(DBAdapter.USERNAME, user);
-            updateProfile.put(DBAdapter.PASSWORD, token);
-            dbAdapter.updateProfile(updateProfile);
-            Toast.makeText(getActivity(), "Updating " + user, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Don't do anything
-     * @param dialog
-     */
-    @Override
-    public void onProfileNegativeClick(DialogFragment dialog)
-    {
-
-    }
-
     private class LongRunningGetIO extends AsyncTask<Void, Void, String>
     {
-        String body = "nada";
-        protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException
-        {
-            InputStream in = entity.getContent();
-
-
-            StringBuffer out = new StringBuffer();
-            int n = 1;
-            while (n>0) {
-                byte[] b = new byte[4096];
-                n =  in.read(b);
-
-
-                if (n>0) out.append(new String(b, 0, n));
-            }
-
-
-            System.out.println("First string: "+out.toString());
-            return out.toString();
-        }
-
+        String body = "BODY_PLACEHOLDER";
 
         @Override
         protected String doInBackground(Void... params) {
@@ -212,15 +159,11 @@ public class ProfileFragment extends Fragment implements ProfileDialogFragment.P
                 HttpResponse response = client.execute(httpGet);
                 body = handler.handleResponse(response);
                 Log.d(TAG, body + " got to try");
-                //Toast.makeText(getApplicationContext(), body, Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(),
-                //"You haven't take that many steps today. Why don't you " + body + "?", Toast.LENGTH_LONG)
-                //.show();
             }
             catch(IOException ex) {
                 Log.d(TAG, ex.getMessage().toString());
             }
-            return "ayooo";
+            return body;
         }
 
         @Override

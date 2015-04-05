@@ -130,8 +130,7 @@ public class ProfileDialogFragment extends DialogFragment
                 mListener.onProfileNegativeClick(ProfileDialogFragment.this);
             }
         });
-        // Create the AlertDialog object and return it
         return builder.create();
-    }
+    } // onCreateDialog()
 
 } // ProfileDialogFragment class

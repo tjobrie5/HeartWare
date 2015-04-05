@@ -58,7 +58,7 @@ public class FriendsFragment extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.friends_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
 
         // setup all the Facebook stuff
         mProfilePictureView = (ProfilePictureView) rootView.findViewById(R.id.vProfilePicture);
@@ -113,7 +113,7 @@ public class FriendsFragment extends android.support.v4.app.Fragment
 //    protected void onCreate(Bundle savedInstanceState)
 //    {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.friends_fragment);
+//        setContentView(R.layout.fragment_friends);
 //
 //        mProfilePictureView = (ProfilePictureView) findViewById(R.id.vProfilePicture);
 //
