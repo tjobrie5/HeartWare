@@ -40,7 +40,7 @@ public class ViewWorkout extends Activity
     private TextView tvViewLabel;
     public static final String NEW_WORKOUT = "NEW_WORKOUT";
     public static final String OLD_WORKOUT = "OLD_WORKOUT";
-
+// @TODO turn this into a dialog view thing
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

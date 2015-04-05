@@ -6,10 +6,9 @@
         <item name="paralyzed">Paralyzed</item>
     </string-array>
 
-
-    <string name="workout_tab">Workouts Tab</string>
     <string name="profile_tab">Profile Tab</string>
     <string name="friends_tab">Friends Tab</string>
+    <string name="meetups_tab">Meetups Tab</string>
     <string name="graph_data">Graph Data</string>
     <string name="goals">Goals</string>
     <string name="workouts">Workouts</string>

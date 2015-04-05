@@ -1,8 +1,11 @@
 package heartware.com.heartware_master;
 
+import android.app.DialogFragment;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,19 +33,25 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
-public class ProfileFragment extends Fragment
+public class ProfileFragment extends Fragment implements ProfileDialogFragment.ProfileDialogListener
 {
     private static final String TAG = ProfileFragment.class.getSimpleName();
     private Button bRecommend;
     private Button bUserInfo;
     private GraphView mGraph;
+    private ProfileDialogFragment mProfileDialog;
+    private DBAdapter dbAdapter;
+    private String mCurrentProfileId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.profile_fragment, container, false);
-
+        dbAdapter = new DBAdapter(getActivity());
+        mProfileDialog = new ProfileDialogFragment();
+        mCurrentProfileId = "0"; // zero means no current profile set
         createButtons(rootView);
         createGraph(rootView);
 
@@ -64,7 +73,7 @@ public class ProfileFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                //mProfileDialog.show(getFragmentManager(), TAG);
+                mProfileDialog.show(getActivity().getFragmentManager(), TAG); // @TODO : this will crash
             }
         });
     }
@@ -118,6 +127,55 @@ public class ProfileFragment extends Fragment
         animation.setRepeatMode(Animation.REVERSE);
         animation.setRepeatCount(Animation.INFINITE);
         mGraph.startAnimation(animation);
+    }
+
+    /**
+     * Update user information
+     * @param dialog
+     * @param user
+     * @param sex
+     * @param age
+     * @param height
+     * @param weight
+     * @param skill
+     * @param disability
+     */
+    @Override
+    public void onProfilePositiveClick(DialogFragment dialog, final String user, final String sex,
+                                       final String age, final String height,
+                                       final String weight, final String skill,
+                                       final String disability)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
+        HashMap<String, String> profile = dbAdapter.getProfileByUserAndToken(user, token);
+        if(profile.size() == 0) { // this is the first time the user has updated their information
+            HashMap<String, String> newProfile = new HashMap<>();
+            newProfile.put(DBAdapter.USERNAME, user);
+            newProfile.put(DBAdapter.PASSWORD, token);
+            dbAdapter.createProfile(newProfile);
+            // this is sloppy, but once the profile is created a new profileId is made and we need to keep track of it
+            mCurrentProfileId = dbAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
+            Toast.makeText(getActivity(), "Creating " + user, Toast.LENGTH_SHORT).show();
+        }
+        else { // user is already in database and now we should update their info
+            HashMap<String, String> updateProfile = new HashMap<>();
+            updateProfile.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
+            updateProfile.put(DBAdapter.USERNAME, user);
+            updateProfile.put(DBAdapter.PASSWORD, token);
+            dbAdapter.updateProfile(updateProfile);
+            Toast.makeText(getActivity(), "Updating " + user, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Don't do anything
+     * @param dialog
+     */
+    @Override
+    public void onProfileNegativeClick(DialogFragment dialog)
+    {
+
     }
 
     private class LongRunningGetIO extends AsyncTask<Void, Void, String>

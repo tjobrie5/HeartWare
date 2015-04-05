@@ -19,6 +19,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter
 {
+    private static final int TAB_COUNT = 3;
+
     public TabsPagerAdapter(android.support.v4.app.FragmentManager fm)
     {
         super(fm);
@@ -34,8 +36,12 @@ public class TabsPagerAdapter extends FragmentPagerAdapter
         System.out.println("MainActivity.TabsPagerAdapter.getItem(): " + index);
         switch (index) {
             case 0:
-                // Leftmost (and default) is the Profile (graph, user info, etc... )
+                // Leftmost tab (and default) is the Profile (graph, user info, etc... )
                 return new ProfileFragment();
+            case 1:
+                return new FriendsFragment();
+            case 2:
+                return new MeetupsFragment();
         }
         return null;
     }
@@ -43,6 +49,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter
     @Override
     public int getCount()
     {
-        return 1;	// we always have 3 tabs.
+        return TAB_COUNT;	// we always have 3 tabs.
     }
 } // TabsPagerAdapter class

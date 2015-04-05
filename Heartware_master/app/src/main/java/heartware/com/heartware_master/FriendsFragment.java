@@ -15,13 +15,15 @@
 
 package heartware.com.heartware_master;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,9 +41,9 @@ import com.facebook.widget.ProfilePictureView;
 import java.util.Arrays;
 import java.util.List;
 
-public class FriendsActivity extends Activity
+public class FriendsFragment extends android.support.v4.app.Fragment
 {
-    private static final String TAG = FriendsActivity.class.getSimpleName();
+    private static final String TAG = FriendsFragment.class.getSimpleName();
     private TextView tvUsername;
     private Button bPostImage;
     private Button bUpdateStatus;
@@ -54,18 +56,18 @@ public class FriendsActivity extends Activity
     private UiLifecycleHelper mUIHelper;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
+        View rootView = inflater.inflate(R.layout.friends_fragment, container, false);
 
-        mProfilePictureView = (ProfilePictureView) findViewById(R.id.vProfilePicture);
+        // setup all the Facebook stuff
+        mProfilePictureView = (ProfilePictureView) rootView.findViewById(R.id.vProfilePicture);
 
-        mUIHelper = new UiLifecycleHelper(this, statusCallback);
+        mUIHelper = new UiLifecycleHelper(getActivity(), statusCallback);
         mUIHelper.onCreate(savedInstanceState);
 
-        tvUsername = (TextView) findViewById(R.id.tvUserName);
-        bAuthButton = (LoginButton) findViewById(R.id.bAuthButton);
+        tvUsername = (TextView) rootView.findViewById(R.id.tvUserName);
+        bAuthButton = (LoginButton) rootView.findViewById(R.id.bAuthButton);
         bAuthButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser graphUser) {
@@ -82,7 +84,7 @@ public class FriendsActivity extends Activity
             }
         });
 
-        bPostImage = (Button) findViewById(R.id.bPostImage);
+        bPostImage = (Button) rootView.findViewById(R.id.bPostImage);
         bPostImage.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -92,7 +94,7 @@ public class FriendsActivity extends Activity
             }
         });
 
-        bUpdateStatus = (Button) findViewById(R.id.bUpdateStatus);
+        bUpdateStatus = (Button) rootView.findViewById(R.id.bUpdateStatus);
         bUpdateStatus.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -103,7 +105,61 @@ public class FriendsActivity extends Activity
         });
 
         buttonsEnabled(false);
-    } // onCreate
+
+        return rootView;
+    } // onCreateView
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState)
+//    {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.friends_fragment);
+//
+//        mProfilePictureView = (ProfilePictureView) findViewById(R.id.vProfilePicture);
+//
+//        mUIHelper = new UiLifecycleHelper(this, statusCallback);
+//        mUIHelper.onCreate(savedInstanceState);
+//
+//        tvUsername = (TextView) findViewById(R.id.tvUserName);
+//        bAuthButton = (LoginButton) findViewById(R.id.bAuthButton);
+//        bAuthButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+//            @Override
+//            public void onUserInfoFetched(GraphUser graphUser) {
+//                if(graphUser != null) {
+//                    tvUsername.setText(graphUser.getName());
+//                    mUser = graphUser;
+//                    updateUI();
+//                }
+//                else {
+//                    tvUsername.setText("You are not logged into Facebook");
+//                    mUser = null;
+//                    updateUI();
+//                }
+//            }
+//        });
+//
+//        bPostImage = (Button) findViewById(R.id.bPostImage);
+//        bPostImage.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                postImage();
+//            }
+//        });
+//
+//        bUpdateStatus = (Button) findViewById(R.id.bUpdateStatus);
+//        bUpdateStatus.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                postStatusMessage();
+//            }
+//        });
+//
+//        buttonsEnabled(false);
+//    } // onCreate
 
     /**
      * Callback is invoked after user logs in and logs out.
@@ -134,7 +190,7 @@ public class FriendsActivity extends Activity
                     Session.getActiveSession(), img, new Request.Callback() {
                         @Override
                         public void onCompleted(Response response) {
-                            Toast.makeText(FriendsActivity.this,
+                            Toast.makeText(getActivity(),
                                     "Photo uploaded successfully",
                                     Toast.LENGTH_LONG).show();
                         }
@@ -158,7 +214,7 @@ public class FriendsActivity extends Activity
                         @Override
                         public void onCompleted(Response response) {
                             if(response.getError() == null)
-                                Toast.makeText(FriendsActivity.this,
+                                Toast.makeText(getActivity(),
                                         "Status updated successfully",
                                         Toast.LENGTH_LONG).show();
                         }
@@ -187,46 +243,46 @@ public class FriendsActivity extends Activity
     }
 
     @Override
-    protected void onResume()
+    public void onResume()
     {
         super.onResume();
         mUIHelper.onResume();
         // Logs 'install' and 'app activate' App Events
-        AppEventsLogger.activateApp(this);
+        AppEventsLogger.activateApp(getActivity());
         updateUI();
     }
 
     @Override
-    protected void onPause()
+    public void onPause()
     {
         super.onPause();
         mUIHelper.onPause();
         // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
+        AppEventsLogger.deactivateApp(getActivity());
     }
 
     @Override
-    protected void onDestroy()
+    public void onDestroy()
     {
         super.onDestroy();
         mUIHelper.onDestroy();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
+    public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
         mUIHelper.onSaveInstanceState(outState);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
         mUIHelper.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void buttonsEnabled(boolean isEnabled)
+    private void buttonsEnabled(boolean isEnabled)
     {
         bPostImage.setEnabled(isEnabled);
         bUpdateStatus.setEnabled(isEnabled);

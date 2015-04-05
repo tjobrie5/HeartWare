@@ -18,30 +18,15 @@ package heartware.com.heartware_master;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import android.app.ActionBar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
-
-import java.util.HashMap;
-
-public class MainActivity extends FragmentActivity implements LoginDialogFragment.LoginDialogListener,
-        ProfileDialogFragment.ProfileDialogListener
+public class MainActivity extends FragmentActivity implements LoginDialogFragment.LoginDialogListener
 {
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -49,9 +34,7 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
     private TabsPagerAdapter mTabsAdapter;
     private ViewPager mViewPager;
 
-    private DBAdapter dbAdapter;
     private LoginDialogFragment mLoginDialog;
-    private ProfileDialogFragment mProfileDialog;
     private JawboneUpHelper mJboneHelper;
     private String mCurrentProfileId;
 
@@ -60,13 +43,11 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // adding invisible worker fragments:
-        //  https://developer.android.com/guide/components/fragments.html
+        // adding invisible worker fragments: https://developer.android.com/guide/components/fragments.html
         mJboneHelper = new JawboneUpHelper();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().add(mJboneHelper, JawboneUpHelper.TAG).commit();
         mCurrentProfileId = "0"; // zero means no current profile set
-        dbAdapter = new DBAdapter(this);
         mLoginDialog = new LoginDialogFragment();
         mLoginDialog.show(getFragmentManager(), TAG);
 
@@ -84,35 +65,23 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch(item.getItemId()) {
-            case R.id.action_workouts:
-                Intent intent = new Intent(getApplicationContext(), WorkoutsActivity.class);
-                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                startActivity(intent);
-                return true;
-            case R.id.action_friends:
-                startActivity(new Intent(getApplicationContext(), FriendsActivity.class));
-                return true;
+//            case R.id.action_workouts:
+//                Intent intent = new Intent(getApplicationContext(), MeetupsFragment.class);
+//                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
+//                startActivity(intent);
+//                return true;
+//            case R.id.action_friends:
+//                startActivity(new Intent(getApplicationContext(), FriendsFragment.class));
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    /**
-     * create dialogs and show the login dialog
-     */
-    private void createDialogs()
-    {
-        // create and show the login pop up as soon as the main activity is created
-        mLoginDialog = new LoginDialogFragment();
-        mProfileDialog = new ProfileDialogFragment();
-    }
-
     private void setupActionTabs()
     {
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        // Tell the ActionBar to display tabs
         mActionBar = getActionBar();
-//        setSupportActionBar(this);
         mTabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mTabsAdapter);
         mViewPager.setOnPageChangeListener(new SwipedListener());
@@ -123,7 +92,8 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
             @Override
             public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft)
             {
-
+                // @TODO : move view when tab is selected
+                mActionBar.setSelectedNavigationItem(tab.getPosition());
             }
 
             @Override
@@ -143,64 +113,17 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
         mActionBar.addTab(
                 mActionBar.newTab()
                         .setText(getString(R.string.profile_tab))
+                        .setIcon(R.drawable.ic_heartware_main_transparent)
                         .setTabListener(tabListener));
-//        mActionBar.addTab(
-//                mActionBar.newTab()
-//                        .setText(getString(R.string.Tab2Title))
-//                        .setTabListener(this));
-//        mActionBar.addTab(
-//                mActionBar.newTab()
-//                        .setText(getString(R.string.Tab3Title))
-//                        .setTabListener(this));
-    }
-
-    /**
-     * Update user information
-     * @param dialog
-     * @param user
-     * @param sex
-     * @param age
-     * @param height
-     * @param weight
-     * @param skill
-     * @param disability
-     */
-    @Override
-    public void onProfilePositiveClick(DialogFragment dialog, final String user, final String sex,
-                                       final String age, final String height,
-                                       final String weight, final String skill,
-                                       final String disability)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
-        HashMap<String, String> profile = dbAdapter.getProfileByUserAndToken(user, token);
-        if(profile.size() == 0) { // this is the first time the user has updated their information
-            HashMap<String, String> newProfile = new HashMap<>();
-            newProfile.put(DBAdapter.USERNAME, user);
-            newProfile.put(DBAdapter.PASSWORD, token);
-            dbAdapter.createProfile(newProfile);
-            // this is sloppy, but once the profile is created a new profileId is made and we need to keep track of it
-            mCurrentProfileId = dbAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
-            Toast.makeText(this, "Creating " + user, Toast.LENGTH_SHORT).show();
-        }
-        else { // user is already in database and now we should update their info
-            HashMap<String, String> updateProfile = new HashMap<>();
-            updateProfile.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
-            updateProfile.put(DBAdapter.USERNAME, user);
-            updateProfile.put(DBAdapter.PASSWORD, token);
-            dbAdapter.updateProfile(updateProfile);
-            Toast.makeText(this, "Updating " + user, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Don't do anything
-     * @param dialog
-     */
-    @Override
-    public void onProfileNegativeClick(DialogFragment dialog)
-    {
-
+        mActionBar.addTab(
+                mActionBar.newTab()
+                        .setText(getString(R.string.friends_tab))
+                        .setIcon(R.drawable.ic_action_friends)
+                        .setTabListener(tabListener));
+        mActionBar.addTab(
+                mActionBar.newTab()
+                        .setText(getString(R.string.meetups_tab))
+                        .setTabListener(tabListener));
     }
 
     /**
