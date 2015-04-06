@@ -51,7 +51,7 @@
                 android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/selected_image"
-                    android:src="@drawable/com_facebook_tooltip_black_background"
+                    android:src="@drawable/placeholder_image"
                     android:layout_width="fill_parent"
                     android:layout_height="200dp"
                     android:layout_marginLeft="10dp"

@@ -61,6 +61,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -71,9 +72,12 @@ import com.facebook.FacebookGraphResponseException;
 import com.facebook.FacebookRequestError;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.internal.Utility;
 import com.facebook.login.DefaultAudience;
 import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
@@ -122,6 +126,7 @@ public class FriendsFragment extends Fragment
     private TextView announceButton;
     private ShareButton shareButton;
     private SendButton messageButton;
+    private LoginButton bLoginButton;
     private ListView listView;
     private List<BaseListElement> listElements;
     private ProfilePictureView profilePictureView;
@@ -193,6 +198,29 @@ public class FriendsFragment extends Fragment
 
         profilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
         profilePictureView.setCropped(true);
+        bLoginButton = (LoginButton) view.findViewById(R.id.login_button);
+        bLoginButton.setReadPermissions("user_friends");
+        bLoginButton.setFragment(this);
+        bLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+        {
+            @Override
+            public void onSuccess(LoginResult loginResult)
+            {
+                Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancel()
+            {
+                Toast.makeText(getActivity(), "Login canceled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException e)
+            {
+                Toast.makeText(getActivity(), "Login error", Toast.LENGTH_SHORT).show();
+            }
+        });
         announceButton = (TextView) view.findViewById(R.id.announce_text);
         shareButton = (ShareButton) view.findViewById(R.id.share_button);
         messageButton = (SendButton) view.findViewById(R.id.message_button);
@@ -249,6 +277,28 @@ public class FriendsFragment extends Fragment
             listElement.onSaveInstanceState(bundle);
         }
         bundle.putBoolean(PENDING_ANNOUNCE_KEY, pendingAnnounce);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        isResumed = true;
+
+        // Call the 'activateApp' method to log an app event for use in analytics and advertising
+        // reporting.  Do so in the onResume methods of the primary Activities that an app may be
+        // launched into.
+        AppEventsLogger.activateApp(getActivity());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+//        isResumed = false;
+
+        // Call the 'deactivateApp' method to log an app event for use in analytics and advertising
+        // reporting.  Do so in the onPause methods of the primary Activities that an app may be
+        // launched into.
+        AppEventsLogger.deactivateApp(getActivity());
     }
 
     @Override

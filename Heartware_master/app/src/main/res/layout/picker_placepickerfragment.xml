@@ -92,4 +92,3 @@
         android:background="@drawable/picker_default_separator_color"
         />
 </RelativeLayout>
-    <!-- From: file:/home/zeep/develop/facebook-android-sdk-4.0.1/samples/Scrumptious/res/layout/picker_placepickerfragment_list_row.xml -->
