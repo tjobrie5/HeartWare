@@ -113,8 +113,8 @@ import java.util.UUID;
 public class FriendsFragment extends Fragment
 {
     private static final String TAG = FriendsFragment.class.getSimpleName();
-    private static final String MEAL_OBJECT_TYPE = "fb_sample_scrumps:meal";
-    private static final String EAT_ACTION_TYPE = "fb_sample_scrumps:eat";
+    private static final String EXERCISE_OBJECT_TYPE = "_heartware:exercise";
+    private static final String EAT_ACTION_TYPE = "_heartware:eat";
 
     private static final String PENDING_ANNOUNCE_KEY = "pendingAnnounce";
     private static final int USER_GENERATED_MIN_SIZE = 480;
@@ -359,7 +359,7 @@ public class FriendsFragment extends Fragment
 
         listElements = new ArrayList<FB_BaseListElement>();
 
-        listElements.add(new EatListElement(0));
+        listElements.add(new ExerciseListElement(0));
         listElements.add(new LocationListElement(1));
         listElements.add(new PeopleListElement(2));
         listElements.add(new PhotoListElement(3));
@@ -427,7 +427,7 @@ public class FriendsFragment extends Fragment
 
         return new ShareOpenGraphContent.Builder()
                 .setAction(actionBuilder.build())
-                .setPreviewPropertyName("meal")
+                .setPreviewPropertyName("exercise")
                 .build();
     } // createOpenGraphContent
 
@@ -591,23 +591,23 @@ public class FriendsFragment extends Fragment
         startActivityForResult(intent, requestCode);
     }
 
-    private class EatListElement extends FB_BaseListElement
+    private class ExerciseListElement extends FB_BaseListElement
     {
-        private static final String FOOD_KEY = "food";
-        private static final String FOOD_URL_KEY = "food_url";
+        private static final String EXERCISE_KEY = "exericse";
+        private static final String EXERCISE_URL_KEY = "exercise_url";
 
-        private final String[] foodChoices;
-        private final String[] foodUrls;
-        private String foodChoiceUrl = null;
-        private String foodChoice = null;
+        private final String[] exerciseChoices;
+        private final String[] exerciseUrls;
+        private String exerciseChoiceUrl = null;
+        private String exerciseChoice = null;
 
-        public EatListElement(int requestCode) {
+        public ExerciseListElement(int requestCode) {
             super(getActivity().getResources().getDrawable(R.drawable.add_food),
-                    getActivity().getResources().getString(R.string.action_eating),
+                    getActivity().getResources().getString(R.string.action_exercising),
                     null,
                     requestCode);
-            foodChoices = getActivity().getResources().getStringArray(R.array.food_types);
-            foodUrls = getActivity().getResources().getStringArray(R.array.food_og_urls);
+            exerciseChoices = getActivity().getResources().getStringArray(R.array.exercise_types);
+            exerciseUrls = getActivity().getResources().getStringArray(R.array.exercise_og_urls);
         }
 
         @Override
@@ -615,61 +615,61 @@ public class FriendsFragment extends Fragment
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showMealOptions();
+                    showExerciseOptions();
                 }
             };
         }
 
         @Override
         protected void populateOpenGraphAction(ShareOpenGraphAction.Builder actionBuilder) {
-            if (foodChoice != null && foodChoice.length() > 0) {
-                if (foodChoiceUrl != null && foodChoiceUrl.length() > 0) {
-                    actionBuilder.putString("meal", foodChoiceUrl);
+            if (exerciseChoice != null && exerciseChoice.length() > 0) {
+                if (exerciseChoiceUrl != null && exerciseChoiceUrl.length() > 0) {
+                    actionBuilder.putString("exercise", exerciseChoiceUrl);
                 } else {
                     ShareOpenGraphObject mealObject = new ShareOpenGraphObject.Builder()
-                            .putString("og:type", MEAL_OBJECT_TYPE)
-                            .putString("og:title", foodChoice)
+                            .putString("og:type", EXERCISE_OBJECT_TYPE)
+                            .putString("og:title", exerciseChoice)
                             .build();
-                    actionBuilder.putObject("meal", mealObject);
+                    actionBuilder.putObject("exercise", mealObject);
                 }
             }
         }
 
         @Override
         protected void onSaveInstanceState(Bundle bundle) {
-            if (foodChoice != null && foodChoiceUrl != null) {
-                bundle.putString(FOOD_KEY, foodChoice);
-                bundle.putString(FOOD_URL_KEY, foodChoiceUrl);
+            if (exerciseChoice != null && exerciseChoiceUrl != null) {
+                bundle.putString(EXERCISE_KEY, exerciseChoice);
+                bundle.putString(EXERCISE_URL_KEY, exerciseChoiceUrl);
             }
         }
 
         @Override
         protected boolean restoreState(Bundle savedState) {
-            String food = savedState.getString(FOOD_KEY);
-            String foodUrl = savedState.getString(FOOD_URL_KEY);
+            String food = savedState.getString(EXERCISE_KEY);
+            String foodUrl = savedState.getString(EXERCISE_URL_KEY);
             if (food != null && foodUrl != null) {
-                foodChoice = food;
-                foodChoiceUrl = foodUrl;
-                setFoodText();
+                exerciseChoice = food;
+                exerciseChoiceUrl = foodUrl;
+                setExerciseText();
                 return true;
             }
             return false;
         }
 
-        private void showMealOptions() {
-            String title = getActivity().getResources().getString(R.string.select_meal);
+        private void showExerciseOptions() {
+            String title = getActivity().getResources().getString(R.string.select_exercise);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(title).
                     setCancelable(true).
-                    setItems(foodChoices, new DialogInterface.OnClickListener() {
+                    setItems(exerciseChoices, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            foodChoiceUrl = foodUrls[i];
-                            if (foodChoiceUrl.length() == 0) {
-                                getCustomFood();
+                            exerciseChoiceUrl = exerciseUrls[i];
+                            if (exerciseChoiceUrl.length() == 0) {
+                                getCustomExercise();
                             } else {
-                                foodChoice = foodChoices[i];
-                                setFoodText();
+                                exerciseChoice = exerciseChoices[i];
+                                setExerciseText();
                                 notifyDataChanged();
                             }
                         }
@@ -677,8 +677,8 @@ public class FriendsFragment extends Fragment
             builder.show();
         }
 
-        private void getCustomFood() {
-            String title = getActivity().getResources().getString(R.string.enter_meal);
+        private void getCustomExercise() {
+            String title = getActivity().getResources().getString(R.string.enter_exercise);
             final EditText input = new EditText(getActivity());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -688,8 +688,8 @@ public class FriendsFragment extends Fragment
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            foodChoice = input.getText().toString();
-                            setFoodText();
+                            exerciseChoice = input.getText().toString();
+                            setExerciseText();
                             notifyDataChanged();
                         }
                     })
@@ -705,18 +705,18 @@ public class FriendsFragment extends Fragment
             dialog.show();
         }
 
-        private void setFoodText() {
-            if (foodChoice != null && foodChoice.length() > 0) {
-                setText2(foodChoice);
+        private void setExerciseText() {
+            if (exerciseChoice != null && exerciseChoice.length() > 0) {
+                setText2(exerciseChoice);
                 announceButton.setEnabled(true);
                 messageButton.setEnabled(true);
             } else {
-                setText2(getActivity().getResources().getString(R.string.action_eating_default));
+                setText2(getActivity().getResources().getString(R.string.action_exercising_default));
                 announceButton.setEnabled(false);
                 messageButton.setEnabled(false);
             }
         }
-    } // EatListElement
+    } // ExerciseListElement
 
     private class PeopleListElement extends FB_BaseListElement
     {
