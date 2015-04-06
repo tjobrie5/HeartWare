@@ -9,8 +9,7 @@
 //
 // Source code: github.com/tjobrie5/HeartWare
 //
-// Description: Singleton class that handles mostly Facebook operations.
-// Resource: Scrumptious example app from Facebook SDK 4.0
+// Description:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 package heartware.com.heartware_master;

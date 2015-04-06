@@ -49,7 +49,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.util.Log;
@@ -58,12 +57,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -74,7 +71,6 @@ import com.facebook.FacebookGraphResponseException;
 import com.facebook.FacebookRequestError;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.internal.Utility;
 import com.facebook.login.DefaultAudience;
 import com.facebook.login.LoginManager;
@@ -234,7 +230,7 @@ public class FriendsFragment extends Fragment
         updateWithToken(AccessToken.getCurrentAccessToken());
 
         return view;
-    }
+    } // onCreateView
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -406,7 +402,7 @@ public class FriendsFragment extends Fragment
                 .setAction(actionBuilder.build())
                 .setPreviewPropertyName("meal")
                 .build();
-    }
+    } // createOpenGraphContent
 
     private File getTempPhotoStagingDirectory() {
         File photoDir = new File(getActivity().getCacheDir(), "photoFiles");
@@ -477,7 +473,7 @@ public class FriendsFragment extends Fragment
             }
         }
         return null;
-    }
+    } // getImageFileAndMinDimension
 
     private ShareOpenGraphAction.Builder createEatActionBuilder() {
         ShareOpenGraphAction.Builder builder = new ShareOpenGraphAction.Builder()
@@ -693,7 +689,7 @@ public class FriendsFragment extends Fragment
                 messageButton.setEnabled(false);
             }
         }
-    }
+    } // EatListElement
 
     private class PeopleListElement extends BaseListElement {
 
@@ -821,7 +817,7 @@ public class FriendsFragment extends Fragment
             }
             return null;
         }
-    }
+    } // PeopleListElement
 
     private class LocationListElement extends BaseListElement {
         private static final String PLACE_KEY = "place";
@@ -893,15 +889,14 @@ public class FriendsFragment extends Fragment
             }
             setText2(text);
         }
-
-    }
+    } // LocationListElement
 
     private class PhotoListElement extends BaseListElement {
         private static final int CAMERA = 0;
         private static final int GALLERY = 1;
         private static final String PHOTO_URI_KEY = "photo_uri";
         private static final String TEMP_URI_KEY = "temp_uri";
-        private static final String FILE_PREFIX = "scrumptious_img_";
+        private static final String FILE_PREFIX = "heartware_img_";
         private static final String FILE_SUFFIX = ".jpg";
 
         private Uri tempUri = null;
@@ -1032,7 +1027,7 @@ public class FriendsFragment extends Fragment
                     imgFileName);
             return Uri.fromFile(image);
         }
-    }
+    } // PhotoListElement
 
     private class ActionListAdapter extends ArrayAdapter<BaseListElement>
     {
@@ -1080,7 +1075,7 @@ public class FriendsFragment extends Fragment
             }
             return view;
         }
-    }
+    } // ActionListAdapter
 
     private class ScaleAndSetImageTask extends AsyncTask<Void, Void, Bitmap>
     {
@@ -1125,5 +1120,5 @@ public class FriendsFragment extends Fragment
                 photoThumbnail.setImageURI(photoUri);
             }
         }
-    }
+    } // ScaleAndSetImageTask
 } // FriendsActivity class
