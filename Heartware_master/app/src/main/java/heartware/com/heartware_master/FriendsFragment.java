@@ -602,7 +602,7 @@ public class FriendsFragment extends Fragment
         private String exerciseChoice = null;
 
         public ExerciseListElement(int requestCode) {
-            super(getActivity().getResources().getDrawable(R.drawable.add_food),
+            super(getActivity().getResources().getDrawable(R.drawable.add_exercise_black),
                     getActivity().getResources().getString(R.string.action_exercising),
                     null,
                     requestCode);
@@ -726,7 +726,7 @@ public class FriendsFragment extends Fragment
         private List<JSONObject> selectedUsers;
 
         public PeopleListElement(int requestCode) {
-            super(getActivity().getResources().getDrawable(R.drawable.add_friends),
+            super(getActivity().getResources().getDrawable(R.drawable.add_friends_black),
                     getActivity().getResources().getString(R.string.action_people),
                     null,
                     requestCode);
@@ -854,7 +854,7 @@ public class FriendsFragment extends Fragment
         private JSONObject selectedPlace = null;
 
         public LocationListElement(int requestCode) {
-            super(getActivity().getResources().getDrawable(R.drawable.add_location),
+            super(getActivity().getResources().getDrawable(R.drawable.add_location_black),
                     getActivity().getResources().getString(R.string.action_location),
                     null,
                     requestCode);
@@ -932,7 +932,7 @@ public class FriendsFragment extends Fragment
         private Uri tempUri = null;
 
         public PhotoListElement(int requestCode) {
-            super(getActivity().getResources().getDrawable(R.drawable.add_photo),
+            super(getActivity().getResources().getDrawable(R.drawable.add_photo_black),
                     getActivity().getResources().getString(R.string.action_photo),
                     null,
                     requestCode);

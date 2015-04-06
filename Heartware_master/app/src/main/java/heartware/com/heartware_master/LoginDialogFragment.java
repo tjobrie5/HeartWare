@@ -60,7 +60,7 @@ public class LoginDialogFragment extends DialogFragment
             public void onClick(DialogInterface dialog, int id) {
                 mListener.onDialogPositiveClick(LoginDialogFragment.this);
             }
-        });
+        }).setIcon(R.drawable.jawbone_button);
         // Create the AlertDialog object and return it
         return builder.create();
     }
