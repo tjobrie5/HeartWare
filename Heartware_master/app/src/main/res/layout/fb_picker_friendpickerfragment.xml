@@ -24,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:background="#FFFFFF">
 
-    <include layout="@layout/picker_title_bar_stub"/>
+    <include layout="@layout/fb_picker_title_bar_stub"/>
 
     <ListView
         android:id="@+id/com_facebook_picker_list_view"

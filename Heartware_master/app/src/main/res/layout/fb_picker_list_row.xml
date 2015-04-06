@@ -27,7 +27,7 @@
     <ViewStub
         android:id="@+id/com_facebook_picker_profile_pic_stub"
         android:inflatedId="@+id/com_facebook_picker_image"
-        android:layout="@layout/picker_image"
+        android:layout="@layout/fb_picker_image"
         android:layout_width="50dip"
         android:layout_height="50dip" />
     <TextView
@@ -45,7 +45,7 @@
     <ViewStub
         android:id="@+id/com_facebook_picker_checkbox_stub"
         android:inflatedId="@+id/com_facebook_picker_checkbox"
-        android:layout="@layout/picker_checkbox"
+        android:layout="@layout/fb_picker_checkbox"
         android:layout_width="23dip"
         android:layout_height="23dip"
         android:layout_marginRight="10dip"/>

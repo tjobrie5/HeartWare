@@ -38,7 +38,6 @@ import android.content.DialogInterface;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -52,16 +51,16 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 import com.facebook.FacebookException;
-import heartware.com.picker.FriendPickerFragment;
-import heartware.com.picker.PickerFragment;
-import heartware.com.picker.PlacePickerFragment;
+import heartware.com.FB_picker.FriendPickerFragment;
+import heartware.com.FB_picker.PickerFragment;
+import heartware.com.FB_picker.PlacePickerFragment;
 
 /**
  * The PickerActivity enhances the Friend or Place Picker by adding a title
  * and a Done button. The selection results are saved in the HeartwareApplication
  * instance.
  */
-public class PickerActivity extends FragmentActivity {
+public class FB_PickerActivity extends FragmentActivity {
     public static final Uri FRIEND_PICKER = Uri.parse("picker://friend");
     public static final Uri PLACE_PICKER = Uri.parse("picker://place");
 
@@ -82,7 +81,7 @@ public class PickerActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pickers);
+        setContentView(R.layout.fb_pickers);
 
         Bundle args = getIntent().getExtras();
         FragmentManager manager = getSupportFragmentManager();
@@ -101,7 +100,7 @@ public class PickerActivity extends FragmentActivity {
             friendPickerFragment.setOnErrorListener(new PickerFragment.OnErrorListener() {
                 @Override
                 public void onError(PickerFragment fragment, FacebookException error) {
-                    PickerActivity.this.onError(error);
+                    FB_PickerActivity.this.onError(error);
                 }
             });
             friendPickerFragment.setOnDoneButtonClickedListener(new PickerFragment.OnDoneButtonClickedListener() {
@@ -128,7 +127,7 @@ public class PickerActivity extends FragmentActivity {
             placePickerFragment.setOnErrorListener(new PickerFragment.OnErrorListener() {
                 @Override
                 public void onError(PickerFragment fragment, FacebookException error) {
-                    PickerActivity.this.onError(error);
+                    FB_PickerActivity.this.onError(error);
                 }
             });
             placePickerFragment.setOnDoneButtonClickedListener(new PickerFragment.OnDoneButtonClickedListener() {

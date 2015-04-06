@@ -12,7 +12,7 @@
 // Description:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-package heartware.com.picker;
+package heartware.com.FB_picker;
 
 /**
  * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
@@ -53,9 +53,6 @@ import com.facebook.internal.Utility;
 
 import org.json.JSONObject;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.Collator;
 import java.util.*;
 
 class GraphObjectAdapter extends BaseAdapter implements SectionIndexer {
@@ -301,7 +298,7 @@ class GraphObjectAdapter extends BaseAdapter implements SectionIndexer {
         TextView result = (TextView) convertView;
 
         if (result == null) {
-            result = (TextView) inflater.inflate(R.layout.picker_list_section_header, null);
+            result = (TextView) inflater.inflate(R.layout.fb_picker_list_section_header, null);
         }
 
         result.setText(sectionHeader);
@@ -324,7 +321,7 @@ class GraphObjectAdapter extends BaseAdapter implements SectionIndexer {
         View result = convertView;
 
         if (result == null) {
-            result = inflater.inflate(R.layout.picker_activity_circle_row, null);
+            result = inflater.inflate(R.layout.fb_picker_activity_circle_row, null);
         }
         ProgressBar activityCircle = (ProgressBar) result.findViewById(R.id.com_facebook_picker_row_activity_circle);
         activityCircle.setVisibility(View.VISIBLE);
@@ -333,7 +330,7 @@ class GraphObjectAdapter extends BaseAdapter implements SectionIndexer {
     }
 
     protected int getGraphObjectRowLayoutId(JSONObject graphObject) {
-        return R.layout.picker_list_row;
+        return R.layout.fb_picker_list_row;
     }
 
     protected int getDefaultPicture() {

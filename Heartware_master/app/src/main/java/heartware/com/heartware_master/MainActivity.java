@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.facebook.appevents.AppEventsLogger;
 import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
 
 import java.util.HashMap;
@@ -65,9 +66,25 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
     } // onCreate
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
+    public void onResume()
     {
-        super.onSaveInstanceState(outState);
+        super.onResume();
+
+        // Call the 'activateApp' method to log an app event for use in analytics and advertising
+        // reporting.  Do so in the onResume methods of the primary Activities that an app may be
+        // launched into.
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        // Call the 'deactivateApp' method to log an app event for use in analytics and advertising
+        // reporting.  Do so in the onPause methods of the primary Activities that an app may be
+        // launched into.
+        AppEventsLogger.deactivateApp(this);
     }
 
     //    @Override

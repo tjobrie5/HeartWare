@@ -24,5 +24,5 @@
 		android:state_enabled="false"
 		android:color="@color/disabled_button_color"/>
     <item
-    	android:color="@color/scrumptious_main_orange"/>
+    	android:color="@color/heartware_main_blacl"/>
 </selector>

@@ -12,7 +12,7 @@
 // Description:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-package heartware.com.picker;
+package heartware.com.FB_picker;
 
 /**
  * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
@@ -45,7 +45,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +120,7 @@ public class PlacePickerFragment extends PickerFragment {
      * Default constructor. Creates a Fragment with all default properties.
      */
     public PlacePickerFragment() {
-        super(R.layout.picker_placepickerfragment);
+        super(R.layout.fb_picker_placepickerfragment);
     }
 
     /**
@@ -285,7 +284,7 @@ public class PlacePickerFragment extends PickerFragment {
             ListView listView = (ListView) view.findViewById(R.id.com_facebook_picker_list_view);
 
             View searchHeaderView = getActivity().getLayoutInflater().inflate(
-                    R.layout.picker_search_box, listView, false);
+                    R.layout.fb_picker_search_box, listView, false);
 
             listView.addHeaderView(searchHeaderView, null, false);
 
@@ -382,7 +381,7 @@ public class PlacePickerFragment extends PickerFragment {
 
             @Override
             protected int getGraphObjectRowLayoutId(JSONObject graphObject) {
-                return R.layout.picker_placepickerfragment_list_row;
+                return R.layout.fb_picker_placepickerfragment_list_row;
             }
 
             @Override

@@ -12,7 +12,7 @@
 // Description:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-package heartware.com.picker;
+package heartware.com.FB_picker;
 
 /**
  * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
@@ -47,7 +47,6 @@ import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.animation.AlphaAnimation;
@@ -182,7 +181,7 @@ public abstract class PickerFragment extends Fragment {
             public boolean onLongClick(View v) {
                 // We don't actually do anything differently on long-clicks, but setting the listener
                 // enables the selector transition that we have for visual consistency with the
-                // Facebook app's pickers.
+                // Facebook app's fb_pickers.
                 return false;
             }
         });

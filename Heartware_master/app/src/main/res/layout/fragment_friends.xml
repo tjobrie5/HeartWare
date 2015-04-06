@@ -24,7 +24,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <include layout="@layout/title_bar"/>
+    <include layout="@layout/fb_title_bar"/>
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <heartware.com.heartware_master.FullListView
+            <heartware.com.heartware_master.FB_FullListView
                 android:id="@+id/selection_list"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

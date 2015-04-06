@@ -48,7 +48,8 @@ import org.json.JSONObject;
  * Base class for a list element in the Scrumptious main display, consisting of an
  * icon to the left, and a two line display to the right.
  */
-public abstract class BaseListElement {
+public abstract class FB_BaseListElement
+{
 
     private Drawable icon;
     private String text1;
@@ -64,7 +65,7 @@ public abstract class BaseListElement {
      * @param text2 the second row of text
      * @param requestCode the requestCode to start new Activities with
      */
-    public BaseListElement(Drawable icon, String text1, String text2, int requestCode) {
+    public FB_BaseListElement(Drawable icon, String text1, String text2, int requestCode) {
         this.icon = icon;
         this.text1 = text1;
         this.text2 = text2;

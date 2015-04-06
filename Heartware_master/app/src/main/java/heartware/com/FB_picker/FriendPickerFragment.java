@@ -12,7 +12,7 @@
 // Description:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-package heartware.com.picker;
+package heartware.com.FB_picker;
 
 /**
  * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
@@ -105,7 +105,7 @@ public class FriendPickerFragment extends PickerFragment {
      * Default constructor. Creates a Fragment with all default properties.
      */
     public FriendPickerFragment() {
-        super(R.layout.picker_friendpickerfragment);
+        super(R.layout.fb_picker_friendpickerfragment);
     }
 
     /**
@@ -239,7 +239,7 @@ public class FriendPickerFragment extends PickerFragment {
         PickerFragmentAdapter adapter = new PickerFragmentAdapter(this.getActivity()) {
             @Override
             protected int getGraphObjectRowLayoutId(JSONObject graphObject) {
-                return R.layout.picker_list_row;
+                return R.layout.fb_picker_list_row;
             }
 
             @Override

@@ -37,7 +37,7 @@
             <ViewStub
                 android:id="@+id/com_facebook_picker_profile_pic_stub"
                 android:inflatedId="@+id/com_facebook_picker_image"
-                android:layout="@layout/picker_image"
+                android:layout="@layout/fb_picker_image"
                 android:layout_gravity="left|center_vertical"
                 android:layout_width="@dimen/picker_place_image_size"
                 android:layout_height="@dimen/picker_place_image_size" />
@@ -77,7 +77,7 @@
         </LinearLayout>
         <!--ViewStub
                 android:id="@+id/checkbox_stub"
-                android:inflatedId="@+id/picker_checkbox"
+                android:inflatedId="@+id/fb_picker_checkbox"
                 android:layout="@layout/checkbox_layout"
                 android:layout_width="23dip"
                 android:layout_height="23dip"

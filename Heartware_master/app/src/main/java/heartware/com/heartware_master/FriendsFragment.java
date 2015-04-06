@@ -128,7 +128,7 @@ public class FriendsFragment extends Fragment
     private SendButton messageButton;
     private LoginButton bLoginButton;
     private ListView listView;
-    private List<BaseListElement> listElements;
+    private List<FB_BaseListElement> listElements;
     private ProfilePictureView profilePictureView;
     private boolean pendingAnnounce;
     private MainActivity activity;
@@ -273,32 +273,10 @@ public class FriendsFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        for (BaseListElement listElement : listElements) {
+        for (FB_BaseListElement listElement : listElements) {
             listElement.onSaveInstanceState(bundle);
         }
         bundle.putBoolean(PENDING_ANNOUNCE_KEY, pendingAnnounce);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        isResumed = true;
-
-        // Call the 'activateApp' method to log an app event for use in analytics and advertising
-        // reporting.  Do so in the onResume methods of the primary Activities that an app may be
-        // launched into.
-        AppEventsLogger.activateApp(getActivity());
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        isResumed = false;
-
-        // Call the 'deactivateApp' method to log an app event for use in analytics and advertising
-        // reporting.  Do so in the onPause methods of the primary Activities that an app may be
-        // launched into.
-        AppEventsLogger.deactivateApp(getActivity());
     }
 
     @Override
@@ -380,7 +358,7 @@ public class FriendsFragment extends Fragment
         announceButton.setEnabled(false);
         messageButton.setEnabled(false);
 
-        listElements = new ArrayList<BaseListElement>();
+        listElements = new ArrayList<FB_BaseListElement>();
 
         listElements.add(new EatListElement(0));
         listElements.add(new LocationListElement(1));
@@ -388,7 +366,7 @@ public class FriendsFragment extends Fragment
         listElements.add(new PhotoListElement(3));
 
         if (savedInstanceState != null) {
-            for (BaseListElement listElement : listElements) {
+            for (FB_BaseListElement listElement : listElements) {
                 listElement.restoreState(savedInstanceState);
             }
             pendingAnnounce = savedInstanceState.getBoolean(PENDING_ANNOUNCE_KEY, false);
@@ -528,7 +506,7 @@ public class FriendsFragment extends Fragment
     private ShareOpenGraphAction.Builder createEatActionBuilder() {
         ShareOpenGraphAction.Builder builder = new ShareOpenGraphAction.Builder()
                 .setActionType(EAT_ACTION_TYPE);
-        for (BaseListElement element : listElements) {
+        for (FB_BaseListElement element : listElements) {
             element.populateOpenGraphAction(builder);
         }
 
@@ -610,11 +588,12 @@ public class FriendsFragment extends Fragment
     private void startPickerActivity(Uri data, int requestCode) {
         Intent intent = new Intent();
         intent.setData(data);
-        intent.setClass(getActivity(), PickerActivity.class);
+        intent.setClass(getActivity(), FB_PickerActivity.class);
         startActivityForResult(intent, requestCode);
     }
 
-    private class EatListElement extends BaseListElement {
+    private class EatListElement extends FB_BaseListElement
+    {
 
         private static final String FOOD_KEY = "food";
         private static final String FOOD_URL_KEY = "food_url";
@@ -741,7 +720,8 @@ public class FriendsFragment extends Fragment
         }
     } // EatListElement
 
-    private class PeopleListElement extends BaseListElement {
+    private class PeopleListElement extends FB_BaseListElement
+    {
 
         private static final String FRIENDS_KEY = "friends";
 
@@ -760,7 +740,7 @@ public class FriendsFragment extends Fragment
                 @Override
                 public void onClick(View view) {
                     if (AccessToken.getCurrentAccessToken() != null) {
-                        startPickerActivity(PickerActivity.FRIEND_PICKER, getRequestCode());
+                        startPickerActivity(FB_PickerActivity.FRIEND_PICKER, getRequestCode());
                     } else {
 //                        activity.showSplashFragment();
                     }
@@ -869,7 +849,8 @@ public class FriendsFragment extends Fragment
         }
     } // PeopleListElement
 
-    private class LocationListElement extends BaseListElement {
+    private class LocationListElement extends FB_BaseListElement
+    {
         private static final String PLACE_KEY = "place";
 
         private JSONObject selectedPlace = null;
@@ -887,7 +868,7 @@ public class FriendsFragment extends Fragment
                 @Override
                 public void onClick(View view) {
                     if (AccessToken.getCurrentAccessToken() != null) {
-                        startPickerActivity(PickerActivity.PLACE_PICKER, getRequestCode());
+                        startPickerActivity(FB_PickerActivity.PLACE_PICKER, getRequestCode());
                     } else {
 //                        activity.showSplashFragment();
                     }
@@ -941,7 +922,8 @@ public class FriendsFragment extends Fragment
         }
     } // LocationListElement
 
-    private class PhotoListElement extends BaseListElement {
+    private class PhotoListElement extends FB_BaseListElement
+    {
         private static final int CAMERA = 0;
         private static final int GALLERY = 1;
         private static final String PHOTO_URI_KEY = "photo_uri";
@@ -1079,12 +1061,12 @@ public class FriendsFragment extends Fragment
         }
     } // PhotoListElement
 
-    private class ActionListAdapter extends ArrayAdapter<BaseListElement>
+    private class ActionListAdapter extends ArrayAdapter<FB_BaseListElement>
     {
-        private List<BaseListElement> listElements;
+        private List<FB_BaseListElement> listElements;
 
         public ActionListAdapter(
-                Context context, int resourceId, List<BaseListElement> listElements) {
+                Context context, int resourceId, List<FB_BaseListElement> listElements) {
             super(context, resourceId, listElements);
             this.listElements = listElements;
             for (int i = 0; i < listElements.size(); i++) {
@@ -1099,10 +1081,10 @@ public class FriendsFragment extends Fragment
                 LayoutInflater inflater =
                         (LayoutInflater) getActivity().getSystemService(
                                 Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.listitem, null);
+                view = inflater.inflate(R.layout.fb_listitem, null);
             }
 
-            BaseListElement listElement = listElements.get(position);
+            FB_BaseListElement listElement = listElements.get(position);
             if (listElement != null) {
                 view.setOnClickListener(listElement.getOnClickListener());
                 ImageView icon = (ImageView) view.findViewById(R.id.icon);

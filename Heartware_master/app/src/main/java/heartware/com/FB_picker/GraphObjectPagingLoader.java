@@ -12,7 +12,7 @@
 // Description:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-package heartware.com.picker;
+package heartware.com.FB_picker;
 
 /**
  * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
@@ -39,7 +39,6 @@ import org.json.JSONArray;
 import android.content.Context;
 import android.support.v4.content.Loader;
 import com.facebook.*;
-import org.json.JSONArray;
 
 class GraphObjectPagingLoader extends Loader<GraphObjectCursor> {
     private GraphRequest originalRequest;

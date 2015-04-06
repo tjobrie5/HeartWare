@@ -46,17 +46,17 @@ import android.widget.ListView;
  * A subclass of ListView that will always show the full list of elements.
  * This allows a ListView to be embedded inside a ScrollView.
  */
-public class FullListView extends ListView {
+public class FB_FullListView extends ListView {
 
-    public FullListView(Context context) {
+    public FB_FullListView(Context context) {
         super(context);
     }
 
-    public FullListView(Context context, AttributeSet attributeSet) {
+    public FB_FullListView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }
 
-    public FullListView(Context context, AttributeSet attributeSet, int defStyle) {
+    public FB_FullListView(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
     }
 
