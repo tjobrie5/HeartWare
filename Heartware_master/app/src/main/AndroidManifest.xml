@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="heartware.com.heartware_master" >
+    package="heartware.com.heartware_master"
+    android:versionCode="1"
+    android:versionName="1.0">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <provider android:authorities="com.facebook.app.FacebookContentProvider795766887172566"
-              android:name="com.facebook.FacebookContentProvider"
-              android:exported="true" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name=".HeartwareApplication">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-deta android:name="com.facebook.sdk.ApplicationName" android:value="@string/app_name"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -38,6 +43,13 @@
         </activity>
         <activity android:name=".ViewWorkout"
                   android:label="@string/app_name" />
+
+        <activity android:name="PickerActivity"
+                  android:label="@string/app_name" />
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider795766887172566"
+                  android:name="com.facebook.FacebookContentProvider"
+                  android:exported="true" />
     </application>
 
 </manifest>

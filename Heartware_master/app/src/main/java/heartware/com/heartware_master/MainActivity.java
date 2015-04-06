@@ -64,7 +64,13 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
         setupActionTabs();
     } // onCreate
 
-//    @Override
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+    }
+
+    //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu)
 //    {
 //        getMenuInflater().inflate(R.menu.menu_main, menu);

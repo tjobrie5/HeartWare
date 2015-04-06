@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="faded_hint">#ffc6c7c5</color>
+
+    <!-- from the Facebook scrumptious example -->
+    <dimen name="picker_place_image_size">64dp</dimen>
+    <color name="picker_search_bar_background">#f5f5f7</color>
+    <color name="picker_search_bar_text">#bcbdc2</color>
+    <color name="scrumptious_main_orange">#FFFD5720</color>
+    <color name="disabled_button_color">#FFB7B7B7</color>
+
 </resources>
