@@ -16,12 +16,9 @@
 
 package heartware.com.heartware_master;
 
-import android.app.DialogFragment;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,13 +30,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
-
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -48,8 +42,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 
 public class ProfileFragment extends Fragment
 {
@@ -58,14 +50,12 @@ public class ProfileFragment extends Fragment
     private Button bUserInfo;
     private GraphView mGraph;
     private ProfileDialogFragment mProfileDialog;
-    private DBAdapter dbAdapter;
     private String mCurrentProfileId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-        dbAdapter = new DBAdapter(getActivity());
         mProfileDialog = new ProfileDialogFragment();
         mCurrentProfileId = "1"; // zero means no current profile set
         createButtons(rootView);

@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.FacebookSdk;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -41,7 +43,7 @@ import com.facebook.widget.ProfilePictureView;
 import java.util.Arrays;
 import java.util.List;
 
-public class FriendsFragment extends android.support.v4.app.Fragment
+public class FriendsFragment extends Fragment
 {
     private static final String TAG = FriendsFragment.class.getSimpleName();
     private TextView tvUsername;
@@ -58,6 +60,7 @@ public class FriendsFragment extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
 
         // setup all the Facebook stuff
@@ -184,8 +187,7 @@ public class FriendsFragment extends android.support.v4.app.Fragment
     public void postImage()
     {
         if(checkPermissions()) {
-            Bitmap img = BitmapFactory.decodeResource(getResources(),
-                    R.mipmap.ic_launcher);
+            Bitmap img = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
             Request uploadRequest = Request.newUploadPhotoRequest(
                     Session.getActiveSession(), img, new Request.Callback() {
                         @Override

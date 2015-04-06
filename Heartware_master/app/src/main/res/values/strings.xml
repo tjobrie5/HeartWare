@@ -59,7 +59,7 @@
     <string name="new_workout">New Workout</string>
     <string name="fb_update">Update Status</string>
     <string name="fb_post_image">Post Image</string>
-    <string name="facebook_app_id">795766887172566</string>
     <string name="jbone_logo">Jawbone</string>
     <!-- facebook_app_id is necessary for Facebook SDK -->
+    <string name="facebook_app_id">795766887172566</string>
 </resources>
