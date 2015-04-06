@@ -72,7 +72,6 @@ import com.facebook.FacebookGraphResponseException;
 import com.facebook.FacebookRequestError;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.internal.Utility;
 import com.facebook.login.DefaultAudience;
 import com.facebook.login.LoginManager;
@@ -594,7 +593,6 @@ public class FriendsFragment extends Fragment
 
     private class EatListElement extends FB_BaseListElement
     {
-
         private static final String FOOD_KEY = "food";
         private static final String FOOD_URL_KEY = "food_url";
 
@@ -604,7 +602,7 @@ public class FriendsFragment extends Fragment
         private String foodChoice = null;
 
         public EatListElement(int requestCode) {
-            super(getActivity().getResources().getDrawable(R.drawable.com_facebook_tooltip_blue_bottomnub),
+            super(getActivity().getResources().getDrawable(R.drawable.add_food),
                     getActivity().getResources().getString(R.string.action_eating),
                     null,
                     requestCode);
@@ -728,7 +726,7 @@ public class FriendsFragment extends Fragment
         private List<JSONObject> selectedUsers;
 
         public PeopleListElement(int requestCode) {
-            super(getActivity().getResources().getDrawable(R.drawable.ic_action_friends),
+            super(getActivity().getResources().getDrawable(R.drawable.add_friends),
                     getActivity().getResources().getString(R.string.action_people),
                     null,
                     requestCode);
@@ -856,7 +854,7 @@ public class FriendsFragment extends Fragment
         private JSONObject selectedPlace = null;
 
         public LocationListElement(int requestCode) {
-            super(getActivity().getResources().getDrawable(R.drawable.ic_action_update),
+            super(getActivity().getResources().getDrawable(R.drawable.add_location),
                     getActivity().getResources().getString(R.string.action_location),
                     null,
                     requestCode);
@@ -934,13 +932,13 @@ public class FriendsFragment extends Fragment
         private Uri tempUri = null;
 
         public PhotoListElement(int requestCode) {
-            super(getActivity().getResources().getDrawable(R.drawable.ic_arrow),
+            super(getActivity().getResources().getDrawable(R.drawable.add_photo),
                     getActivity().getResources().getString(R.string.action_photo),
                     null,
                     requestCode);
             photoUri = null;
             photoThumbnail.setImageDrawable(
-                    getActivity().getResources().getDrawable(R.drawable.com_facebook_profile_picture_blank_portrait));
+                    getActivity().getResources().getDrawable(R.drawable.placeholder_image));
             photoThumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

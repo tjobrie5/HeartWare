@@ -73,6 +73,14 @@
                         android:layout_margin="5dp"
                         android:text="@string/announce"
                         style="@style/com_facebook_button"/>
+                    <Button
+                        android:id="@+id/create_meetup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:text="@string/create_meetup"
+                        style="@style/com_facebook_button"/>
                     <com.facebook.share.widget.ShareButton
                         android:id="@+id/share_button"
                         android:layout_width="wrap_content"

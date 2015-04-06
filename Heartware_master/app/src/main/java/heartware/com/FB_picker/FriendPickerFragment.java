@@ -61,17 +61,17 @@ public class FriendPickerFragment extends PickerFragment {
      * The key for a String parameter in the fragment's Intent bundle to indicate what user's
      * friends should be shown. The default is to display the currently authenticated user's friends.
      */
-    public static final String USER_ID_BUNDLE_KEY = "com.facebook.scrumptious.widget.FriendPickerFragment.UserId";
+    public static final String USER_ID_BUNDLE_KEY = "heartware.com.heartware_master.widget.FriendPickerFragment.UserId";
     /**
      * The key for a boolean parameter in the fragment's Intent bundle to indicate whether the
      * picker should allow more than one friend to be selected or not.
      */
-    public static final String MULTI_SELECT_BUNDLE_KEY = "com.facebook.scrumptious.widget.FriendPickerFragment.MultiSelect";
+    public static final String MULTI_SELECT_BUNDLE_KEY = "heartware.com.heartware_master.widget.FriendPickerFragment.MultiSelect";
     /**
      * The key for a String parameter in the fragment's Intent bundle to indicate the type of friend picker to use.
      * This value is case sensitive, and must match the enum @{link FriendPickerType}
      */
-    public static final String FRIEND_PICKER_TYPE_KEY = "com.facebook.scrumptious.widget.FriendPickerFragment.FriendPickerType";
+    public static final String FRIEND_PICKER_TYPE_KEY = "heartware.com.heartware_master.widget.FriendPickerFragment.FriendPickerType";
 
     public enum FriendPickerType {
         FRIENDS("/friends"),

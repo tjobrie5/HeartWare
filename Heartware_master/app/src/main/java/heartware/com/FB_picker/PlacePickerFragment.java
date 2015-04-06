@@ -67,27 +67,27 @@ public class PlacePickerFragment extends PickerFragment {
      * The key for an int parameter in the fragment's Intent bundle to indicate the radius in meters around
      * the center point to search. The default is 1000 meters.
      */
-    public static final String RADIUS_IN_METERS_BUNDLE_KEY = "com.facebook.scrumptious.widget.PlacePickerFragment.RadiusInMeters";
+    public static final String RADIUS_IN_METERS_BUNDLE_KEY = "heartware.com.widget.PlacePickerFragment.RadiusInMeters";
     /**
      * The key for an int parameter in the fragment's Intent bundle to indicate what how many results to
      * return at a time. The default is 100 results.
      */
-    public static final String RESULTS_LIMIT_BUNDLE_KEY = "com.facebook.scrumptious.widget.PlacePickerFragment.ResultsLimit";
+    public static final String RESULTS_LIMIT_BUNDLE_KEY = "heartware.com.widget.PlacePickerFragment.ResultsLimit";
     /**
      * The key for a String parameter in the fragment's Intent bundle to indicate what search text should
      * be sent to the service. The default is to have no search text.
      */
-    public static final String SEARCH_TEXT_BUNDLE_KEY = "com.facebook.scrumptious.widget.PlacePickerFragment.SearchText";
+    public static final String SEARCH_TEXT_BUNDLE_KEY = "heartware.com.widget.PlacePickerFragment.SearchText";
     /**
      * The key for a Location parameter in the fragment's Intent bundle to indicate what geographical
      * location should be the center of the search.
      */
-    public static final String LOCATION_BUNDLE_KEY = "com.facebook.scrumptious.widget.PlacePickerFragment.Location";
+    public static final String LOCATION_BUNDLE_KEY = "heartware.com.widget.PlacePickerFragment.Location";
     /**
      * The key for a boolean parameter in the fragment's Intent bundle to indicate that the fragment
      * should display a search box and automatically update the search text as it changes.
      */
-    public static final String SHOW_SEARCH_BOX_BUNDLE_KEY = "com.facebook.scrumptious.widget.PlacePickerFragment.ShowSearchBox";
+    public static final String SHOW_SEARCH_BOX_BUNDLE_KEY = "heartware.com.widget.PlacePickerFragment.ShowSearchBox";
 
     /**
      * The default radius around the center point to search.

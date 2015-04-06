@@ -77,30 +77,30 @@ public abstract class PickerFragment extends Fragment {
      * The key for a boolean parameter in the fragment's Intent bundle to indicate whether the
      * picker should show pictures (if available) for the graph objects.
      */
-    public static final String SHOW_PICTURES_BUNDLE_KEY = "com.facebook.scrumptious.widget.PickerFragment.ShowPictures";
+    public static final String SHOW_PICTURES_BUNDLE_KEY = "heartware.com.heartware_master.widget.PickerFragment.ShowPictures";
     /**
      * The key for a String parameter in the fragment's Intent bundle to indicate which extra fields
      * beyond the default fields should be retrieved for any graph objects in the results.
      */
-    public static final String EXTRA_FIELDS_BUNDLE_KEY = "com.facebook.scrumptious.widget.PickerFragment.ExtraFields";
+    public static final String EXTRA_FIELDS_BUNDLE_KEY = "heartware.com.heartware_master.widget.PickerFragment.ExtraFields";
     /**
      * The key for a boolean parameter in the fragment's Intent bundle to indicate whether the
      * picker should display a title bar with a Done button.
      */
-    public static final String SHOW_TITLE_BAR_BUNDLE_KEY = "com.facebook.scrumptious.widget.PickerFragment.ShowTitleBar";
+    public static final String SHOW_TITLE_BAR_BUNDLE_KEY = "heartware.com.heartware_master.widget.PickerFragment.ShowTitleBar";
     /**
      * The key for a String parameter in the fragment's Intent bundle to indicate the text to
      * display in the title bar.
      */
-    public static final String TITLE_TEXT_BUNDLE_KEY = "com.facebook.scrumptious.widget.PickerFragment.TitleText";
+    public static final String TITLE_TEXT_BUNDLE_KEY = "heartware.com.heartware_master.widget.PickerFragment.TitleText";
     /**
      * The key for a String parameter in the fragment's Intent bundle to indicate the text to
      * display in the Done button.
      */
-    public static final String DONE_BUTTON_TEXT_BUNDLE_KEY = "com.facebook.scrumptious.widget.PickerFragment.DoneButtonText";
+    public static final String DONE_BUTTON_TEXT_BUNDLE_KEY = "heartware.com.heartware_master.widget.PickerFragment.DoneButtonText";
 
-    private static final String SELECTION_BUNDLE_KEY = "com.facebook.android.PickerFragment.Selection";
-    private static final String ACTIVITY_CIRCLE_SHOW_KEY = "com.facebook.android.PickerFragment.ActivityCircleShown";
+    private static final String SELECTION_BUNDLE_KEY = "heartware.com.heartware_master.android.PickerFragment.Selection";
+    private static final String ACTIVITY_CIRCLE_SHOW_KEY = "heartware.com.heartware_master.android.PickerFragment.ActivityCircleShown";
     private static final int PROFILE_PICTURE_PREFETCH_BUFFER = 5;
 
     private final int layout;

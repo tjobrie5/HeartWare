@@ -14,6 +14,7 @@
     <string name="workouts">Workouts</string>
     <string name="meetups">Meetups</string>
     <string name="new_meetup">New Meetup</string>
+    <string name="create_meetup">Create Meetup</string>
     <string name="jbone_login">Enter Jawbone UP Info</string>
     <string name="add_button">Add</string>
     <string name="new_user">New User</string>
