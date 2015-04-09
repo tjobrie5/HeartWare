@@ -938,7 +938,7 @@ public class FriendsFragment extends Fragment
                     requestCode);
             photoUri = null;
             photoThumbnail.setImageDrawable(
-                    getActivity().getResources().getDrawable(R.drawable.placeholder_image));
+                    getActivity().getResources().getDrawable(R.drawable.placeholder_image_black));
             photoThumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
