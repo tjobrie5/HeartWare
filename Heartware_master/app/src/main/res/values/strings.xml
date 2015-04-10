@@ -3,7 +3,9 @@
 
     <string-array name="disabilities_array">
         <item name="diabetes">Diabetes</item>
-        <item name="paralyzed">Paralyzed</item>
+        <item name="not_running">Not Running</item>
+        <item name="not_swimming">Not Swimming</item>
+        <item name="not_golfing">Not Golfing</item>
     </string-array>
 
     <string name="profile_tab">Profile</string>
@@ -36,7 +38,7 @@
     <string name="exercise">Exercise</string>
     <string name="goal">Goal</string>
     <string name="difficulty">Difficulty</string>
-    <string name="disabilities">Disabilities</string>
+    <string name="disability">Disability</string>
     <string name="exemptions">Exemptions</string>
     <string name="recommendation">Get Recommendation</string>
     <string name="user_info">User Information</string>

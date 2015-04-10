@@ -39,64 +39,8 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tableRow3">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/sex"
-            android:id="@+id/tvSex" />
-
-        <RadioGroup
-            android:id="@+id/rgSex"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/male"
-                android:id="@+id/rbMale"
-                android:checked="false" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/female"
-                android:id="@+id/rbFemale"
-                android:checked="false" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/undefined"
-                android:id="@+id/rbUndefined"
-                android:checked="false" />
-        </RadioGroup>
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/tableRow4">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/age"
-            android:id="@+id/textView4" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/etAge"
-            android:hint="@string/age_hint"
-            android:textColorHint="@color/faded_hint"
-            android:layout_weight="1" />
     </TableRow>
 
     <TableRow
@@ -104,22 +48,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/tableRow5">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/height"
-            android:id="@+id/tvHeight" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/etHeight"
-            android:hint="@string/age_hint"
-            android:textColorHint="@color/faded_hint"
-            android:layout_weight="1" />
     </TableRow>
 
     <TableRow
@@ -127,22 +55,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/tableRow6">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/weight"
-            android:id="@+id/tvWeight" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/etWeight"
-            android:hint="@string/age_hint"
-            android:textColorHint="@color/faded_hint"
-            android:layout_weight="1" />
     </TableRow>
 
     <TableRow
@@ -191,8 +103,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/disabilities"
-            android:id="@+id/tvDisabilities"
+            android:text="@string/disability"
+            android:id="@+id/tvDisability"
             android:layout_column="0" />
 
         <Spinner

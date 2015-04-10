@@ -193,18 +193,11 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
      * Update user information using the ProfileDialogFragment
      * @param dialog
      * @param user
-     * @param sex
-     * @param age
-     * @param height
-     * @param weight
-     * @param skill
      * @param disability
      */
     @Override
-    public void onProfilePositiveClick(DialogFragment dialog, final String user, final String sex,
-                                       final String age, final String height,
-                                       final String weight, final String skill,
-                                       final String disability)
+    public void onProfilePositiveClick(DialogFragment dialog, final String user,
+                                       final String skill, final String disability)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");

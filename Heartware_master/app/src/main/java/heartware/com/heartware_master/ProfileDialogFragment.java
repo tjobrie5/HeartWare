@@ -33,9 +33,7 @@ public class ProfileDialogFragment extends DialogFragment
 {
     public interface ProfileDialogListener {
         public void onProfilePositiveClick(DialogFragment dialog,
-                                          final String user, final String sex,
-                                          final String age, final String height,
-                                          final String weight, final String skill,
+                                          final String user, final String skill,
                                           final String disability);
         public void onProfileNegativeClick(DialogFragment dialog);
     }
@@ -66,11 +64,7 @@ public class ProfileDialogFragment extends DialogFragment
         builder.setView(view);
         // get the view items
         final EditText username = (EditText) view.findViewById(R.id.etName);
-        final EditText age = (EditText) view.findViewById(R.id.etAge);
-        final EditText height = (EditText) view.findViewById(R.id.etHeight);
-        final EditText weight = (EditText) view.findViewById(R.id.etWeight);
         final RadioGroup diffGroup = (RadioGroup) view.findViewById(R.id.rgDifficulty);
-        final RadioGroup sexGroup = (RadioGroup) view.findViewById(R.id.rgSex);
         // set up the spinner adapter and array and whatnot
         final String[] DisabilityArray = getResources().getStringArray(R.array.disabilities_array);
         final Spinner disabilitySpinner = (Spinner) view.findViewById(R.id.spinnerDisabilities);
@@ -108,20 +102,9 @@ public class ProfileDialogFragment extends DialogFragment
                     case 3: difficulty = "expert";
                         break;
                 }
-                final int radioId2 = sexGroup.getCheckedRadioButtonId();
-                String sex = "";
-                switch(radioId2) {
-                    case 1: sex = "male";
-                        break;
-                    case 2: sex = "female";
-                        break;
-                    case 3: sex = "undefnied";
-                        break;
-                }
 
                 mListener.onProfilePositiveClick(ProfileDialogFragment.this,
-                        username.getText().toString(), sex, age.getText().toString(),
-                        height.getText().toString(), weight.getText().toString(),
+                        username.getText().toString(),
                         difficulty, DisabilityArray[mCurrentDisabilityPosition]);
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
