@@ -44,6 +44,7 @@ import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -120,7 +122,7 @@ public class FriendsFragment extends Fragment
 
     private static final String PERMISSION = "publish_actions";
 
-    private TextView announceButton;
+    private Button bMeetup;
     private ShareButton shareButton;
     private LoginButton bLoginButton;
     private ListView listView;
@@ -178,10 +180,10 @@ public class FriendsFragment extends Fragment
         if (currentAccessToken != null) {
             tokenUpdated(currentAccessToken);
             profilePictureView.setProfileId(currentAccessToken.getUserId());
-            announceButton.setVisibility(View.VISIBLE);
+            bMeetup.setVisibility(View.VISIBLE);
         } else {
             profilePictureView.setProfileId(null);
-            announceButton.setVisibility(View.GONE);
+            bMeetup.setVisibility(View.GONE);
         }
     }
 
@@ -215,15 +217,17 @@ public class FriendsFragment extends Fragment
                 Toast.makeText(getActivity(), "Login error", Toast.LENGTH_SHORT).show();
             }
         });
-        announceButton = (TextView) view.findViewById(R.id.announce_text);
+
+        bMeetup = (Button) view.findViewById(R.id.create_meetup);
+        bMeetup.getBackground().setColorFilter(0xFFFFFFFF, PorterDuff.Mode.MULTIPLY);
         shareButton = (ShareButton) view.findViewById(R.id.share_button);
         listView = (ListView) view.findViewById(R.id.selection_list);
         photoThumbnail = (ImageView) view.findViewById(R.id.selected_image);
 
-        announceButton.setOnClickListener(new View.OnClickListener() {
+        bMeetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handleAnnounce();
+//                handleAnnounce();
             }
         });
 
@@ -313,10 +317,10 @@ public class FriendsFragment extends Fragment
     private void updateShareContent() {
         ShareContent content = createOpenGraphContent();
         if (content != null) {
-            announceButton.setEnabled(true);
+            bMeetup.setEnabled(true);
             shareButton.setEnabled(true);
         } else {
-            announceButton.setEnabled(false);
+            bMeetup.setEnabled(false);
             shareButton.setEnabled(false);
         }
 
@@ -327,7 +331,7 @@ public class FriendsFragment extends Fragment
      * Resets the view to the initial defaults.
      */
     private void init(Bundle savedInstanceState) {
-        announceButton.setEnabled(false);
+        bMeetup.setEnabled(false);
 
         listElements = new ArrayList<FB_BaseListElement>();
 
@@ -680,10 +684,10 @@ public class FriendsFragment extends Fragment
         private void setExerciseText() {
             if (exerciseChoice != null && exerciseChoice.length() > 0) {
                 setText2(exerciseChoice);
-                announceButton.setEnabled(true);
+                bMeetup.setEnabled(true);
             } else {
                 setText2(getActivity().getResources().getString(R.string.action_exercising_default));
-                announceButton.setEnabled(false);
+                bMeetup.setEnabled(false);
             }
         }
     } // ExerciseListElement
