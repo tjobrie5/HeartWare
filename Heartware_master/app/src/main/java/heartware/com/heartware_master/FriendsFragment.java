@@ -383,23 +383,23 @@ public class FriendsFragment extends Fragment
         ShareOpenGraphAction.Builder actionBuilder = createExerciseActionBuilder();
 
         boolean userGenerated = false;
-        if (photoUri != null) {
-            String photoUriString = photoUri.toString();
-            Pair<File, Integer> fileAndMinDimension = getImageFileAndMinDimension();
-            userGenerated = fileAndMinDimension.second >= USER_GENERATED_MIN_SIZE;
-
-            // If we have a content: URI, we can just use that URI, otherwise we'll need to add it
-            // as an attachment.
-            if (fileAndMinDimension != null && photoUri.getScheme().startsWith("content")) {
-                final SharePhoto actionPhoto = new SharePhoto.Builder()
-                        .setImageUrl(Uri.parse(photoUriString))
-                        .setUserGenerated(userGenerated)
-                        .build();
-                actionBuilder.putPhotoArrayList("image", new ArrayList<SharePhoto>() {{
-                    add(actionPhoto);
-                }});
-            }
-        }
+//        if (photoUri != null) {
+//            String photoUriString = photoUri.toString();
+//            Pair<File, Integer> fileAndMinDimension = getImageFileAndMinDimension();
+//            userGenerated = fileAndMinDimension.second >= USER_GENERATED_MIN_SIZE;
+//
+//            // If we have a content: URI, we can just use that URI, otherwise we'll need to add it
+//            // as an attachment.
+//            if (fileAndMinDimension != null && photoUri.getScheme().startsWith("content")) {
+//                final SharePhoto actionPhoto = new SharePhoto.Builder()
+//                        .setImageUrl(Uri.parse(photoUriString))
+//                        .setUserGenerated(userGenerated)
+//                        .build();
+//                actionBuilder.putPhotoArrayList("image", new ArrayList<SharePhoto>() {{
+//                    add(actionPhoto);
+//                }});
+//            }
+//        }
 
         return new ShareOpenGraphContent.Builder()
                 .setAction(actionBuilder.build())
@@ -599,15 +599,15 @@ public class FriendsFragment extends Fragment
         @Override
         protected void populateOpenGraphAction(ShareOpenGraphAction.Builder actionBuilder) {
             if (exerciseChoice != null && exerciseChoice.length() > 0) {
-                if (exerciseChoiceUrl != null && exerciseChoiceUrl.length() > 0) {
-                    actionBuilder.putString("exercise", exerciseChoiceUrl);
-                } else {
+//                if (exerciseChoiceUrl != null && exerciseChoiceUrl.length() > 0) {
+//                    actionBuilder.putString("exercise", exerciseChoiceUrl);
+//                } else {
                     ShareOpenGraphObject exObject = new ShareOpenGraphObject.Builder()
                             .putString("og:type", EXERCISE_OBJECT_TYPE)
                             .putString("og:title", exerciseChoice)
                             .build();
                     actionBuilder.putObject("exercise", exObject);
-                }
+//                }
             }
         }
 
