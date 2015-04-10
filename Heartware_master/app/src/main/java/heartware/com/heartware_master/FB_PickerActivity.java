@@ -70,9 +70,11 @@ public class FB_PickerActivity extends FragmentActivity {
     private static final String SEARCH_TEXT = "Gym";
     private static final int LOCATION_CHANGE_THRESHOLD = 50; // meters
 
-    private static final Location SAN_FRANCISCO_LOCATION = new Location("") {{
-        setLatitude(37.7750);
-        setLongitude(-122.4183);
+    private static final Location TEMPE_AZ_LOCATION = new Location("") {{
+//        setLatitude(37.7750);
+//        setLongitude(-122.4183);
+        setLatitude(33.4172678);
+        setLongitude(-111.9354214);
     }};
 
     private FriendPickerFragment friendPickerFragment;
@@ -197,7 +199,7 @@ public class FB_PickerActivity extends FragmentActivity {
                     String model = Build.MODEL;
                     if (model.equals("sdk") || model.equals("google_sdk") || model.contains("x86")) {
                         // this may be the emulator, pretend we're in an exotic place
-                        location = SAN_FRANCISCO_LOCATION;
+                        location = TEMPE_AZ_LOCATION;
                     }
                 }
                 if (location != null) {
