@@ -85,8 +85,6 @@ import com.facebook.share.model.ShareOpenGraphAction;
 import com.facebook.share.model.ShareOpenGraphContent;
 import com.facebook.share.model.ShareOpenGraphObject;
 import com.facebook.share.model.SharePhoto;
-import com.facebook.share.widget.MessageDialog;
-import com.facebook.share.widget.SendButton;
 import com.facebook.share.widget.ShareButton;
 
 import org.json.JSONException;
@@ -113,8 +111,8 @@ import java.util.UUID;
 public class FriendsFragment extends Fragment
 {
     private static final String TAG = FriendsFragment.class.getSimpleName();
-    private static final String EXERCISE_OBJECT_TYPE = "_heartware:exercise";
-    private static final String EAT_ACTION_TYPE = "_heartware:eat";
+    private static final String EXERCISE_OBJECT_TYPE = "heartware:exercise";
+    private static final String EX_ACTION_TYPE = "heartware:exercise";
 
     private static final String PENDING_ANNOUNCE_KEY = "pendingAnnounce";
     private static final int USER_GENERATED_MIN_SIZE = 480;
@@ -124,13 +122,11 @@ public class FriendsFragment extends Fragment
 
     private TextView announceButton;
     private ShareButton shareButton;
-    private SendButton messageButton;
     private LoginButton bLoginButton;
     private ListView listView;
     private List<FB_BaseListElement> listElements;
     private ProfilePictureView profilePictureView;
     private boolean pendingAnnounce;
-    private MainActivity activity;
 
     private Uri photoUri;
     private ImageView photoThumbnail;
@@ -167,7 +163,6 @@ public class FriendsFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainActivity) getActivity();
         callbackManager = CallbackManager.Factory.create();
 
         accessTokenTracker = new AccessTokenTracker() {
@@ -222,13 +217,8 @@ public class FriendsFragment extends Fragment
         });
         announceButton = (TextView) view.findViewById(R.id.announce_text);
         shareButton = (ShareButton) view.findViewById(R.id.share_button);
-        messageButton = (SendButton) view.findViewById(R.id.message_button);
         listView = (ListView) view.findViewById(R.id.selection_list);
         photoThumbnail = (ImageView) view.findViewById(R.id.selected_image);
-
-        if (MessageDialog.canShow(ShareOpenGraphContent.class)) {
-            messageButton.setVisibility(View.VISIBLE);
-        }
 
         announceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,21 +227,8 @@ public class FriendsFragment extends Fragment
             }
         });
 
-        messageButton.registerCallback(callbackManager, shareCallback);
-        messageButton.setFragment(this);
         shareButton.registerCallback(callbackManager, shareCallback);
         shareButton.setFragment(this);
-
-        profilePictureView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (AccessToken.getCurrentAccessToken() != null) {
-//                    activity.showSettingsFragment();
-                } else {
-//                    activity.showSplashFragment();
-                }
-            }
-        });
 
         init(savedInstanceState);
         updateWithToken(AccessToken.getCurrentAccessToken());
@@ -282,7 +259,6 @@ public class FriendsFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         accessTokenTracker.stopTracking();
-        activity = null;
     }
 
     private void processDialogError(FacebookException error) {
@@ -339,15 +315,12 @@ public class FriendsFragment extends Fragment
         if (content != null) {
             announceButton.setEnabled(true);
             shareButton.setEnabled(true);
-            messageButton.setEnabled(true);
         } else {
             announceButton.setEnabled(false);
             shareButton.setEnabled(false);
-            messageButton.setEnabled(false);
         }
 
         shareButton.setShareContent(content);
-        messageButton.setShareContent(content);
     }
 
     /**
@@ -355,7 +328,6 @@ public class FriendsFragment extends Fragment
      */
     private void init(Bundle savedInstanceState) {
         announceButton.setEnabled(false);
-        messageButton.setEnabled(false);
 
         listElements = new ArrayList<FB_BaseListElement>();
 
@@ -404,7 +376,7 @@ public class FriendsFragment extends Fragment
     }
 
     private ShareOpenGraphContent createOpenGraphContent() {
-        ShareOpenGraphAction.Builder actionBuilder = createEatActionBuilder();
+        ShareOpenGraphAction.Builder actionBuilder = createExerciseActionBuilder();
 
         boolean userGenerated = false;
         if (photoUri != null) {
@@ -502,9 +474,9 @@ public class FriendsFragment extends Fragment
         return null;
     } // getImageFileAndMinDimension
 
-    private ShareOpenGraphAction.Builder createEatActionBuilder() {
+    private ShareOpenGraphAction.Builder createExerciseActionBuilder() {
         ShareOpenGraphAction.Builder builder = new ShareOpenGraphAction.Builder()
-                .setActionType(EAT_ACTION_TYPE);
+                .setActionType(EX_ACTION_TYPE);
         for (FB_BaseListElement element : listElements) {
             element.populateOpenGraphAction(builder);
         }
@@ -626,11 +598,11 @@ public class FriendsFragment extends Fragment
                 if (exerciseChoiceUrl != null && exerciseChoiceUrl.length() > 0) {
                     actionBuilder.putString("exercise", exerciseChoiceUrl);
                 } else {
-                    ShareOpenGraphObject mealObject = new ShareOpenGraphObject.Builder()
+                    ShareOpenGraphObject exObject = new ShareOpenGraphObject.Builder()
                             .putString("og:type", EXERCISE_OBJECT_TYPE)
                             .putString("og:title", exerciseChoice)
                             .build();
-                    actionBuilder.putObject("exercise", mealObject);
+                    actionBuilder.putObject("exercise", exObject);
                 }
             }
         }
@@ -709,11 +681,9 @@ public class FriendsFragment extends Fragment
             if (exerciseChoice != null && exerciseChoice.length() > 0) {
                 setText2(exerciseChoice);
                 announceButton.setEnabled(true);
-                messageButton.setEnabled(true);
             } else {
                 setText2(getActivity().getResources().getString(R.string.action_exercising_default));
                 announceButton.setEnabled(false);
-                messageButton.setEnabled(false);
             }
         }
     } // ExerciseListElement
