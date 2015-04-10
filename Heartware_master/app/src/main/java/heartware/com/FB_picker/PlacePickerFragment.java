@@ -120,7 +120,7 @@ public class PlacePickerFragment extends PickerFragment {
      * Default constructor. Creates a Fragment with all default properties.
      */
     public PlacePickerFragment() {
-        super(R.layout.fb_picker_placepickerfragment);
+        super(R.layout.fb_picker_friendpickerfragment);
     }
 
     /**
@@ -381,7 +381,8 @@ public class PlacePickerFragment extends PickerFragment {
 
             @Override
             protected int getGraphObjectRowLayoutId(JSONObject graphObject) {
-                return R.layout.fb_picker_placepickerfragment_list_row;
+                //return R.layout.fb_picker_placepickerfragment_list_row;
+                return R.layout.fb_picker_list_row;
             }
 
             @Override

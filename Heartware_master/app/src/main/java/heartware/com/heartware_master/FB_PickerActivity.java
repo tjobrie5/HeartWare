@@ -66,7 +66,8 @@ public class FB_PickerActivity extends FragmentActivity {
 
     private static final int SEARCH_RADIUS_METERS = 1000;
     private static final int SEARCH_RESULT_LIMIT = 50;
-    private static final String SEARCH_TEXT = "Restaurant";
+    // the text that's auto-inserted to search engine when Pick Location is active
+    private static final String SEARCH_TEXT = "Gym";
     private static final int LOCATION_CHANGE_THRESHOLD = 50; // meters
 
     private static final Location SAN_FRANCISCO_LOCATION = new Location("") {{
