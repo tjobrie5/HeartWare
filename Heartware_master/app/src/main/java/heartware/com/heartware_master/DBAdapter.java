@@ -38,8 +38,7 @@ public class DBAdapter extends SQLiteOpenHelper
     public static final String EXERCISE = "exercise";
     public static final String GOAL = "goal";
     public static final String DIFFICULTY = "difficulty";
-    public static final String EXEMPTIONS = "exemptions"; // disabilities
-    public static final String AGE = "age";
+    public static final String EXEMPTIONS = "exemptions"; // disability
     public static final String DATA = "data";
     public static final String PLACE = "place";
     public static final String TIME = "time";

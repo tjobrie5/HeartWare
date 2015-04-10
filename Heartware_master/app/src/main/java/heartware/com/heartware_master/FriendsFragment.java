@@ -113,7 +113,7 @@ import java.util.UUID;
 public class FriendsFragment extends Fragment
 {
     private static final String TAG = FriendsFragment.class.getSimpleName();
-    private static final String EXERCISE_OBJECT_TYPE = "heartware:exercise";
+    private static final String EXERCISE_OBJECT_TYPE = "heartware:exercise"; // note - must be lower case
     private static final String EX_ACTION_TYPE = "heartware:exercise";
 
     private static final String PENDING_ANNOUNCE_KEY = "pendingAnnounce";
@@ -227,7 +227,7 @@ public class FriendsFragment extends Fragment
         bMeetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                handleAnnounce();
+                createMeetup();
             }
         });
 
@@ -263,6 +263,17 @@ public class FriendsFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         accessTokenTracker.stopTracking();
+    }
+
+    /**
+     * Save the meetups details in SQL
+     */
+    private void createMeetup()
+    {
+        String exText = listElements.get(0).getText2();
+        String locText = listElements.get(0).getText2();
+        String friendsText = listElements.get(0).getText2();
+        String photoText = listElements.get(0).getText2();
     }
 
     private void processDialogError(FacebookException error) {
