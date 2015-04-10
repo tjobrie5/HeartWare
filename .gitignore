@@ -1,4 +1,2 @@
-# ignore .idea files from Android Studio
-.idea/*
-Heartware_master/.idea/*
-Heartware_master/.gradle/*
+*.o
+*.*~
