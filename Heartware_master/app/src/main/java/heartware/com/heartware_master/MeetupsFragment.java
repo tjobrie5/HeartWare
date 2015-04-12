@@ -54,74 +54,74 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
 
         mListView = (ListView) rootView.findViewById(android.R.id.list);
 
-        final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts(mCurrentProfileId);
-        mWorkoutArray = new ArrayList<>(workouts.size());
-
-        setWorkoutArray(workouts);
-
-        mArrayAdapter = new ArrayAdapter(getActivity(), R.layout.meetups_entry, R.id.tvExercise, mWorkoutArray);
-
-        setListAdapter(mArrayAdapter);
-
-        if(workouts.size() != 0) {
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Log.d(TAG, "in onItemSelected listener");
-                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
-                    String exerciseName = tvExercise.getText().toString();
-                    // send a map of data over to the view workout
-//                    Intent intent = new Intent(getApplication(), ViewWorkout.class);
-//                    intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-//                    intent.putExtra(DBAdapter.EXERCISE, exerciseName);
-//                    startActivityForResult(intent, 0);
-                }
-            });
-
-            mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-            {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
-                    Log.d(TAG, "in the onItemLongClick listener");
-                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
-                    final String exName = tvExercise.getText().toString();
-//                    dbAdapter.deleteWorkout(exName);
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        view.animate().setDuration(2000).alpha(0)
-                                .withEndAction(new Runnable()
-                                {
-                                    @Override
-                                    public void run()
-                                    {
-                                        mWorkoutArray.remove(exName);
-                                        mArrayAdapter.notifyDataSetChanged();
-                                        view.setAlpha(1);
-                                    }
-                                });
-                    }
-                    else {
-                        mWorkoutArray.remove(exName);
-                        mArrayAdapter.notifyDataSetChanged();
-                    }
-                    Toast.makeText(getActivity(), "Deleting " + exName, Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
-        }
-
-        bNewWorkout = (Button) rootView.findViewById(R.id.bNewWorkout);
-        bNewWorkout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(getActivity(), ViewWorkout.class);
-                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-                startActivityForResult(intent, 0);
-                Log.d(TAG, "Creating a New Workout.");
-            }
-        });
+//        final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts(mCurrentProfileId);
+//        mWorkoutArray = new ArrayList<>(workouts.size());
+//
+//        setWorkoutArray(workouts);
+//
+//        mArrayAdapter = new ArrayAdapter(getActivity(), R.layout.meetups_entry, R.id.tvExercise, mWorkoutArray);
+//
+//        setListAdapter(mArrayAdapter);
+//
+//        if(workouts.size() != 0) {
+//            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//            {
+//                @Override
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    Log.d(TAG, "in onItemSelected listener");
+//                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
+//                    String exerciseName = tvExercise.getText().toString();
+//                    // send a map of data over to the view workout
+////                    Intent intent = new Intent(getApplication(), ViewWorkout.class);
+////                    intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
+////                    intent.putExtra(DBAdapter.EXERCISE, exerciseName);
+////                    startActivityForResult(intent, 0);
+//                }
+//            });
+//
+//            mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+//            {
+//                @Override
+//                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
+//                    Log.d(TAG, "in the onItemLongClick listener");
+//                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
+//                    final String exName = tvExercise.getText().toString();
+////                    dbAdapter.deleteWorkout(exName);
+//                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                        view.animate().setDuration(2000).alpha(0)
+//                                .withEndAction(new Runnable()
+//                                {
+//                                    @Override
+//                                    public void run()
+//                                    {
+//                                        mWorkoutArray.remove(exName);
+//                                        mArrayAdapter.notifyDataSetChanged();
+//                                        view.setAlpha(1);
+//                                    }
+//                                });
+//                    }
+//                    else {
+//                        mWorkoutArray.remove(exName);
+//                        mArrayAdapter.notifyDataSetChanged();
+//                    }
+//                    Toast.makeText(getActivity(), "Deleting " + exName, Toast.LENGTH_SHORT).show();
+//                    return true;
+//                }
+//            });
+//        }
+//
+//        bNewWorkout = (Button) rootView.findViewById(R.id.bNewWorkout);
+//        bNewWorkout.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                Intent intent = new Intent(getActivity(), ViewWorkout.class);
+//                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
+//                startActivityForResult(intent, 0);
+//                Log.d(TAG, "Creating a New Workout.");
+//            }
+//        });
 
         return rootView;
     }
