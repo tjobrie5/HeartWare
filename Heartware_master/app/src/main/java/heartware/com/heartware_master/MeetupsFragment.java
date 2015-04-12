@@ -100,121 +100,30 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
                         mMeetupArray.remove(noteName);
                         mArrayAdapter.notifyDataSetChanged();
                     }
+
+                    // delete from SQL database
+                    dbAdapter.deleteMeetup(noteName);
                     Toast.makeText(getActivity(), "Deleting " + noteName, Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
         }
 
-        // @TODO : add animation on heartware imageview
-
         return rootView;
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState)
-//    {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.fragment_meetups);
-//        dbAdapter = new DBAdapter(this);
-//        // get the current profile Id from the activity that started this one
-//        mCurrentProfileId = getIntent().getStringExtra(DBAdapter.PROFILE_ID);
-//
-//        mListView = (ListView) findViewById(android.R.id.list);
-//
-//        final ArrayList<HashMap<String, String>> meetups = dbAdapter.getAllmeetups(mCurrentProfileId);
-//        mMeetupArray = new ArrayList<>(meetups.size());
-//
-//        setMeetupArray(meetups);
-//
-//        mArrayAdapter = new ArrayAdapter(this, R.layout.meetups_entry, R.id.tvNote, mMeetupArray);
-//
-//        setListAdapter(mArrayAdapter);
-//
-//        if(meetups.size() != 0) {
-//            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-//            {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    Log.d(TAG, "in onItemSelected listener");
-//                    tvNote = (TextView) view.findViewById(R.id.tvNote);
-//                    String exerciseName = tvNote.getText().toString();
-//                    // send a map of data over to the view workout
-//                    Intent intent = new Intent(getApplication(), ViewWorkout.class);
-//                    intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-//                    intent.putExtra(DBAdapter.EXERCISE, exerciseName);
-//                    startActivityForResult(intent, 0);
-//                }
-//            });
-//
-//            mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-//            {
-//                @Override
-//                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
-//                    Log.d(TAG, "in the onItemLongClick listener");
-//                    tvNote = (TextView) view.findViewById(R.id.tvNote);
-//                    final String exName = tvNote.getText().toString();
-//                    dbAdapter.deleteWorkout(exName);
-//                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                        view.animate().setDuration(2000).alpha(0)
-//                                .withEndAction(new Runnable()
-//                                {
-//                                    @Override
-//                                    public void run()
-//                                    {
-//                                        mMeetupArray.remove(exName);
-//                                        mArrayAdapter.notifyDataSetChanged();
-//                                        view.setAlpha(1);
-//                                    }
-//                                });
-//                    }
-//                    else {
-//                        mMeetupArray.remove(exName);
-//                        mArrayAdapter.notifyDataSetChanged();
-//                    }
-//                    Toast.makeText(getApplicationContext(), "Deleting " + exName, Toast.LENGTH_SHORT).show();
-//                    return true;
-//                }
-//            });
-//        }
-//
-//        bNewWorkout = (Button) findViewById(R.id.bNewWorkout);
-//        bNewWorkout.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplication(), ViewWorkout.class);
-//                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-//                startActivityForResult(intent, 0);
-//                Log.d(TAG, "Creating a New Workout.");
-//            }
-//        });
-//    }
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        HeartwareApplication app = (HeartwareApplication) getActivity().getApplication();
+        final ArrayList<HashMap<String, String>> meetups = dbAdapter.getAllMeetups(app.getCurrentProfileId());
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-//    {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        // there should always be a new workout, if there isn't the user just hit back
-//        if(resultCode == RESULT_OK) {
-//            final String oldWorkout = data.getStringExtra(ViewWorkout.OLD_WORKOUT);
-//            final String newWorkout = data.getStringExtra(ViewWorkout.NEW_WORKOUT);
-//            if(oldWorkout == null) { // new workout
-//                mMeetupArray.add(newWorkout);
-//                mArrayAdapter.notifyDataSetChanged();
-//            }
-//            else { // updating current workout
-//                for(int i = 0; i < mMeetupArray.size(); ++i) {
-//                    if(mMeetupArray.get(i).equals(oldWorkout)) {
-//                        mMeetupArray.set(i, newWorkout);
-//                        mArrayAdapter.notifyDataSetChanged();
-//                    }
-//                }
-//            }
-//        }
-//        // else, do nothing the user just hit back
-//    }
+        mMeetupArray.clear();
+        setMeetupArray(meetups);
+
+        mArrayAdapter.notifyDataSetChanged();
+    }
 
     private void setMeetupArray(ArrayList<HashMap<String, String>> listMap)
     {
