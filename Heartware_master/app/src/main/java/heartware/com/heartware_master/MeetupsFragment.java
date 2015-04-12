@@ -86,7 +86,7 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
                     Log.d(TAG, "in the onItemLongClick listener");
                     tvExercise = (TextView) view.findViewById(R.id.tvExercise);
                     final String exName = tvExercise.getText().toString();
-                    dbAdapter.deleteWorkout(exName);
+//                    dbAdapter.deleteWorkout(exName);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         view.animate().setDuration(2000).alpha(0)
                                 .withEndAction(new Runnable()

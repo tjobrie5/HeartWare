@@ -27,31 +27,29 @@ public class DBAdapter extends SQLiteOpenHelper
     private static final String TAG = DBAdapter.class.getSimpleName();
     private static final String DB_Name = "Heartware";
     private static final String PROFILES_TABLE = "profiles";
-    private static final String WORKOUTS_TABLE = "workouts";
+    private static final String MEETUPS_TABLE = "meetups";
     // profiles table data
     public static final String PROFILE_ID = "profileId";
     public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
-    public static final String SEX = "sex";
-    // workouts table data
+    public static final String PASSWORD = "password"; // usually the user's Jawbone UP token
+    public static final String DIFFICULTY = "difficulty"; // easy medium hard
+    public static final String DISABILITY = "disability";
+    // meetups table data
     public static final String USER_ID = "userId";
+    public static final String NOTE = "note";
     public static final String EXERCISE = "exercise";
-    public static final String GOAL = "goal";
-    public static final String DIFFICULTY = "difficulty";
-    public static final String EXEMPTIONS = "exemptions"; // disability
-    public static final String DATA = "data";
-    public static final String PLACE = "place";
-    public static final String TIME = "time";
+    public static final String LOCATION = "location";
+    public static final String DATE = "date";
+    public static final String PEOPLE = "people";
 
     // @NOTE : Make sure you don't put a ; at the end of the SQL schema string
     private final String profileSchema = "CREATE TABLE " + PROFILES_TABLE +
         " ( " + PROFILE_ID + " INTEGER PRIMARY KEY, " + USERNAME + " TEXT NOT NULL, " +
-        PASSWORD + " TEXT NOT NULL, " + SEX + " TEXT)";
+        PASSWORD + " TEXT NOT NULL, " + DIFFICULTY + " TEXT, " + DISABILITY + " TEXT)";
 
-    private final String workoutSchema = "CREATE TABLE " + WORKOUTS_TABLE +
-            " ( " + USER_ID + " INTEGER NOT NULL, " + EXERCISE + " TEXT, " +
-            GOAL + " TEXT, " + DIFFICULTY + " TEXT, " + EXEMPTIONS + " TEXT, " +
-            DATA + " INTEGER, " + PLACE + " TEXT, " + TIME + " TEXT, " +
+    private final String meetupsSchema = "CREATE TABLE " + MEETUPS_TABLE +
+            " ( " + USER_ID + " INTEGER NOT NULL, " + NOTE + " TEXT, " + EXERCISE + " TEXT, " +
+            LOCATION + " TEXT, " + DATE + " TEXT, " + PEOPLE + " TEXT, " +
             "FOREIGN KEY ( " + USER_ID + " ) REFERENCES " + PROFILES_TABLE + " (" + PROFILE_ID + ") )";
 
     public DBAdapter(Context appContext)
@@ -64,14 +62,14 @@ public class DBAdapter extends SQLiteOpenHelper
     public void onCreate(SQLiteDatabase database)
     {
         database.execSQL(profileSchema);
-        database.execSQL(workoutSchema);
+        database.execSQL(meetupsSchema);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int version_old, int current_version)
     {
         final String queryProfiles = "DROP TABLE IF EXISTS " + PROFILES_TABLE;
-        final String queryWorkouts = "DROP TABLE IF EXISTS " + WORKOUTS_TABLE;
+        final String queryWorkouts = "DROP TABLE IF EXISTS " + MEETUPS_TABLE;
         database.execSQL(queryProfiles);
         database.execSQL(queryWorkouts);
         onCreate(database);
@@ -83,7 +81,8 @@ public class DBAdapter extends SQLiteOpenHelper
         ContentValues values = new ContentValues();
         values.put(USERNAME, queryValues.get(USERNAME));
         values.put(PASSWORD, queryValues.get(PASSWORD));
-        values.put(SEX, queryValues.get(SEX));
+        values.put(DIFFICULTY, queryValues.get(DIFFICULTY));
+        values.put(DISABILITY, queryValues.get(DISABILITY));
         database.insert(PROFILES_TABLE, null, values);
         database.close();
     }
@@ -93,8 +92,9 @@ public class DBAdapter extends SQLiteOpenHelper
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(USERNAME, queryValues.get(USERNAME));
-        values.put(PASSWORD, getProfilePassword(queryValues.get(PROFILE_ID)).get(PASSWORD));
-        values.put(SEX, queryValues.get(SEX));
+        values.put(PASSWORD, queryValues.get(PROFILE_ID));
+        values.put(DIFFICULTY, queryValues.get(DIFFICULTY));
+        values.put(DISABILITY, queryValues.get(DISABILITY));
         // update(TableName, ContentValueForTable, WhereClause, ArgumentForWhereClause)
         return database.update(PROFILES_TABLE, values,
                 PROFILE_ID + " = ?", new String[] { queryValues.get(PROFILE_ID) });
@@ -121,7 +121,8 @@ public class DBAdapter extends SQLiteOpenHelper
                 profileMap.put(PROFILE_ID, cursor.getString(0));
                 profileMap.put(USERNAME, cursor.getString(1));
                 profileMap.put(PASSWORD, cursor.getString(2));
-                profileMap.put(SEX, cursor.getString(3));
+                profileMap.put(DIFFICULTY, cursor.getString(3));
+                profileMap.put(DISABILITY, cursor.getString(4));
                 profileArrayList.add(profileMap);
             } while (cursor.moveToNext());
         }
@@ -141,7 +142,8 @@ public class DBAdapter extends SQLiteOpenHelper
                 profileMap.put(PROFILE_ID, cursor.getString(0));
                 profileMap.put(USERNAME, cursor.getString(1));
                 profileMap.put(PASSWORD, cursor.getString(2));
-                profileMap.put(SEX, cursor.getString(3));
+                profileMap.put(DIFFICULTY, cursor.getString(3));
+                profileMap.put(DISABILITY, cursor.getString(4));
 
             } while (cursor.moveToNext());
         }
@@ -175,59 +177,56 @@ public class DBAdapter extends SQLiteOpenHelper
                 profileMap.put(PROFILE_ID, cursor.getString(0));
                 profileMap.put(USERNAME, cursor.getString(1));
                 profileMap.put(PASSWORD, cursor.getString(2));
-                profileMap.put(SEX, cursor.getString(3));
+                profileMap.put(DIFFICULTY, cursor.getString(3));
+                profileMap.put(DISABILITY, cursor.getString(4));
 
             } while (cursor.moveToNext());
         }
         return profileMap;
     }
 
-    public void createWorkout(HashMap<String, String> queryValues)
+    public void createMeetup(HashMap<String, String> queryValues)
     {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(USER_ID, queryValues.get(USER_ID));
+        values.put(NOTE, queryValues.get(NOTE));
         values.put(EXERCISE, queryValues.get(EXERCISE));
-        values.put(GOAL, queryValues.get(GOAL));
-        values.put(DIFFICULTY, queryValues.get(DIFFICULTY));
-        values.put(EXEMPTIONS, queryValues.get(EXEMPTIONS));
-        values.put(DATA, queryValues.get(DATA));
-        values.put(PLACE, queryValues.get(PLACE));
-        values.put(TIME, queryValues.get(TIME));
-        database.insert(WORKOUTS_TABLE, null, values);
+        values.put(LOCATION, queryValues.get(LOCATION));
+        values.put(DATE, queryValues.get(DATE));
+        values.put(PEOPLE, queryValues.get(PEOPLE));
+        database.insert(MEETUPS_TABLE, null, values);
         database.close();
     }
 
-    public int updateWorkout(final String oldEx, final String userId, HashMap<String, String> queryValues)
+    public int updateMeetup(final String note, final String userId, HashMap<String, String> queryValues)
     {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(USER_ID, queryValues.get(USER_ID));
+        values.put(NOTE, queryValues.get(NOTE));
         values.put(EXERCISE, queryValues.get(EXERCISE));
-        values.put(GOAL, queryValues.get(GOAL));
-        values.put(DIFFICULTY, queryValues.get(DIFFICULTY));
-        values.put(EXEMPTIONS, queryValues.get(EXEMPTIONS));
-        values.put(DATA, queryValues.get(DATA));
-        values.put(PLACE, queryValues.get(PLACE));
-        values.put(TIME, queryValues.get(TIME));
+        values.put(LOCATION, queryValues.get(LOCATION));
+        values.put(DATE, queryValues.get(DATE));
+        values.put(PEOPLE, queryValues.get(PEOPLE));
         // update(TableName, ContentValueForTable, WhereClause, ArgumentForWhereClause)
-        return database.update(WORKOUTS_TABLE, values,
-                EXERCISE + " = '" + oldEx + "' AND " + USER_ID + " = " + userId, null);
+        return database.update(MEETUPS_TABLE, values,
+                NOTE + " = '" + note + "' AND " + USER_ID + " = " + userId, null);
     }
 
-    public void deleteWorkout(String id)
+    public void deleteMeetup(String note)
     {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + WORKOUTS_TABLE + " WHERE " + EXERCISE + "='" + id + "'";
+        String deleteQuery = "DELETE FROM " + MEETUPS_TABLE + " WHERE " + NOTE + "='" + note + "'";
         database.execSQL(deleteQuery);
     }
 
     // get every workout in the table
-    public ArrayList<HashMap<String, String>> getAllWorkouts()
+    public ArrayList<HashMap<String, String>> getAllMeetups()
     {
         ArrayList<HashMap<String, String>> workoutList;
         workoutList = new ArrayList<HashMap<String, String>>();
-        String selectQuery = "SELECT * FROM " + WORKOUTS_TABLE + " ORDER BY " + USER_ID + " ASC";
+        String selectQuery = "SELECT * FROM " + MEETUPS_TABLE + " ORDER BY " + USER_ID + " ASC";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
 
@@ -235,13 +234,11 @@ public class DBAdapter extends SQLiteOpenHelper
             do {
                 HashMap<String, String> workoutMap = new HashMap<String, String>();
                 workoutMap.put(USER_ID, cursor.getString(0));
-                workoutMap.put(EXERCISE, cursor.getString(1));
-                workoutMap.put(GOAL, cursor.getString(2));
-                workoutMap.put(DIFFICULTY, cursor.getString(3));
-                workoutMap.put(EXEMPTIONS, cursor.getString(4));
-                workoutMap.put(DATA, cursor.getString(5));
-                workoutMap.put(PLACE, cursor.getString(6));
-                workoutMap.put(TIME, cursor.getString(7));
+                workoutMap.put(NOTE, cursor.getString(1));
+                workoutMap.put(EXERCISE, cursor.getString(2));
+                workoutMap.put(LOCATION, cursor.getString(3));
+                workoutMap.put(DATE, cursor.getString(4));
+                workoutMap.put(PEOPLE, cursor.getString(5));
                 workoutList.add(workoutMap);
             } while (cursor.moveToNext());
         }
@@ -253,7 +250,7 @@ public class DBAdapter extends SQLiteOpenHelper
     {
         ArrayList<HashMap<String, String>> workoutList;
         workoutList = new ArrayList<HashMap<String, String>>();
-        String selectQuery = "SELECT * FROM " + WORKOUTS_TABLE + " WHERE " + USER_ID + " ='" + userId + "' ORDER BY " + USER_ID + " ASC";
+        String selectQuery = "SELECT * FROM " + MEETUPS_TABLE + " WHERE " + USER_ID + " ='" + userId + "' ORDER BY " + USER_ID + " ASC";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
 
@@ -261,37 +258,33 @@ public class DBAdapter extends SQLiteOpenHelper
             do {
                 HashMap<String, String> workoutMap = new HashMap<String, String>();
                 workoutMap.put(USER_ID, cursor.getString(0));
-                workoutMap.put(EXERCISE, cursor.getString(1));
-                workoutMap.put(GOAL, cursor.getString(2));
-                workoutMap.put(DIFFICULTY, cursor.getString(3));
-                workoutMap.put(EXEMPTIONS, cursor.getString(4));
-                workoutMap.put(DATA, cursor.getString(5));
-                workoutMap.put(PLACE, cursor.getString(6));
-                workoutMap.put(TIME, cursor.getString(7));
+                workoutMap.put(NOTE, cursor.getString(1));
+                workoutMap.put(EXERCISE, cursor.getString(2));
+                workoutMap.put(LOCATION, cursor.getString(3));
+                workoutMap.put(DATE, cursor.getString(4));
+                workoutMap.put(PEOPLE, cursor.getString(5));
                 workoutList.add(workoutMap);
             } while (cursor.moveToNext());
         }
         return workoutList;
     }
 
-    // assumes all exercises are uniquely named
-    public HashMap<String, String> getWorkoutInfo(final String exercise, final String userId)
+    // assumes all meetup notes are uniquely named
+    public HashMap<String, String> getMeetupInfo(final String note, final String userId)
     {
         HashMap<String, String> workoutMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + WORKOUTS_TABLE + " WHERE " + EXERCISE + "='" + exercise + "'" + " AND " + USER_ID + " = " + userId;
+        String selectQuery = "SELECT * FROM " + MEETUPS_TABLE + " WHERE " + EXERCISE + "='" + note + "'" + " AND " + USER_ID + " = " + userId;
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
                 workoutMap.put(USER_ID, cursor.getString(0));
-                workoutMap.put(EXERCISE, cursor.getString(1));
-                workoutMap.put(GOAL, cursor.getString(2));
-                workoutMap.put(DIFFICULTY, cursor.getString(3));
-                workoutMap.put(EXEMPTIONS, cursor.getString(4));
-                workoutMap.put(DATA, cursor.getString(5));
-                workoutMap.put(PLACE, cursor.getString(6));
-                workoutMap.put(TIME, cursor.getString(7));
+                workoutMap.put(NOTE, cursor.getString(1));
+                workoutMap.put(EXERCISE, cursor.getString(2));
+                workoutMap.put(LOCATION, cursor.getString(3));
+                workoutMap.put(DATE, cursor.getString(4));
+                workoutMap.put(PEOPLE, cursor.getString(5));
             } while (cursor.moveToNext());
         }
         return workoutMap;
