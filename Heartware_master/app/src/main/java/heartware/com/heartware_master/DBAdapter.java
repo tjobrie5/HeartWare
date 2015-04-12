@@ -274,7 +274,7 @@ public class DBAdapter extends SQLiteOpenHelper
     {
         HashMap<String, String> workoutMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + MEETUPS_TABLE + " WHERE " + EXERCISE + "='" + note + "'" + " AND " + USER_ID + " = " + userId;
+        String selectQuery = "SELECT * FROM " + MEETUPS_TABLE + " WHERE " + NOTE + "='" + note + "'" + " AND " + USER_ID + " = " + userId;
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {

@@ -61,19 +61,19 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
         setListAdapter(mArrayAdapter);
 
         if(meetups.size() != 0) {
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Log.d(TAG, "in onItemSelected listener");
-                    tvNote = (TextView) view.findViewById(R.id.tvNote);
-                    HashMap<String, String> meetup = dbAdapter.getMeetupInfo(tvNote.getText().toString(), app.getCurrentProfileId());
-                    mMeetupDialog.setMeetupText(meetup.get(DBAdapter.EXERCISE), meetup.get(DBAdapter.LOCATION),
-                            meetup.get(DBAdapter.PEOPLE), meetup.get(DBAdapter.NOTE), meetup.get(DBAdapter.DATE));
-
-                    mMeetupDialog.show(getActivity().getFragmentManager(), TAG);
-                }
-            });
+//            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//            {
+//                @Override
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    Log.d(TAG, "in onItemSelected listener");
+//                    tvNote = (TextView) view.findViewById(R.id.tvNote);
+//                    HashMap<String, String> meetup = dbAdapter.getMeetupInfo(tvNote.getText().toString(), app.getCurrentProfileId());
+//                    mMeetupDialog.setMeetupText(meetup.get(DBAdapter.EXERCISE), meetup.get(DBAdapter.LOCATION),
+//                            meetup.get(DBAdapter.PEOPLE), meetup.get(DBAdapter.NOTE), meetup.get(DBAdapter.DATE));
+//
+//                    mMeetupDialog.show(getActivity().getFragmentManager(), TAG);
+//                }
+//            });
 
             mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
             {
@@ -110,6 +110,21 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
+        super.onListItemClick(l, v, position, id);
+        Log.d(TAG, "in onItemSelected listener");
+        tvNote = (TextView) v.findViewById(R.id.tvNote);
+        HeartwareApplication app = (HeartwareApplication) getActivity().getApplication();
+        HashMap<String, String> meetup = dbAdapter.getMeetupInfo(tvNote.getText().toString(), app.getCurrentProfileId());
+        if(meetup.size() != 0) {
+            mMeetupDialog.setMeetupText(meetup.get(DBAdapter.EXERCISE), meetup.get(DBAdapter.LOCATION),
+                    meetup.get(DBAdapter.PEOPLE), meetup.get(DBAdapter.NOTE), meetup.get(DBAdapter.DATE));
+            mMeetupDialog.show(getActivity().getFragmentManager(), TAG);
+        }
     }
 
     @Override

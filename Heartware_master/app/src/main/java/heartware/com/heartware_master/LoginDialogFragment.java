@@ -56,7 +56,7 @@ public class LoginDialogFragment extends DialogFragment
         View view = inflater.inflate(R.layout.dialog_login, null);
         builder.setView(view);
         // add the buttons
-        builder.setPositiveButton(R.string.jbone_logo, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.jbone_login, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 mListener.onDialogPositiveClick(LoginDialogFragment.this);
             }

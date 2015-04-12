@@ -20,7 +20,7 @@
     <string name="location">Location</string>
     <string name="date">Date</string>
     <string name="graph_data">Graph Data</string>
-    <string name="jbone_login">Enter Jawbone UP Info</string>
+    <string name="jbone_login">Click</string>
     <string name="jbone_logo">Jawbone</string>
     <string name="add_button">Add</string>
     <string name="new_user">New User</string>
