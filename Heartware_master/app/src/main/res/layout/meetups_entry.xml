@@ -5,13 +5,13 @@
               android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/workoutId"
+        android:id="@+id/meetupId"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/tvExercise"
+        android:id="@+id/tvNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/com_facebook_likeboxcountview_caret_width"

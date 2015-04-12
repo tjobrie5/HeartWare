@@ -246,7 +246,7 @@ public class DBAdapter extends SQLiteOpenHelper
     }
 
     // get every workout for a specific userid
-    public ArrayList<HashMap<String, String>> getAllWorkouts(final String userId)
+    public ArrayList<HashMap<String, String>> getAllMeetups(final String userId)
     {
         ArrayList<HashMap<String, String>> workoutList;
         workoutList = new ArrayList<HashMap<String, String>>();

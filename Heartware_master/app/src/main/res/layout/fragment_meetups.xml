@@ -15,7 +15,7 @@
         android:background="#000000" >
 
         <TextView
-            android:id="@+id/profilesTitleTextView"
+            android:id="@+id/tvMeetupNote"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
@@ -26,7 +26,7 @@
 />
 
         <ImageView
-            android:id="@+id/bNewWorkout"
+            android:id="@+id/ivLogo"
             android:background="#444444"
             android:src="@drawable/ic_heartware_main_transparent"/>
     </TableRow>

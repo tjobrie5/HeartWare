@@ -106,11 +106,11 @@ public class ProfileDialogFragment extends DialogFragment
                 final int radioId = diffGroup.getCheckedRadioButtonId();
                 String difficulty = "";
                 switch(radioId) {
-                    case 1: difficulty = "beginner";
+                    case R.id.rbBeginner: difficulty = "beginner";
                         break;
-                    case 2: difficulty = "intermediate";
+                    case R.id.rbInterm: difficulty = "intermediate";
                         break;
-                    case 3: difficulty = "expert";
+                    case R.id.rbExpert: difficulty = "expert";
                         break;
                 }
 

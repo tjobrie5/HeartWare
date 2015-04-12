@@ -47,7 +47,6 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
     private DBAdapter mDBAdapter;
     private LoginDialogFragment mLoginDialog;
     private JawboneUpHelper mJboneHelper;
-    private String mCurrentProfileId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,12 +54,6 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mDBAdapter = new DBAdapter(this);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String user = preferences.getString(DBAdapter.USERNAME, "NULL");
-        String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
-        mCurrentProfileId = mDBAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
-        HeartwareApplication app = (HeartwareApplication) getApplication();
-        app.setCurrentProfileId(mCurrentProfileId);
 
         // adding invisible worker fragments: https://developer.android.com/guide/components/fragments.html
         mJboneHelper = new JawboneUpHelper();
@@ -192,14 +185,15 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
             newProfile.put(DBAdapter.DISABILITY, disability);
             mDBAdapter.createProfile(newProfile);
 //            // this is sloppy, but once the profile is created a new profileId is made and we need to keep track of it
-            mCurrentProfileId = mDBAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
-            HeartwareApplication app = (HeartwareApplication) getApplication();
-            app.setCurrentProfileId(mCurrentProfileId);
+//            String currentId = mDBAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
+//            HeartwareApplication app = (HeartwareApplication) getApplication();
+//            app.setCurrentProfileId(currentId);
             Toast.makeText(this, "Creating " + user, Toast.LENGTH_SHORT).show();
         }
         else { // user is already in database and now we should update their info
             HashMap<String, String> updateProfile = new HashMap<>();
-            updateProfile.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
+            HeartwareApplication app = (HeartwareApplication) getApplication();
+            updateProfile.put(DBAdapter.PROFILE_ID, app.getCurrentProfileId());
             updateProfile.put(DBAdapter.USERNAME, user);
             updateProfile.put(DBAdapter.PASSWORD, token);
             updateProfile.put(DBAdapter.DIFFICULTY, skill);
@@ -232,7 +226,16 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
     @Override
     public void onMeetupPositiveClick(DialogFragment dialog, String note, String exercise, String location, String date, String people)
     {
-
+        HashMap<String, String> newMeetup = new HashMap<>();
+        HeartwareApplication app = (HeartwareApplication) getApplication();
+        newMeetup.put(DBAdapter.USER_ID, app.getCurrentProfileId());
+        newMeetup.put(DBAdapter.NOTE, note);
+        newMeetup.put(DBAdapter.EXERCISE, exercise);
+        newMeetup.put(DBAdapter.LOCATION, location);
+        newMeetup.put(DBAdapter.DATE, date);
+        newMeetup.put(DBAdapter.PEOPLE, people);
+        mDBAdapter.createMeetup(newMeetup);
+        Toast.makeText(this, "Creating meetup with note: " + note, Toast.LENGTH_SHORT).show();
     }
 
     /**

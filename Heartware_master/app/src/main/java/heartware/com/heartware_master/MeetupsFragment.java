@@ -10,12 +10,11 @@
 // Source code: github.com/tjobrie5/HeartWare
 //
 // Description: Selecting a workout lets you edit the details surrounding the workout.
-//  A profile (user) can have multiple workouts which are contained in a listview.
+//  A profile (user) can have multiple meetups which are contained in a listview.
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 package heartware.com.heartware_master;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,10 +36,9 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
     private MeetupDialogFragment mMeetupDialog;
     private ListView mListView;
     private DBAdapter dbAdapter;
-    private String mCurrentProfileId;
-    private TextView tvExercise;
+    private TextView tvNote;
     private ArrayAdapter mArrayAdapter;
-    private ArrayList<String> mWorkoutArray;
+    private ArrayList<String> mMeetupArray;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -49,35 +46,32 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
         View rootView = inflater.inflate(R.layout.fragment_meetups, container, false);
         mMeetupDialog = new MeetupDialogFragment();
         dbAdapter = new DBAdapter(getActivity());
-        // get the current profile Id from the activity that started this one
-        //mCurrentProfileId = getIntent().getStringExtra(DBAdapter.PROFILE_ID);
 
+        final HeartwareApplication app = (HeartwareApplication) getActivity().getApplication();
 
         mListView = (ListView) rootView.findViewById(android.R.id.list);
 
-//        final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts(mCurrentProfileId);
-//        mWorkoutArray = new ArrayList<>(workouts.size());
-//
-//        setWorkoutArray(workouts);
-//
-//        mArrayAdapter = new ArrayAdapter(getActivity(), R.layout.meetups_entry, R.id.tvExercise, mWorkoutArray);
-//
-//        setListAdapter(mArrayAdapter);
+        final ArrayList<HashMap<String, String>> meetups = dbAdapter.getAllMeetups(app.getCurrentProfileId());
+        mMeetupArray = new ArrayList<>(meetups.size());
 
-//        if(workouts.size() != 0) {
+        setMeetupArray(meetups);
+
+        mArrayAdapter = new ArrayAdapter(getActivity(), R.layout.meetups_entry, R.id.tvNote, mMeetupArray);
+
+        setListAdapter(mArrayAdapter);
+
+        if(meetups.size() != 0) {
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.d(TAG, "in onItemSelected listener");
+                    tvNote = (TextView) view.findViewById(R.id.tvNote);
+                    HashMap<String, String> meetup = dbAdapter.getMeetupInfo(tvNote.getText().toString(), app.getCurrentProfileId());
+                    mMeetupDialog.setMeetupText(meetup.get(DBAdapter.EXERCISE), meetup.get(DBAdapter.LOCATION),
+                            meetup.get(DBAdapter.PEOPLE), meetup.get(DBAdapter.NOTE), meetup.get(DBAdapter.DATE));
+
                     mMeetupDialog.show(getActivity().getFragmentManager(), TAG);
-//                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
-//                    String exerciseName = tvExercise.getText().toString();
-                    // send a map of data over to the view workout
-//                    Intent intent = new Intent(getApplication(), ViewWorkout.class);
-//                    intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-//                    intent.putExtra(DBAdapter.EXERCISE, exerciseName);
-//                    startActivityForResult(intent, 0);
                 }
             });
 
@@ -86,8 +80,8 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
                     Log.d(TAG, "in the onItemLongClick listener");
-                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
-                    final String exName = tvExercise.getText().toString();
+                    tvNote = (TextView) view.findViewById(R.id.tvNote);
+                    final String noteName = tvNote.getText().toString();
 //                    dbAdapter.deleteWorkout(exName);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         view.animate().setDuration(2000).alpha(0)
@@ -96,21 +90,21 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
                                     @Override
                                     public void run()
                                     {
-                                        mWorkoutArray.remove(exName);
+                                        mMeetupArray.remove(noteName);
                                         mArrayAdapter.notifyDataSetChanged();
                                         view.setAlpha(1);
                                     }
                                 });
                     }
                     else {
-                        mWorkoutArray.remove(exName);
+                        mMeetupArray.remove(noteName);
                         mArrayAdapter.notifyDataSetChanged();
                     }
-                    Toast.makeText(getActivity(), "Deleting " + exName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Deleting " + noteName, Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
-//        }
+        }
 
         // @TODO : add animation on heartware imageview
 
@@ -128,23 +122,23 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
 //
 //        mListView = (ListView) findViewById(android.R.id.list);
 //
-//        final ArrayList<HashMap<String, String>> workouts = dbAdapter.getAllWorkouts(mCurrentProfileId);
-//        mWorkoutArray = new ArrayList<>(workouts.size());
+//        final ArrayList<HashMap<String, String>> meetups = dbAdapter.getAllmeetups(mCurrentProfileId);
+//        mMeetupArray = new ArrayList<>(meetups.size());
 //
-//        setWorkoutArray(workouts);
+//        setMeetupArray(meetups);
 //
-//        mArrayAdapter = new ArrayAdapter(this, R.layout.meetups_entry, R.id.tvExercise, mWorkoutArray);
+//        mArrayAdapter = new ArrayAdapter(this, R.layout.meetups_entry, R.id.tvNote, mMeetupArray);
 //
 //        setListAdapter(mArrayAdapter);
 //
-//        if(workouts.size() != 0) {
+//        if(meetups.size() != 0) {
 //            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
 //            {
 //                @Override
 //                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    Log.d(TAG, "in onItemSelected listener");
-//                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
-//                    String exerciseName = tvExercise.getText().toString();
+//                    tvNote = (TextView) view.findViewById(R.id.tvNote);
+//                    String exerciseName = tvNote.getText().toString();
 //                    // send a map of data over to the view workout
 //                    Intent intent = new Intent(getApplication(), ViewWorkout.class);
 //                    intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
@@ -158,8 +152,8 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
 //                @Override
 //                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
 //                    Log.d(TAG, "in the onItemLongClick listener");
-//                    tvExercise = (TextView) view.findViewById(R.id.tvExercise);
-//                    final String exName = tvExercise.getText().toString();
+//                    tvNote = (TextView) view.findViewById(R.id.tvNote);
+//                    final String exName = tvNote.getText().toString();
 //                    dbAdapter.deleteWorkout(exName);
 //                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 //                        view.animate().setDuration(2000).alpha(0)
@@ -168,14 +162,14 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
 //                                    @Override
 //                                    public void run()
 //                                    {
-//                                        mWorkoutArray.remove(exName);
+//                                        mMeetupArray.remove(exName);
 //                                        mArrayAdapter.notifyDataSetChanged();
 //                                        view.setAlpha(1);
 //                                    }
 //                                });
 //                    }
 //                    else {
-//                        mWorkoutArray.remove(exName);
+//                        mMeetupArray.remove(exName);
 //                        mArrayAdapter.notifyDataSetChanged();
 //                    }
 //                    Toast.makeText(getApplicationContext(), "Deleting " + exName, Toast.LENGTH_SHORT).show();
@@ -207,13 +201,13 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
 //            final String oldWorkout = data.getStringExtra(ViewWorkout.OLD_WORKOUT);
 //            final String newWorkout = data.getStringExtra(ViewWorkout.NEW_WORKOUT);
 //            if(oldWorkout == null) { // new workout
-//                mWorkoutArray.add(newWorkout);
+//                mMeetupArray.add(newWorkout);
 //                mArrayAdapter.notifyDataSetChanged();
 //            }
 //            else { // updating current workout
-//                for(int i = 0; i < mWorkoutArray.size(); ++i) {
-//                    if(mWorkoutArray.get(i).equals(oldWorkout)) {
-//                        mWorkoutArray.set(i, newWorkout);
+//                for(int i = 0; i < mMeetupArray.size(); ++i) {
+//                    if(mMeetupArray.get(i).equals(oldWorkout)) {
+//                        mMeetupArray.set(i, newWorkout);
 //                        mArrayAdapter.notifyDataSetChanged();
 //                    }
 //                }
@@ -222,11 +216,11 @@ public class MeetupsFragment extends android.support.v4.app.ListFragment
 //        // else, do nothing the user just hit back
 //    }
 
-    private void setWorkoutArray(ArrayList<HashMap<String, String>> listMap)
+    private void setMeetupArray(ArrayList<HashMap<String, String>> listMap)
     {
         int i = 0;
         for(HashMap<String, String> map : listMap) {
-            mWorkoutArray.add(i++, map.get(DBAdapter.NOTE));
+            mMeetupArray.add(i++, map.get(DBAdapter.NOTE));
         }
     }
 } // GoalsActivity class

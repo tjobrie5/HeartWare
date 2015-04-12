@@ -54,7 +54,6 @@ public class ProfileFragment extends Fragment
     private Button bUserInfo;
     private GraphView mGraph;
     private ProfileDialogFragment mProfileDialog;
-    private String mCurrentProfileId;
     private DBAdapter dbAdapter;
 
     @Override
@@ -62,11 +61,9 @@ public class ProfileFragment extends Fragment
     {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         mProfileDialog = new ProfileDialogFragment();
-        HeartwareApplication app = (HeartwareApplication) getActivity().getApplication();
-        mCurrentProfileId = app.getCurrentProfileId(); // zero means no current profile set
+
         dbAdapter = new DBAdapter(getActivity());
-        HashMap<String, String> profileMap = dbAdapter.getProfileById(mCurrentProfileId);
-        mProfileDialog.setProfileText(profileMap.get(DBAdapter.USERNAME), profileMap.get(DBAdapter.DIFFICULTY), profileMap.get(DBAdapter.DISABILITY));
+
         createButtons(rootView);
         createGraph(rootView);
 
@@ -88,10 +85,12 @@ public class ProfileFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String username = preferences.getString(DBAdapter.USERNAME, "NULL");
-                if(!username.equals("NULL"))
-                    mProfileDialog.setProfileText(username);
+
+                HashMap<String, String> profileMap = dbAdapter.getProfileById("1");
+
+                if(profileMap.size() != 0) {
+                    mProfileDialog.setProfileText(profileMap.get(DBAdapter.USERNAME), profileMap.get(DBAdapter.DIFFICULTY), profileMap.get(DBAdapter.DISABILITY));
+                }
                 mProfileDialog.show(getActivity().getFragmentManager(), TAG);
             }
         });

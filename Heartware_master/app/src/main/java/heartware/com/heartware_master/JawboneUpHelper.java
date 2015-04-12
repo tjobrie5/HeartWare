@@ -67,6 +67,8 @@ public class JawboneUpHelper extends Fragment
     private static final String OAUTH_CALLBACK_URL = "http://localhost/helloup?";
     private List<UpPlatformSdkConstants.UpPlatformAuthScope> mAuthScope;
 
+    private DBAdapter dbAdapater;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -74,6 +76,7 @@ public class JawboneUpHelper extends Fragment
         // grant all required levels of permissions
         mAuthScope = new ArrayList<UpPlatformSdkConstants.UpPlatformAuthScope>();
         mAuthScope.add(UpPlatformSdkConstants.UpPlatformAuthScope.ALL);
+        dbAdapater = new DBAdapter(getActivity());
     }
 
     /**
@@ -152,6 +155,9 @@ public class JawboneUpHelper extends Fragment
                 // @TODO : this is hardcoded username
                 editor.putString(DBAdapter.USERNAME, "Amy Mazzola");
                 editor.commit();
+
+                HeartwareApplication app = (HeartwareApplication) getActivity().getApplication();
+                app.setCurrentProfileId("1");
 
                 TokenToServer tokenToServer = (TokenToServer) new TokenToServer().execute(
                         new String(result.access_token));

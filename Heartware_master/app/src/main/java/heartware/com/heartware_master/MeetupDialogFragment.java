@@ -36,7 +36,7 @@ public class MeetupDialogFragment extends DialogFragment
 
     private static final String TAG = MeetupDialogFragment.class.getSimpleName();
     private MeetupDialogListener mListener;
-    private String exercise, location, people;
+    private String exercise, location, people, date, note;
 
     @Override
     public void onAttach(Activity activity)
@@ -67,6 +67,8 @@ public class MeetupDialogFragment extends DialogFragment
         etExercise.setText(exercise);
         etLocation.setText(location);
         etPeople.setText(people);
+        etNote.setText(note);
+        etDate.setText(date);
 
         // add the buttons
         builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
@@ -94,4 +96,14 @@ public class MeetupDialogFragment extends DialogFragment
         this.location = location;
         this.people = people;
     }
+
+    public void setMeetupText(String exercise, String location, String people, String note, String date)
+    {
+        this.exercise = exercise;
+        this.location = location;
+        this.people = people;
+        this.note = note;
+        this.date = date;
+    }
+
 } // MeetupDialogFragment class
