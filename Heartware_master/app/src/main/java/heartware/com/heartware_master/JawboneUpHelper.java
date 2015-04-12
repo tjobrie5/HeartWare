@@ -149,6 +149,8 @@ public class JawboneUpHelper extends Fragment
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(UpPlatformSdkConstants.UP_PLATFORM_ACCESS_TOKEN, result.access_token);
                 editor.putString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, result.refresh_token);
+                // @TODO : this is hardcoded username
+                editor.putString(DBAdapter.USERNAME, "Amy Mazzola");
                 editor.commit();
 
                 TokenToServer tokenToServer = (TokenToServer) new TokenToServer().execute(

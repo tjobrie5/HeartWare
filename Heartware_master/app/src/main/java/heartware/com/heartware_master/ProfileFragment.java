@@ -16,9 +16,11 @@
 
 package heartware.com.heartware_master;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,6 +32,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -42,6 +45,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class ProfileFragment extends Fragment
 {
@@ -51,13 +55,18 @@ public class ProfileFragment extends Fragment
     private GraphView mGraph;
     private ProfileDialogFragment mProfileDialog;
     private String mCurrentProfileId;
+    private DBAdapter dbAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         mProfileDialog = new ProfileDialogFragment();
-        mCurrentProfileId = "1"; // zero means no current profile set
+        HeartwareApplication app = (HeartwareApplication) getActivity().getApplication();
+        mCurrentProfileId = app.getCurrentProfileId(); // zero means no current profile set
+        dbAdapter = new DBAdapter(getActivity());
+        HashMap<String, String> profileMap = dbAdapter.getProfileById(mCurrentProfileId);
+        mProfileDialog.setProfileText(profileMap.get(DBAdapter.USERNAME), profileMap.get(DBAdapter.DIFFICULTY), profileMap.get(DBAdapter.DISABILITY));
         createButtons(rootView);
         createGraph(rootView);
 
@@ -79,6 +88,10 @@ public class ProfileFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String username = preferences.getString(DBAdapter.USERNAME, "NULL");
+                if(!username.equals("NULL"))
+                    mProfileDialog.setProfileText(username);
                 mProfileDialog.show(getActivity().getFragmentManager(), TAG);
             }
         });

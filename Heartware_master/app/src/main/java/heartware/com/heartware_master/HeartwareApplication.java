@@ -33,6 +33,7 @@ public class HeartwareApplication extends Application
 
     private List<JSONObject> selectedUsers;
     private JSONObject selectedPlace;
+    private String sCurrentProfileId; // SQL database user ID
 
     public List<JSONObject> getSelectedUsers() {
         return selectedUsers;
@@ -48,5 +49,13 @@ public class HeartwareApplication extends Application
 
     public void setSelectedPlace(JSONObject place) {
         this.selectedPlace = place;
+    }
+
+    public void setCurrentProfileId(String id) {
+        sCurrentProfileId = id;
+    }
+
+    public String getCurrentProfileId() {
+        return sCurrentProfileId;
     }
 } // HeartwareApplication

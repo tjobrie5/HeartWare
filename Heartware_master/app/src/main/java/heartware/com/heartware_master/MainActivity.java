@@ -55,11 +55,17 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mDBAdapter = new DBAdapter(this);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String user = preferences.getString(DBAdapter.USERNAME, "NULL");
+        String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
+        mCurrentProfileId = mDBAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
+        HeartwareApplication app = (HeartwareApplication) getApplication();
+        app.setCurrentProfileId(mCurrentProfileId);
+
         // adding invisible worker fragments: https://developer.android.com/guide/components/fragments.html
         mJboneHelper = new JawboneUpHelper();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().add(mJboneHelper, JawboneUpHelper.TAG).commit();
-        mCurrentProfileId = "0"; // zero means no current profile set
         mLoginDialog = new LoginDialogFragment();
         mLoginDialog.show(getFragmentManager(), TAG);
 
@@ -136,17 +142,6 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
                         .setTabListener(tabListener));
     }
 
-    /**
-     * This dialog pops up when the app starts and the user syncs with Jawbone UP
-     * @param dialog
-     */
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog)
-    {
-        // @TODO : figure out persistent storage
-        mJboneHelper.sendToken();
-    }
-
     private class SwipedListener implements ViewPager.OnPageChangeListener
     {
         @Override
@@ -167,6 +162,16 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
     }
 
     /**
+     * This dialog pops up when the app starts and the user syncs with Jawbone UP
+     * @param dialog
+     */
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog)
+    {
+        mJboneHelper.sendToken();
+    }
+
+    /**
      * Update user information using the ProfileDialogFragment
      * @param dialog
      * @param user
@@ -179,13 +184,17 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_REFRESH_TOKEN, "NULL");
         HashMap<String, String> profile = mDBAdapter.getProfileByUserAndToken(user, token);
-        if(profile.size() == 0) { // this is the first time the user has updated their information
+        if(profile.size() == 0) { // user does not exist in SQL storage
             HashMap<String, String> newProfile = new HashMap<>();
             newProfile.put(DBAdapter.USERNAME, user);
             newProfile.put(DBAdapter.PASSWORD, token);
-//            mDBAdapter.createProfile(newProfile);
+            newProfile.put(DBAdapter.DIFFICULTY, skill);
+            newProfile.put(DBAdapter.DISABILITY, disability);
+            mDBAdapter.createProfile(newProfile);
 //            // this is sloppy, but once the profile is created a new profileId is made and we need to keep track of it
-//            mCurrentProfileId = mDBAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
+            mCurrentProfileId = mDBAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
+            HeartwareApplication app = (HeartwareApplication) getApplication();
+            app.setCurrentProfileId(mCurrentProfileId);
             Toast.makeText(this, "Creating " + user, Toast.LENGTH_SHORT).show();
         }
         else { // user is already in database and now we should update their info
@@ -193,7 +202,9 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
             updateProfile.put(DBAdapter.PROFILE_ID, mCurrentProfileId);
             updateProfile.put(DBAdapter.USERNAME, user);
             updateProfile.put(DBAdapter.PASSWORD, token);
-//            mDBAdapter.updateProfile(updateProfile);
+            updateProfile.put(DBAdapter.DIFFICULTY, skill);
+            updateProfile.put(DBAdapter.DISABILITY, disability);
+            mDBAdapter.updateProfile(updateProfile);
             Toast.makeText(this, "Updating " + user, Toast.LENGTH_SHORT).show();
         }
     }

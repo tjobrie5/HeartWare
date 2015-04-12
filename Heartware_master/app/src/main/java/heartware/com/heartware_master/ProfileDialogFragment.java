@@ -41,6 +41,8 @@ public class ProfileDialogFragment extends DialogFragment
     private static final String TAG = ProfileDialogFragment.class.getSimpleName();
     private ProfileDialogListener mListener;
     private int mCurrentDisabilityPosition = 0;
+    private String usernameString;
+    private String skillString, disabilityString;
 
     @Override
     public void onAttach(Activity activity)
@@ -64,7 +66,16 @@ public class ProfileDialogFragment extends DialogFragment
         builder.setView(view);
         // get the view items
         final EditText username = (EditText) view.findViewById(R.id.etName);
+        username.setText(usernameString);
         final RadioGroup diffGroup = (RadioGroup) view.findViewById(R.id.rgDifficulty);
+        if(skillString != null) {
+            if(skillString.equals("Beginner"))
+                diffGroup.check(R.id.rbBeginner);
+            else if(skillString.equals("Intermediate"))
+                diffGroup.check(R.id.rbInterm);
+            else if(skillString.equals("Expert"))
+                diffGroup.check(R.id.rbExpert);
+        }
         // set up the spinner adapter and array and whatnot
         final String[] DisabilityArray = getResources().getStringArray(R.array.disabilities_array);
         final Spinner disabilitySpinner = (Spinner) view.findViewById(R.id.spinnerDisabilities);
@@ -115,5 +126,15 @@ public class ProfileDialogFragment extends DialogFragment
         });
         return builder.create();
     } // onCreateDialog()
+
+    public void setProfileText(String username) {
+        usernameString = username;
+    }
+
+    public void setProfileText(String username, String skill, String disability) {
+        usernameString = username;
+        skillString = skill;
+        disabilityString = disability;
+    }
 
 } // ProfileDialogFragment class
