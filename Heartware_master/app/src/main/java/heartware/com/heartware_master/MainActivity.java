@@ -88,30 +88,6 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
         AppEventsLogger.deactivateApp(this);
     }
 
-    //    @Override
-//    public boolean onCreateOptionsMenu(Menu menu)
-//    {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item)
-//    {
-//        switch(item.getItemId()) {
-//            case R.id.action_workouts:
-//                Intent intent = new Intent(getApplicationContext(), MeetupsFragment.class);
-//                intent.putExtra(DBAdapter.PROFILE_ID, mCurrentProfileId);
-//                startActivity(intent);
-//                return true;
-//            case R.id.action_friends:
-//                startActivity(new Intent(getApplicationContext(), FriendsFragment.class));
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
     private void setupActionTabs()
     {
         mViewPager = (ViewPager) findViewById(R.id.pager);

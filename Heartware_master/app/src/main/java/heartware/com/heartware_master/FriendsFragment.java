@@ -274,9 +274,9 @@ public class FriendsFragment extends Fragment
     private void createMeetup()
     {
         String exText = listElements.get(0).getText2();
-        String locText = listElements.get(0).getText2();
-        String friendsText = listElements.get(0).getText2();
-        String photoText = listElements.get(0).getText2();
+        String locText = listElements.get(1).getText2();
+        String friendsText = listElements.get(2).getText2();
+        mMeetupDialog.setMeetupText(exText, locText, friendsText);
         mMeetupDialog.show(getActivity().getFragmentManager(), TAG);
     }
 
