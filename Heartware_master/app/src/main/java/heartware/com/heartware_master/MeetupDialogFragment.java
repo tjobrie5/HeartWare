@@ -14,7 +14,73 @@
 
 package heartware.com.heartware_master;
 
-public class MeetupDialogFragment
-{
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
+public class MeetupDialogFragment extends DialogFragment
+{
+    public interface MeetupDialogListener {
+        public void onMeetupPositiveClick(DialogFragment dialog,
+                                           final String note, final String exercise,
+                                           final String location, final String date, final String people);
+        public void onMeetupNegativeClick(DialogFragment dialog);
+    }
+
+    private static final String TAG = MeetupDialogFragment.class.getSimpleName();
+    private MeetupDialogListener mListener;
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        try {
+            mListener = (MeetupDialogListener) activity;
+        }
+        catch(ClassCastException ex) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement MeetupDialogListener");
+        }
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_meetup, null);
+        builder.setView(view);
+        // get the view items
+        final EditText etNote = (EditText) view.findViewById(R.id.etNote);
+        final EditText etExercise = (EditText) view.findViewById(R.id.etExercise);
+        final EditText etLocation = (EditText) view.findViewById(R.id.etLocation);
+        final EditText etDate = (EditText) view.findViewById(R.id.etDate);
+        final EditText etPeople = (EditText) view.findViewById(R.id.etPeople);
+
+        // add the buttons
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int id) {
+                Log.d(TAG, "Meetup confirmed");
+                mListener.onMeetupPositiveClick(MeetupDialogFragment.this,
+                        etNote.getText().toString(), etExercise.getText().toString(),
+                        etLocation.getText().toString(), etDate.getText().toString(),
+                        etPeople.getText().toString());
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id)
+            {
+                Log.d(TAG, "Meetup canceled or not changed");
+                mListener.onMeetupNegativeClick(MeetupDialogFragment.this);
+            }
+        });
+        return builder.create();
+    } // onCreateDialog()
 } // MeetupDialogFragment class

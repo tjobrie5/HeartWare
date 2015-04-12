@@ -113,6 +113,7 @@ import java.util.UUID;
 public class FriendsFragment extends Fragment
 {
     private static final String TAG = FriendsFragment.class.getSimpleName();
+    private MeetupDialogFragment mMeetupDialog;
     private static final String EXERCISE_OBJECT_TYPE = "heartware:exercise"; // note - must be lower case
     private static final String EX_ACTION_TYPE = "heartware:exercise";
 
@@ -191,6 +192,8 @@ public class FriendsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
+
+        mMeetupDialog = new MeetupDialogFragment();
 
         profilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
         profilePictureView.setCropped(true);
@@ -274,6 +277,7 @@ public class FriendsFragment extends Fragment
         String locText = listElements.get(0).getText2();
         String friendsText = listElements.get(0).getText2();
         String photoText = listElements.get(0).getText2();
+        mMeetupDialog.show(getActivity().getFragmentManager(), TAG);
     }
 
     private void processDialogError(FacebookException error) {

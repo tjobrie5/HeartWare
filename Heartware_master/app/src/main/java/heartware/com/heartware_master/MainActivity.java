@@ -36,12 +36,13 @@ import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
 import java.util.HashMap;
 
 public class MainActivity extends FragmentActivity implements LoginDialogFragment.LoginDialogListener,
-        ProfileDialogFragment.ProfileDialogListener
+        ProfileDialogFragment.ProfileDialogListener, MeetupDialogFragment.MeetupDialogListener
 {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private ActionBar mActionBar;
     private TabsPagerAdapter mTabsAdapter;
+
     private ViewPager mViewPager;
     private DBAdapter mDBAdapter;
     private LoginDialogFragment mLoginDialog;
@@ -228,6 +229,31 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
      */
     @Override
     public void onProfileNegativeClick(DialogFragment dialog)
+    {
+
+    }
+
+    /**
+     * Confirmed a new meetup should be created or updated
+     * @param dialog
+     * @param note
+     * @param exercise
+     * @param location
+     * @param date
+     * @param people
+     */
+    @Override
+    public void onMeetupPositiveClick(DialogFragment dialog, String note, String exercise, String location, String date, String people)
+    {
+
+    }
+
+    /**
+     * Meetup will not be created or changed, so do nothing
+     * @param dialog
+     */
+    @Override
+    public void onMeetupNegativeClick(DialogFragment dialog)
     {
 
     }
