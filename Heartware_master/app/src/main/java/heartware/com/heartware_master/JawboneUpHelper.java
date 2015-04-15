@@ -162,6 +162,13 @@ public class JawboneUpHelper extends Fragment
                 TokenToServer tokenToServer = (TokenToServer) new TokenToServer().execute(
                         new String(result.access_token));
 
+
+                    ApiManager.getRestApiInterface().getMoveGraph(
+                            UpPlatformSdkConstants.API_VERSION_STRING,
+                            result.access_token, //hardcoded value, should be dynamic
+                            genericCallbackListener);
+
+
                 Toast.makeText(getActivity(), "Connected with Jawbone UP Device", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, result.access_token + " THIS");
                 Log.d(TAG, "accessToken:" + result.access_token);
@@ -215,4 +222,18 @@ public class JawboneUpHelper extends Fragment
             return "doInBackground() -- TokenToServer";
         }
     } // TokenToServer class
+
+    private Callback genericCallbackListener = new Callback<Object>() {
+        @Override
+        public void success(Object o, Response response) {
+            Log.e(TAG,  "api call successful, json output: " + o.toString());
+            Toast.makeText(getActivity().getApplicationContext(), o.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+            Log.e(TAG,  "api call failed, error message: " + retrofitError.getMessage());
+            Toast.makeText(getActivity().getApplicationContext(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    };
 } // JawboneUpHelper class

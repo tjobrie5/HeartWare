@@ -101,7 +101,7 @@ public class ProfileFragment extends Fragment
         // Build the graph from user's data
         mGraph = (GraphView) view.findViewById(R.id.userDataGraph);
         mGraph.setTitle("Your Workouts");
-        //mGraph.setTitleTextSize(14.0f);
+
         mGraph.setTitleColor(Color.WHITE);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
                 new DataPoint(0, 1),
