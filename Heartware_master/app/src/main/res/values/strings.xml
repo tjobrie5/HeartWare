@@ -15,6 +15,7 @@
     <string name="meetup_info">Meetup Info</string>
     <string name="create_meetup">Create Meetup</string>
     <string name="note">Note</string>
+    <string name="title">Title</string>
     <string name="exercise">Exercise</string>
     <string name="people">People</string>
     <string name="location">Location</string>

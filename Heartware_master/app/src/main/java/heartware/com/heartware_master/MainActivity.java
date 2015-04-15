@@ -31,9 +31,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.facebook.appevents.AppEventsLogger;
+import com.jawbone.upplatformsdk.api.ApiManager;
 import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
 
 import java.util.HashMap;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends FragmentActivity implements LoginDialogFragment.LoginDialogListener,
         ProfileDialogFragment.ProfileDialogListener, MeetupDialogFragment.MeetupDialogListener
@@ -132,7 +137,9 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
                 mActionBar.newTab()
                         .setText(getString(R.string.meetups_tab))
                         .setIcon(R.drawable.ic_action_workout)
+
                         .setTabListener(tabListener));
+
     }
 
     private class SwipedListener implements ViewPager.OnPageChangeListener
@@ -141,6 +148,12 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
         public void onPageSelected(int position) {
             // when changing the page make make the respected tab selected
             mActionBar.setSelectedNavigationItem(position);
+            if (position == 0) {
+                ApiManager.getRestApiInterface().getMoveGraph(
+                        UpPlatformSdkConstants.API_VERSION_STRING,
+                        "wZ3pxuSAHA9mnOxjz3yw5w", //hardcoded value, should be dynamic
+                        genericCallbackListener);
+            }
         }
 
         @Override
@@ -247,5 +260,19 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
     {
 
     }
+
+    private Callback genericCallbackListener = new Callback<Object>() {
+        @Override
+        public void success(Object o, Response response) {
+            Log.e(TAG,  "api call successful, json output: " + o.toString());
+            Toast.makeText(getApplicationContext(), o.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+            Log.e(TAG,  "api call failed, error message: " + retrofitError.getMessage());
+            Toast.makeText(getApplicationContext(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    };
 
 } // MainActivity class

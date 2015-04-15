@@ -102,7 +102,7 @@ public class ProfileFragment extends Fragment
         mGraph = (GraphView) view.findViewById(R.id.userDataGraph);
         mGraph.setTitle("Your Workouts");
         //mGraph.setTitleTextSize(14.0f);
-        mGraph.setTitleColor(Color.YELLOW);
+        mGraph.setTitleColor(Color.WHITE);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
                 new DataPoint(0, 1),
                 new DataPoint(1, 5),
@@ -111,13 +111,13 @@ public class ProfileFragment extends Fragment
                 new DataPoint(4, 6)
         });
         series.setColor(Color.RED);
-        mGraph.getGridLabelRenderer().setGridColor(Color.WHITE);
+        mGraph.getGridLabelRenderer().setGridColor(Color.GRAY);
         mGraph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
-        mGraph.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.YELLOW);
-        mGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.YELLOW);
+        mGraph.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.LTGRAY);
+        mGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
         mGraph.getGridLabelRenderer().setVerticalAxisTitle("Space");
-        mGraph.getGridLabelRenderer().setVerticalAxisTitleColor(Color.YELLOW);
-        mGraph.getGridLabelRenderer().setVerticalLabelsColor(Color.YELLOW);
+        mGraph.getGridLabelRenderer().setVerticalAxisTitleColor(Color.LTGRAY);
+        mGraph.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
         mGraph.addSeries(series);
 //        mGraph.setOnClickListener(new View.OnClickListener() {
 //            @Override
