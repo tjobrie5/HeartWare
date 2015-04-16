@@ -163,10 +163,10 @@ public class JawboneUpHelper extends Fragment
                         new String(result.access_token));
 
 
-                    ApiManager.getRestApiInterface().getMoveGraph(
-                            UpPlatformSdkConstants.API_VERSION_STRING,
-                            result.access_token, //hardcoded value, should be dynamic
-                            genericCallbackListener);
+                ApiManager.getRestApiInterface().getMoveGraph(
+                        UpPlatformSdkConstants.API_VERSION_STRING,
+                        result.access_token, //hardcoded value, should be dynamic
+                        genericCallbackListener);
 
 
                 Toast.makeText(getActivity(), "Connected with Jawbone UP Device", Toast.LENGTH_SHORT).show();

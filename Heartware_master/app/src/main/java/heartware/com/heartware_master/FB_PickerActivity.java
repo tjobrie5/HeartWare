@@ -201,8 +201,10 @@ public class FB_PickerActivity extends FragmentActivity {
                         // this may be the emulator, pretend we're in an exotic place
                         location = TEMPE_AZ_LOCATION;
                     }
+                    location = TEMPE_AZ_LOCATION; // @TODO HARDCODED location
                 }
                 if (location != null) {
+                    location = TEMPE_AZ_LOCATION;
                     placePickerFragment.setLocation(location);
                     placePickerFragment.setRadiusInMeters(SEARCH_RADIUS_METERS);
                     placePickerFragment.setSearchText(SEARCH_TEXT);
