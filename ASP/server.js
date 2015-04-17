@@ -67,7 +67,6 @@ app.get('/', function(req, res){
 Called from android app when initially connecting with Jawbone UP
 Auth Token is recieved and stored in MongoDB associated with the name that is returned
 from retrieveuser API.
-
 */
 app.post('/sendToken', function(req, res){
         console.log("token recieved");
@@ -104,27 +103,20 @@ app.post('/sendToken', function(req, res){
 
 /*
 	orale
-
 	So this is the new Getdata API. Its a post now so I recommend you get a REST client called postman(its a chrome extension) so you can\
 	test it out. Right now the token is being stored in mongodb in the users collection associated with the USERS last name.
-
 	To test this API go to the postman client and use the URL http://qqroute.com:8080/getData MAKE SURE its a POST request. Next find a tab that says
 	x-www-form-urlencoded, click on it and where it says key enter user and where it says value enter in Mazzola. These values will be sent from the Android
 	App when the actual application is working
-
 	Ok so this API works as follows
 	1. Searchs mongodb for the token associated with lastName(in this case Mazzola)
 	2. Deletes old data.
 	3. Uses the token from step 1 calls jawbone movement API and inserts into the DataBase in the movement collection.
 	4. Then calls and does whatever your python stuff does
-
 	I did an initial run of this on qqroute so mongodb will have the necessary info to work.
-
 	IF it doesn't work that is probably because somebody ran the helloUp app and it reissued a new token so the 
 	JAwbone api's won't work correctly(This could happen often). So just post something on Facebook so I can get the new token in the db
-
 	Once the above /sendToken API is integrated with our Android app this won't be a problem
-
 */
 app.post('/getData', function(req, res){
 
@@ -232,6 +224,31 @@ app.get('/getWorkout', function(req, res){
 //                                      res.json(results);
                                 });
 });
+
+app.post('/profileData', function(req, res){
+         	var insertDocuments = function(db, callback){
+         		var collection = db.collection('profile');
+         		collection.update(
+         			{disability : req.body.disability,
+         			difficulty: req.body.difficulty}, 
+         			{$set:{user : req.body.user}}, 
+         			{upsert : true}, function(err, result) {
+         				callback(result);
+         			}
+         		);
+         		
+         	}
+
+         	MongoClient.connect(dbUrl, function(err, db){
+					assert.equal(null, err);
+
+					insertDocuments(db, function(){
+						db.close();
+					});
+				});
+
+         	res.send(200);
+})
 //port app is running on http://qqroute:8x
 app.listen(8080);
 console.log('server up');
