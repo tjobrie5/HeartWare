@@ -1,7 +1,42 @@
 
-#domain steps_for_days(S).
-#domain workouts(W).
 
-1{result(W)}1.
-:- S>5000.
+#domain steps(S).
+#domain disability(D).
+#domain level(L).
+#domain time(T).
 
+
+1{result(X,T, L, D,S): workouts(X)}.
+:- result(wow_you_have_been_very_active_,_take_a_break_this; T, L, D, S), S<20000.
+:- result(go_on_a_long_hike_this, T, easy, D, S).
+:- result(go_on_a_long_hike_this, T, L, yes, S).
+:- result(go_on_a_light_hike_this, T, hard, D, S).
+:- result(jog_2_miles_this, T, easy, D, S).
+:- result(jog_2_miles_this, T, L, yes, S).
+:- result(jog_2_miles_this, T, hard, D, S).
+:- result(do_some_yoga_this, T, hard, D, S).
+:- result(take_a_short_walk_this, T, hard, D, S).
+:- result(take_a_short_walk_this, T, medium, D, S).
+:- result(take_a_long_walk_this, T, easy, D, S).
+:- result(take_a_long_walk_this, T, hard, D, S).
+:- result(go_for_a_light_swim_this, T, medium, D, S).
+:- result(go_for_a_light_swim_this, T, hard, D, S).
+:- result(go_for_a_long_swim_this, T, easy, D, S).
+:- result(run_1_mile_this, T, hard, D, S).
+:- result(run_1_mile_this, T, medium, D, S).
+:- result(run_1_mile_this, T, L, yes, S).
+:- result(run_3_miles_this, T, easy, D, S).
+:- result(run_3_miles_this, T, L, yes, S).
+:- result(run_7_miles_this, T, easy, D, S).
+:- result(run_7_miles_this, T, medium, D, S).
+:- result(run_7_miles_this, T, L, yes, S).
+:- result(go_to_the_gym_and_lift_weights_this, T, easy, L, S). 
+:- result(go_to_the_gym_and_lift_weights_this, T, L, yes, S).
+:- result(take_a_water_aerobics_class_this, T, hard, D, S).
+:- result(take_a_water_aerobics_class_this, T, L, no, S).
+
+#hide steps/1.
+#hide workouts/1.
+#hide disability/1.
+#hide level/1.
+#hide time/1.
