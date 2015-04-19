@@ -156,16 +156,22 @@ public class JawboneUpHelper extends Fragment
                 editor.putString(DBAdapter.USERNAME, "Amy Mazzola");
                 editor.commit();
 
+                ApiManager.getRequestInterceptor().setAccessToken(result.access_token);
+
+
                 HeartwareApplication app = (HeartwareApplication) getActivity().getApplication();
                 app.setCurrentProfileId("1");
 
                 TokenToServer tokenToServer = (TokenToServer) new TokenToServer().execute(
                         new String(result.access_token));
 
+                //UpPlatformSdkConstants.RestApiRequestType apiRequestType = UpPlatformSdkConstants.RestApiRequestType.GET_MOVES_EVENT;
 
-                ApiManager.getRestApiInterface().getMoveGraph(
+                
+
+                ApiManager.getRestApiInterface().getMoveEvent(
                         UpPlatformSdkConstants.API_VERSION_STRING,
-                        result.access_token, //hardcoded value, should be dynamic
+                        "JtN269m6S_xR5T-blbnJBA",
                         genericCallbackListener);
 
 
