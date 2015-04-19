@@ -170,7 +170,7 @@ public class ProfileFragment extends Fragment
 
         @Override
         protected void onPostExecute(String results){
-            Toast.makeText(getActivity(), "You have not been very active... " + body, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), body, Toast.LENGTH_LONG).show();
         }
     } // LongRunningGetIO class
 
