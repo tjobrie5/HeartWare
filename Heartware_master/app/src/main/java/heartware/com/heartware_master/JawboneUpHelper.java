@@ -234,12 +234,12 @@ public class JawboneUpHelper extends Fragment
         @Override
         protected String doInBackground(String... params) {
             HttpClient client= new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(URL);
-            httpPost.addHeader(HeaderName, "Bearer " + params[0]);
+            HttpGet httpGet = new HttpGet(URL);
+            httpGet.addHeader(HeaderName, "Bearer " + params[0]);
             ResponseHandler<String> handler = new BasicResponseHandler();
             Log.d(TAG," JawboneAPI_Caller -- inside do in background");
             try {
-                HttpResponse response = client.execute(httpPost);
+                HttpResponse response = client.execute(httpGet);
                 data = handler.handleResponse(response);
                 Log.d(TAG, "data: " + data);
             }
@@ -254,18 +254,4 @@ public class JawboneUpHelper extends Fragment
             //Toast.makeText(getActivity(), body, Toast.LENGTH_LONG).show();
         }
     } // LongRunningGetIO class
-
-    private Callback genericCallbackListener = new Callback<Object>() {
-        @Override
-        public void success(Object o, Response response) {
-            Log.e(TAG,  "api call successful, json output: " + o.toString());
-            Toast.makeText(getActivity().getApplicationContext(), o.toString(), Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void failure(RetrofitError retrofitError) {
-            Log.e(TAG,  "api call failed, error message: " + retrofitError.getMessage());
-            Toast.makeText(getActivity().getApplicationContext(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    };
 } // JawboneUpHelper class
