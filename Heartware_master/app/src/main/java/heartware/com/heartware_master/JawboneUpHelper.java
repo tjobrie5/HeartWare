@@ -228,18 +228,25 @@ public class JawboneUpHelper extends Fragment
     private class JawboneAPI_Caller extends AsyncTask<String, Void, String>
     {
         private static final String URL = "https://jawbone.com/nudge/api/v.1.1/users/@me/moves";
+        private static final String URL2 = "https://jawbone.com/nudge/api/v.1.1/moves/sFpz5mhlZWTLjBBUHmzleQ/image";
         private static final String HeaderName = "Authorization";
         String data;
+        String xid = "sFpz5mhlZWTLjBBUHmzleQ";
 
         @Override
         protected String doInBackground(String... params) {
             HttpClient client= new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(URL);
+            HttpClient client2 = new DefaultHttpClient();
+            HttpGet httpGet2 = new HttpGet(URL2);
+            httpGet2.addHeader(HeaderName, "Bearer" + params[0]);
             httpGet.addHeader(HeaderName, "Bearer " + params[0]);
+            ResponseHandler<String> handler2 = new BasicResponseHandler();
             ResponseHandler<String> handler = new BasicResponseHandler();
             Log.d(TAG," JawboneAPI_Caller -- inside do in background");
             try {
                 HttpResponse response = client.execute(httpGet);
+                HttpResponse response2 = client2.execute(httpGet2);
                 data = handler.handleResponse(response);
                 Log.d(TAG, "data: " + data);
             }

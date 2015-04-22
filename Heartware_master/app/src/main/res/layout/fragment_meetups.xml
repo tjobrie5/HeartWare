@@ -10,25 +10,18 @@
 
     <TableRow
         android:id="@+id/tableRow1"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#000000" >
 
-        <TextView
-            android:id="@+id/tvMeetupBanner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="@string/meetups_tab"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#FFFFFF"
-/>
+
 
         <ImageView
             android:id="@+id/ivLogo"
-            android:background="#444444"
-            android:src="@drawable/ic_heartware_main_transparent"/>
+
+            android:layout_width="wrap_content"
+
+            android:src="@drawable/meetups"/>
     </TableRow>
     <TableRow
         android:id="@+id/tableRow2"
