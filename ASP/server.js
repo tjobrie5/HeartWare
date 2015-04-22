@@ -17,6 +17,7 @@ var async 	   = require('async');
 var url 	   = require('url');
 var request	   = require('request');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 //Data base connection
 var MongoClient = require('mongodb').MongoClient
@@ -202,8 +203,19 @@ app.get('/getWorkout', function(req, res){
                                 }  else {
                                         var items = results[0].data.items;
                                         var last_item = items.pop();
-
-                                        console.log(last_item.details.steps);
+					
+					var data = "steps(";
+					data += last_item.details.steps;
+					data += ").";
+					console.log(data);
+					fs.writeFile("/root/HeartWare/ASP/asp_steps.db", data, function(err){
+						if(err){
+							console.log(err);
+						}
+						else{
+							console.log("The file was saved!");
+						}
+				});
                                 }
 
                                 db.close();
@@ -218,12 +230,46 @@ app.get('/getWorkout', function(req, res){
 
 
                                 python_shell.run('script.py', function(err, results){
-                                         console.log('ran python');
-                                         console.log( results);
-                                        res.send('Go on a hike today!');
-//                                      res.json(results);
+                                	if(err){
+						console.log('ran python')
+					}
+					  
+				        console.log('ran python');
+                                        var array_results = [];
+					array_results = results.map(function (item){
+						return item;});
+					var result = "";
+					if(array_results.length > 1){
+						result += array_results[1];
+					}
+					var workout = result.substring(7);
+					workout = arr[0];
+					var time = arr[1];
+					arr = workout.split("_");
+					workout = "";
+					for(var i = 0; i<arr.length; i++){
+						workout += arr[i];
+						workout += " ";
+					}
+					workout += time;
+					workout += "!";
+					var final_workout = workout.charAt(0).toUpperCase()+workout.slice(1);
+					console.log(final_workout); 
+                                        res.send(final_workout);
                                 });
 });
+/*
+//post method for calendar information
+app.post('/sendCal', function(req, res){
+	console.log("calendar info recieved");
+
+        request(optionsConstruct(retrieveUser, req.body.cal),
+	function(error, response, body){
+
+	}
+
+});
+*/
 
 app.post('/profileData', function(req, res){
          	var insertDocuments = function(db, callback){
@@ -250,5 +296,5 @@ app.post('/profileData', function(req, res){
          	res.send(200);
 })
 //port app is running on http://qqroute:8x
-app.listen(8080);
+app.listen(8089);
 console.log('server up');
