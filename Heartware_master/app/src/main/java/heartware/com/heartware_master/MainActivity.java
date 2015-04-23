@@ -91,7 +91,7 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
         Toast.makeText(this, "Available: " + avail, Toast.LENGTH_LONG).show();
 
         //send user availability to server
-        CalToServer calToServer = (CalToServer) new CalToServer().execute(new String(avail));
+        //CalToServer calToServer = (CalToServer) new CalToServer().execute(new String(avail));
 
     } // onCreate
 

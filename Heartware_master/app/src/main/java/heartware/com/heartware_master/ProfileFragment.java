@@ -32,6 +32,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.jawbone.upplatformsdk.utils.UpPlatformSdkConstants;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -43,6 +45,9 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -55,6 +60,7 @@ public class ProfileFragment extends Fragment
     private GraphView mGraph;
     private ProfileDialogFragment mProfileDialog;
     private DBAdapter dbAdapter;
+    private JSONObject mUserData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -63,6 +69,13 @@ public class ProfileFragment extends Fragment
         mProfileDialog = new ProfileDialogFragment();
 
         dbAdapter = new DBAdapter(getActivity());
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String token = preferences.getString(UpPlatformSdkConstants.UP_PLATFORM_ACCESS_TOKEN, "NULL");
+
+        JawboneAPI_Caller api_caller = (JawboneAPI_Caller) new JawboneAPI_Caller().execute(
+                new String(token)
+        );
 
         createButtons(rootView);
         createGraph(rootView);
@@ -100,25 +113,38 @@ public class ProfileFragment extends Fragment
     {
         // Build the graph from user's data
         mGraph = (GraphView) view.findViewById(R.id.userDataGraph);
-        mGraph.setTitle("Your Workouts");
+        setGraphSettings();
 
-        mGraph.setTitleColor(Color.WHITE);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        series.setColor(Color.RED);
-        mGraph.getGridLabelRenderer().setGridColor(Color.GRAY);
-        mGraph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
-        mGraph.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.LTGRAY);
-        mGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-        mGraph.getGridLabelRenderer().setVerticalAxisTitle("Space");
-        mGraph.getGridLabelRenderer().setVerticalAxisTitleColor(Color.LTGRAY);
-        mGraph.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-        mGraph.addSeries(series);
+        if(mUserData != null) {
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+            try {
+                JSONArray names = mUserData.names();
+                JSONArray results = mUserData.toJSONArray(names);
+                for(int i = 0; i != results.length(); ++i) {
+                    if(results.getString(i).equals("steps")) {
+                        series.appendData(new DataPoint(i, Integer.parseInt(results.getString(i))), false, 100);
+                    }
+                }
+                series.setColor(Color.RED);
+                mGraph.addSeries(series);
+            }
+            catch(JSONException ex) {
+                Log.d(TAG, ex.getMessage().toString());
+            }
+        }
+        else {
+            mGraph.setTitle("No data -- placeholder");
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                    new DataPoint(0, 1),
+                    new DataPoint(1, 5),
+                    new DataPoint(2, 3),
+                    new DataPoint(3, 2),
+                    new DataPoint(4, 6)
+            });
+            series.setColor(Color.RED);
+            mGraph.addSeries(series);
+        }
+
 //        mGraph.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -128,10 +154,42 @@ public class ProfileFragment extends Fragment
 //        });
     }
 
+    private void setGraphSettings()
+    {
+        mGraph.setTitleColor(Color.WHITE);
+        mGraph.getGridLabelRenderer().setGridColor(Color.GRAY);
+        mGraph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
+        mGraph.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.LTGRAY);
+        mGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+        mGraph.getGridLabelRenderer().setVerticalAxisTitle("Steps");
+        mGraph.getGridLabelRenderer().setVerticalAxisTitleColor(Color.LTGRAY);
+        mGraph.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+    }
+
     @Override
     public void onResume()
     {
         super.onResume();
+        if(mUserData != null) {
+            mGraph.setTitle("Data entered");
+            mGraph.removeAllSeries();
+            //setGraphSettings();
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+            try {
+                JSONArray names = mUserData.names();
+                JSONArray results = mUserData.toJSONArray(names);
+                for(int i = 0; i != results.length(); ++i) {
+                    if(results.getString(i).equals("steps")) {
+                        series.appendData(new DataPoint(i, Integer.parseInt(results.getString(i))), false, 100);
+                    }
+                }
+                series.setColor(Color.RED);
+                mGraph.addSeries(series);
+            }
+            catch(JSONException ex) {
+                Log.d(TAG, ex.getMessage().toString());
+            }
+        }
         triggerAnimation();
     }
 
@@ -173,5 +231,47 @@ public class ProfileFragment extends Fragment
             Toast.makeText(getActivity(), body, Toast.LENGTH_LONG).show();
         }
     } // LongRunningGetIO class
+
+    private void setUserData(JSONObject userData)
+    {
+        mUserData = userData;
+    }
+
+    private class JawboneAPI_Caller extends AsyncTask<String, Void, String>
+    {
+        private static final String URL = "https://jawbone.com/nudge/api/v.1.1/users/@me/moves";
+        private static final String HeaderName = "Authorization";
+        String data;
+        JSONObject dataObj;
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpClient client= new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(URL);
+            httpGet.addHeader(HeaderName, "Bearer " + params[0]);
+            ResponseHandler<String> handler = new BasicResponseHandler();
+            Log.d(TAG," JawboneAPI_Caller -- inside do in background");
+            try {
+                HttpResponse response = client.execute(httpGet);
+                data = handler.handleResponse(response);
+                dataObj = new JSONObject(data);
+                Log.d(TAG, "data: " + data);
+            }
+            catch(IOException ex) {
+                Log.d(TAG, ex.getMessage().toString());
+            }
+            catch(JSONException excp) {
+                Log.d(TAG, excp.getMessage().toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String s)
+        {
+            super.onPostExecute(s);
+            setUserData(dataObj);
+        }
+    } // JawboneAPI_Caller class
 
 } // ProfileFragment class
