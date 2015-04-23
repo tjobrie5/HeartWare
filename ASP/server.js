@@ -282,7 +282,7 @@ app.post('/profileData', function(req, res){
          				callback(result);
          			}
          		);
-         		
+         		console.log(req.body.user + " " + req.body.disability);
          	}
 
          	MongoClient.connect(dbUrl, function(err, db){
