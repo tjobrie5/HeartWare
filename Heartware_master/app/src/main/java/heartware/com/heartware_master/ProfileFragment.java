@@ -51,6 +51,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class ProfileFragment extends Fragment
 {
@@ -115,36 +116,6 @@ public class ProfileFragment extends Fragment
         mGraph = (GraphView) view.findViewById(R.id.userDataGraph);
         setGraphSettings();
 
-        if(mUserData != null) {
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-            try {
-                JSONArray names = mUserData.names();
-                JSONArray results = mUserData.toJSONArray(names);
-                for(int i = 0; i != results.length(); ++i) {
-                    if(results.getString(i).equals("steps")) {
-                        series.appendData(new DataPoint(i, Integer.parseInt(results.getString(i))), false, 100);
-                    }
-                }
-                series.setColor(Color.RED);
-                mGraph.addSeries(series);
-            }
-            catch(JSONException ex) {
-                Log.d(TAG, ex.getMessage().toString());
-            }
-        }
-        else {
-            mGraph.setTitle("No data -- placeholder");
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                    new DataPoint(0, 1),
-                    new DataPoint(1, 5),
-                    new DataPoint(2, 3),
-                    new DataPoint(3, 2),
-                    new DataPoint(4, 6)
-            });
-            series.setColor(Color.RED);
-            mGraph.addSeries(series);
-        }
-
 //        mGraph.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -158,7 +129,7 @@ public class ProfileFragment extends Fragment
     {
         mGraph.setTitleColor(Color.WHITE);
         mGraph.getGridLabelRenderer().setGridColor(Color.GRAY);
-        mGraph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
+        mGraph.getGridLabelRenderer().setHorizontalAxisTitle("Day");
         mGraph.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.LTGRAY);
         mGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
         mGraph.getGridLabelRenderer().setVerticalAxisTitle("Steps");
@@ -170,26 +141,6 @@ public class ProfileFragment extends Fragment
     public void onResume()
     {
         super.onResume();
-        if(mUserData != null) {
-            mGraph.setTitle("Data entered");
-            mGraph.removeAllSeries();
-            //setGraphSettings();
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-            try {
-                JSONArray names = mUserData.names();
-                JSONArray results = mUserData.toJSONArray(names);
-                for(int i = 0; i != results.length(); ++i) {
-                    if(results.getString(i).equals("steps")) {
-                        series.appendData(new DataPoint(i, Integer.parseInt(results.getString(i))), false, 100);
-                    }
-                }
-                series.setColor(Color.RED);
-                mGraph.addSeries(series);
-            }
-            catch(JSONException ex) {
-                Log.d(TAG, ex.getMessage().toString());
-            }
-        }
         triggerAnimation();
     }
 
@@ -232,17 +183,13 @@ public class ProfileFragment extends Fragment
         }
     } // LongRunningGetIO class
 
-    private void setUserData(JSONObject userData)
-    {
-        mUserData = userData;
-    }
-
     private class JawboneAPI_Caller extends AsyncTask<String, Void, String>
     {
         private static final String URL = "https://jawbone.com/nudge/api/v.1.1/users/@me/moves";
         private static final String HeaderName = "Authorization";
         String data;
         JSONObject dataObj;
+        private LineGraphSeries<DataPoint> series = new LineGraphSeries<>(); // graph data points
 
         @Override
         protected String doInBackground(String... params) {
@@ -263,6 +210,30 @@ public class ProfileFragment extends Fragment
             catch(JSONException excp) {
                 Log.d(TAG, excp.getMessage().toString());
             }
+
+            // now parse the dataObj
+            try {
+                String step = "";
+                JSONObject jsonData = dataObj.getJSONObject("data");
+                JSONArray jsonItems = jsonData.getJSONArray("items");
+                for(int i = 0; i != jsonItems.length(); ++i) {
+                    JSONObject item = jsonItems.getJSONObject(i);
+                    JSONObject detail = item.getJSONObject("details");
+                    JSONObject hourly_totals = detail.getJSONObject("hourly_totals");
+                    Iterator<String> iter = hourly_totals.keys();
+                    if(iter.hasNext()) {
+                        String key = iter.next(); // the date that starts with 2015
+                        JSONObject date_data = hourly_totals.getJSONObject(key);
+                        step = date_data.getString("steps");
+                    }
+
+                    series.appendData(new DataPoint(i, Double.parseDouble(step)), false, 1000);
+                }
+            } catch(JSONException ex) {
+                Log.d(TAG, ex.getMessage().toString());
+            }
+
+
             return data;
         }
 
@@ -270,7 +241,14 @@ public class ProfileFragment extends Fragment
         protected void onPostExecute(String s)
         {
             super.onPostExecute(s);
-            setUserData(dataObj);
+            // initialize the graph data points
+            if(series != null) {
+                mGraph.setTitle("Steps per day");
+                mGraph.removeAllSeries();
+                //setGraphSettings();
+                series.setColor(Color.RED);
+                mGraph.addSeries(series);
+            }
         }
     } // JawboneAPI_Caller class
 
