@@ -29,7 +29,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#FFF"
+
         android:fillViewport="true">
 
         <LinearLayout
@@ -71,8 +71,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+
                         android:text="@string/create_meetup"
                         android:textColor="#000000"/>
+
                     <com.facebook.share.widget.ShareButton
                         android:id="@+id/share_button"
                         android:layout_width="wrap_content"

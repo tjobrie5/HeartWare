@@ -71,12 +71,14 @@
         <RadioGroup
             android:id="@+id/rgDifficulty"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/beginner"
                 android:id="@+id/rbBeginner"
+                android:buttonTint="@color/radio_button_color"
                 android:textSize="12dp" />
 
             <RadioButton
@@ -84,6 +86,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/interm"
                 android:id="@+id/rbInterm"
+                android:buttonTint="@color/radio_button_color"
                 android:textSize="12dp" />
 
             <RadioButton
@@ -91,6 +94,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/exercise"
                 android:id="@+id/rbExpert"
+                android:buttonTint="@color/radio_button_color"
                 android:textSize="12dp" />
         </RadioGroup>
     </TableRow>
