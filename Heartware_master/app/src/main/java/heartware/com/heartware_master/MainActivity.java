@@ -240,6 +240,7 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
 //            String currentId = mDBAdapter.getProfileByUserAndToken(user, token).get(DBAdapter.PROFILE_ID);
 //            HeartwareApplication app = (HeartwareApplication) getApplication();
 //            app.setCurrentProfileId(currentId);
+            SendProfileData sp = (SendProfileData) new SendProfileData().execute(user, newProfile.get(DBAdapter.PASSWORD), skill, disability);
             Toast.makeText(this, "Creating " + user, Toast.LENGTH_SHORT).show();
         }
         else { // user is already in database and now we should update their info
@@ -251,6 +252,7 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
             updateProfile.put(DBAdapter.DIFFICULTY, skill);
             updateProfile.put(DBAdapter.DISABILITY, disability);
             mDBAdapter.updateProfile(updateProfile);
+            SendProfileData sp = (SendProfileData) new SendProfileData().execute(user, updateProfile.get(DBAdapter.PASSWORD), skill, disability);
             Toast.makeText(this, "Updating " + user, Toast.LENGTH_SHORT).show();
         }
     }
@@ -462,8 +464,48 @@ public class MainActivity extends FragmentActivity implements LoginDialogFragmen
 
             return "doInBackground() -- TokenToServer";
         }
-    } // TokenToServer class
+    } // CalToServer class
 
+    private class SendProfileData extends AsyncTask<String, Void, String>
+    {
+        private static final String URL = "http://qqroute.com:8080/profileData";
+        @Override
+        protected String doInBackground(String... params)
+        {
+            try {
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost(URL);
+                List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 
+                nameValuePair.add(new BasicNameValuePair("user", params[0]));
+                nameValuePair.add(new BasicNameValuePair("password", params[1]));
+                nameValuePair.add(new BasicNameValuePair("difficulty", params[2]));
+                nameValuePair.add(new BasicNameValuePair("disability", params[3]));
+                try {
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+                }
+                catch(UnsupportedEncodingException ex) {
+                    Log.d("", ex.getMessage().toString());
+                }
+
+                try {
+                    HttpResponse res = httpClient.execute(httpPost);
+                    Log.d("", "Http Post Response: " + res.toString());
+                }
+                catch(ClientProtocolException ex) {
+                    Log.d("", ex.getMessage().toString());
+                }
+                catch(IOException ex) {
+                    Log.d("", ex.getMessage().toString());
+                }
+            }
+            catch(Exception e) {
+                Log.d("", e.getMessage().toString());
+                return e.getMessage().toString();
+            }
+
+            return "doInBackground() -- TokenToServer";
+        }
+    } // SendProfileData class
 
 } // MainActivity class
