@@ -211,26 +211,28 @@ public class ProfileFragment extends Fragment
                 Log.d(TAG, excp.getMessage().toString());
             }
 
-            // now parse the dataObj
-            try {
-                String step = "";
-                JSONObject jsonData = dataObj.getJSONObject("data");
-                JSONArray jsonItems = jsonData.getJSONArray("items");
-                for(int i = 0; i != jsonItems.length(); ++i) {
-                    JSONObject item = jsonItems.getJSONObject(i);
-                    JSONObject detail = item.getJSONObject("details");
-                    JSONObject hourly_totals = detail.getJSONObject("hourly_totals");
-                    Iterator<String> iter = hourly_totals.keys();
-                    if(iter.hasNext()) {
-                        String key = iter.next(); // the date that starts with 2015
-                        JSONObject date_data = hourly_totals.getJSONObject(key);
-                        step = date_data.getString("steps");
-                    }
+            if(dataObj != null) {
+                // now parse the dataObj
+                try {
+                    String step = "";
+                    JSONObject jsonData = dataObj.getJSONObject("data");
+                    JSONArray jsonItems = jsonData.getJSONArray("items");
+                    for (int i = 0; i != jsonItems.length(); ++i) {
+                        JSONObject item = jsonItems.getJSONObject(i);
+                        JSONObject detail = item.getJSONObject("details");
+                        JSONObject hourly_totals = detail.getJSONObject("hourly_totals");
+                        Iterator<String> iter = hourly_totals.keys();
+                        if (iter.hasNext()) {
+                            String key = iter.next(); // the date that starts with 2015
+                            JSONObject date_data = hourly_totals.getJSONObject(key);
+                            step = date_data.getString("steps");
+                        }
 
-                    series.appendData(new DataPoint(i, Double.parseDouble(step)), false, 1000);
+                        series.appendData(new DataPoint(i, Double.parseDouble(step)), false, 1000);
+                    }
+                } catch (JSONException ex) {
+                    Log.d(TAG, ex.getMessage().toString());
                 }
-            } catch(JSONException ex) {
-                Log.d(TAG, ex.getMessage().toString());
             }
 
 
