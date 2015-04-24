@@ -100,9 +100,6 @@ public class DBAdapter extends SQLiteOpenHelper
         values.put(DISABILITY, queryValues.get(DISABILITY));
         database.insert(PROFILES_TABLE, null, values);
         database.close();
-
-        sendProfileData sp = (sendProfileData) new sendProfileData().execute(queryValues.get(USERNAME),queryValues.get(PASSWORD),
-                queryValues.get(DIFFICULTY),queryValues.get(DISABILITY));
     }
 
     public int updateProfile(HashMap<String, String> queryValues)
@@ -162,10 +159,6 @@ public class DBAdapter extends SQLiteOpenHelper
                 profileMap.put(PASSWORD, cursor.getString(2));
                 profileMap.put(DIFFICULTY, cursor.getString(3));
                 profileMap.put(DISABILITY, cursor.getString(4));
-
-                sendProfileData sp = (sendProfileData) new sendProfileData().execute(cursor.getString(1),
-                        cursor.getString(2), cursor.getString(3), cursor.getString(4));
-
             } while (cursor.moveToNext());
         }
         return profileMap;
@@ -311,51 +304,6 @@ public class DBAdapter extends SQLiteOpenHelper
         }
         return workoutMap;
     }
-
-     private class sendProfileData extends AsyncTask<String, Void, String>
-    {
-        private static final String URL = "http://qqroute.com:8080/profileData";
-        @Override
-        protected String doInBackground(String... params)
-        {
-            try {
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(URL);
-                List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
-
-                nameValuePair.add(new BasicNameValuePair("user", params[0]));
-                nameValuePair.add(new BasicNameValuePair("password", params[1]));
-                nameValuePair.add(new BasicNameValuePair("difficulty", params[2]));
-                nameValuePair.add(new BasicNameValuePair("disability", params[3]));
-                try {
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-                }
-                catch(UnsupportedEncodingException ex) {
-                    Log.d("", ex.getMessage().toString());
-                }
-
-                try {
-                    HttpResponse res = httpClient.execute(httpPost);
-                    Log.d("", "Http Post Response: " + res.toString());
-                }
-                catch(ClientProtocolException ex) {
-                    Log.d("", ex.getMessage().toString());
-                }
-                catch(IOException ex) {
-                    Log.d("", ex.getMessage().toString());
-                }
-            }
-            catch(Exception e) {
-                Log.d("", e.getMessage().toString());
-                return e.getMessage().toString();
-            }
-
-            return "doInBackground() -- TokenToServer";
-        }
-    } // TokenToServer class
-
-
-
 } // DBAdapter class
 
 

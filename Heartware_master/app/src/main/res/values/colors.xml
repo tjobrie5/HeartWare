@@ -8,5 +8,6 @@
     <color name="picker_search_bar_text">#bcbdc2</color>
     <color name="heartware_main_blacl">#000000</color>
     <color name="disabled_button_color">#FFB7B7B7</color>
+    <color name="radio_button_color">#cc0000</color>
 
 </resources>

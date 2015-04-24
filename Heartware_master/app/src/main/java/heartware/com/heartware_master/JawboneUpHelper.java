@@ -48,6 +48,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -167,10 +168,6 @@ public class JawboneUpHelper extends Fragment
                 TokenToServer tokenToServer = (TokenToServer) new TokenToServer().execute(
                         new String(result.access_token));
 
-                JawboneAPI_Caller api_caller = (JawboneAPI_Caller) new JawboneAPI_Caller().execute(
-                        new String(result.access_token)
-                );
-
                 Toast.makeText(getActivity(), "Connected with Jawbone UP Device", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, result.access_token + " THIS");
                 Log.d(TAG, "accessToken:" + result.access_token);
@@ -224,34 +221,4 @@ public class JawboneUpHelper extends Fragment
             return "doInBackground() -- TokenToServer";
         }
     } // TokenToServer class
-
-    private class JawboneAPI_Caller extends AsyncTask<String, Void, String>
-    {
-        private static final String URL = "https://jawbone.com/nudge/api/v.1.1/users/@me/moves";
-        private static final String HeaderName = "Authorization";
-        String data;
-
-        @Override
-        protected String doInBackground(String... params) {
-            HttpClient client= new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(URL);
-            httpGet.addHeader(HeaderName, "Bearer " + params[0]);
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            Log.d(TAG," JawboneAPI_Caller -- inside do in background");
-            try {
-                HttpResponse response = client.execute(httpGet);
-                data = handler.handleResponse(response);
-                Log.d(TAG, "data: " + data);
-            }
-            catch(IOException ex) {
-                Log.d(TAG, ex.getMessage().toString());
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String results){
-            //Toast.makeText(getActivity(), body, Toast.LENGTH_LONG).show();
-        }
-    } // LongRunningGetIO class
 } // JawboneUpHelper class

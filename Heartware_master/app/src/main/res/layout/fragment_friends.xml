@@ -29,7 +29,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#FFF"
+        android:background="@drawable/bg_2"
         android:fillViewport="true">
 
         <LinearLayout
@@ -65,14 +65,26 @@
                     android:orientation="vertical"
                     android:gravity="end"
                     android:layout_weight="2">
-                    <Button
+                    <!--<Button
                         android:id="@+id/create_meetup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+
                         android:text="@string/create_meetup"
-                        android:textColor="#000000"/>
+                        android:textColor="#000000"/>-->
+                    <ImageButton
+                        android:id="@+id/create_meetup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:scaleType="fitCenter"
+                        android:background="@drawable/meetup_button"/>
+
+
+
                     <com.facebook.share.widget.ShareButton
                         android:id="@+id/share_button"
                         android:layout_width="wrap_content"

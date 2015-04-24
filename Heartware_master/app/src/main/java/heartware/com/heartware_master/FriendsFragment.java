@@ -54,12 +54,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -123,7 +125,7 @@ public class FriendsFragment extends Fragment
 
     private static final String PERMISSION = "publish_actions";
 
-    private Button bMeetup;
+    private ImageButton bMeetup;
     private ShareButton shareButton;
     private LoginButton bLoginButton;
     private ListView listView;
@@ -221,7 +223,7 @@ public class FriendsFragment extends Fragment
             }
         });
 
-        bMeetup = (Button) view.findViewById(R.id.create_meetup);
+        bMeetup = (ImageButton) view.findViewById(R.id.create_meetup);
         bMeetup.getBackground().setColorFilter(0xFFFFFFFF, PorterDuff.Mode.MULTIPLY);
         shareButton = (ShareButton) view.findViewById(R.id.share_button);
         listView = (ListView) view.findViewById(R.id.selection_list);
@@ -230,7 +232,31 @@ public class FriendsFragment extends Fragment
         bMeetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createMeetup();
+
+
+
+            }
+        });
+
+       bMeetup.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // show interest in events resulting from ACTION_DOWN
+                if(event.getAction()==MotionEvent.ACTION_DOWN) {
+                    bMeetup.setSelected(true);
+                    createMeetup();
+                    return true;
+                }
+                // don't handle event unless its ACTION_UP so "doSomething()" only runs once.
+
+                if(event.getAction()!=MotionEvent.ACTION_UP) {
+                    bMeetup.setSelected(false);
+
+                    return false;
+                }
+
+
+                return true;
             }
         });
 
@@ -278,6 +304,7 @@ public class FriendsFragment extends Fragment
         String friendsText = listElements.get(2).getText2();
         mMeetupDialog.setMeetupText(exText, locText, friendsText);
         mMeetupDialog.show(getActivity().getFragmentManager(), TAG);
+        //bMeetup.setSelected(false);
     }
 
     private void processDialogError(FacebookException error) {
