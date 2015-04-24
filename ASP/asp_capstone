@@ -7,7 +7,8 @@
 
 
 1{result(X,T, L, D,S): workouts(X)}.
-:- result(wow_you_have_been_very_active_,_take_a_break_this; T, L, D, S), S<20000.
+:- result(wow_you_have_been_very_active_take_a_break_this, T, L, D, S), S<20000.
+:- result(looks_like_you_are_busy_today_take_a_break_this, none, L, D, S).
 :- result(go_on_a_long_hike_this, T, easy, D, S).
 :- result(go_on_a_long_hike_this, T, L, yes, S).
 :- result(go_on_a_light_hike_this, T, hard, D, S).

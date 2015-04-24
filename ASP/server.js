@@ -231,7 +231,7 @@ app.get('/getWorkout', function(req, res){
 
                                 python_shell.run('script.py', function(err, results){
                                 	if(err){
-						console.log('ran python')
+						console.log(err)
 					}
 					  
 				        console.log('ran python');
@@ -239,10 +239,21 @@ app.get('/getWorkout', function(req, res){
 					array_results = results.map(function (item){
 						return item;});
 					var result = "";
-					if(array_results.length > 1){
-						result += array_results[1];
+					console.log("here");
+					var index = Math.floor(Math.random()*(5-1) + 1);
+					console.log(index);
+					if(index < array_results.length)
+					{
+						if(index == 1)	result += array_results[1];
+						else if(index == 2)	result += array_results[3];
+						else if(index == 3)	result += array_results[5];
+						else if(index == 4) result += array_results[7];
+						else result += array_results[9];
 					}
+					else
+						result += array_results[1];
 					var workout = result.substring(7);
+					var arr = workout.split(",");
 					workout = arr[0];
 					var time = arr[1];
 					arr = workout.split("_");
@@ -294,6 +305,15 @@ app.post('/profileData', function(req, res){
 				});
 
          	res.send(200);
+})
+
+app.post('/sendCal', function(req, res){
+	console.log(req.body.cal);
+	fs.writeFile("asp_time.db", "time(" + req.body.cal +").", function(err){
+		if(err){
+			return console.log(err);
+		}
+	})
 })
 //port app is running on http://qqroute:8x
 app.listen(8080);
