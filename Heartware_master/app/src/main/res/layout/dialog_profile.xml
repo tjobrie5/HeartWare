@@ -89,7 +89,7 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/exercise"
+                android:text="@string/expert"
                 android:id="@+id/rbExpert"
                 android:textSize="12dp" />
         </RadioGroup>
